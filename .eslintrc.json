@@ -8,6 +8,17 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
+  "overrides": [
+    {
+      "files": ["**/*.test.js", "**/__tests__/**/*.js"],
+      "env": {
+        "jest": true
+      },
+      "globals": {
+        "fetch": "readonly"
+      }
+    }
+  ],
   "rules": {
     "no-console": "warn",
     "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],

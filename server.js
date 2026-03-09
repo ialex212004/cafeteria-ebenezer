@@ -21,84 +21,95 @@ const healthRoutes = require('./src/routes/health');
 const pedidosRoutes = require('./src/routes/pedidos');
 const reseniasRoutes = require('./src/routes/resenas');
 
-// Inicializar Express
-const app = express();
-
-// ── MIDDLEWARES GLOBALES ──────────────────────────────────
-app.use(securityHeaders);
-app.use(cors);
-app.use(requestLogger);
-app.use(express.json({ limit: config.maxJsonSize }));
-app.use(express.urlencoded({ limit: config.maxRequestBodySize, extended: true }));
-
-// Asegurar que existen los directorios requeridos
-if (!fs.existsSync(config.dataDir)) {
-  fs.mkdirSync(config.dataDir, { recursive: true });
-  logger.info(`Directorio de datos creado: ${config.dataDir}`);
-}
-if (!fs.existsSync(config.logsDir)) {
-  fs.mkdirSync(config.logsDir, { recursive: true });
+function ensureRuntimeDirectories() {
+  if (!fs.existsSync(config.dataDir)) {
+    fs.mkdirSync(config.dataDir, { recursive: true });
+    logger.info(`Directorio de datos creado: ${config.dataDir}`);
+  }
+  if (!fs.existsSync(config.logsDir)) {
+    fs.mkdirSync(config.logsDir, { recursive: true });
+  }
 }
 
-// ── ARCHIVOS ESTÁTICOS ────────────────────────────────────
-app.use(express.static(path.join(__dirname, 'public')));
+function createApp() {
+  // Inicializar Express
+  const app = express();
 
-// ── RATE LIMITING ─────────────────────────────────────────
-app.use('/api/', apiLimiter);
+  // ── MIDDLEWARES GLOBALES ────────────────────────────────
+  app.use(securityHeaders);
+  app.use(cors);
+  app.use(requestLogger);
+  app.use(express.json({ limit: config.maxJsonSize }));
+  app.use(express.urlencoded({ limit: config.maxRequestBodySize, extended: true }));
 
-// ── RUTAS DE API ──────────────────────────────────────────
-app.use('/api', healthRoutes);
-app.use('/api/pedidos', pedidosRoutes);
-app.use('/api/resenas', reseniasRoutes);
+  // ── ARCHIVOS ESTÁTICOS ──────────────────────────────────
+  app.use(express.static(path.join(__dirname, 'public')));
 
-// ── FALLBACK SPA (Serve index.html para rutas no reconocidas) ─
-app.get('*', (req, res) => {
-  // Si es un archivo estático, Express ya lo servió
-  // Si no, es una ruta del SPA, servimos index.html
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
+  // ── RATE LIMITING ───────────────────────────────────────
+  app.use('/api/', apiLimiter);
 
-// ── MANEJO DE ERRORES ─────────────────────────────────────
-app.use(notFound);
-app.use(errorHandler);
+  // ── RUTAS DE API ────────────────────────────────────────
+  app.use('/api', healthRoutes);
+  app.use('/api/pedidos', pedidosRoutes);
+  app.use('/api/resenas', reseniasRoutes);
 
-// ── INICIAR SERVIDOR ──────────────────────────────────────
-const server = app.listen(config.port, config.host, () => {
-  logger.info('🚀 Servidor iniciado', {
-    puerto: config.port,
-    entorno: config.env,
-    url: `http://${config.host}:${config.port}`,
+  // ── FALLBACK SPA (Serve index.html para rutas no reconocidas)
+  app.get('*', (_req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
   });
-});
 
-// ── MANEJO DE ERRORES NO CAPTURADOS ───────────────────────
-process.on('unhandledRejection', (reason, promise) => {
-  logger.error('Unhandled Rejection', {
-    reason: reason.message || String(reason),
-    promise,
+  // ── MANEJO DE ERRORES ───────────────────────────────────
+  app.use(notFound);
+  app.use(errorHandler);
+
+  return app;
+}
+
+function attachProcessHandlers(serverInstance) {
+  process.on('unhandledRejection', (reason, promise) => {
+    logger.error('Unhandled Rejection', {
+      reason: reason.message || String(reason),
+      promise,
+    });
   });
-});
 
-process.on('uncaughtException', (error) => {
-  logger.error('Uncaught Exception', { error: error.message, stack: error.stack });
-  process.exit(1);
-});
-
-// ── GRACEFUL SHUTDOWN ─────────────────────────────────────
-process.on('SIGTERM', () => {
-  logger.info('SIGTERM recibido. Cerrando servidor gracefully...');
-  server.close(() => {
-    logger.info('Servidor cerrado');
-    process.exit(0);
+  process.on('uncaughtException', (error) => {
+    logger.error('Uncaught Exception', { error: error.message, stack: error.stack });
+    process.exit(1);
   });
-});
 
-process.on('SIGINT', () => {
-  logger.info('SIGINT recibido. Cerrando servidor gracefully...');
-  server.close(() => {
-    logger.info('Servidor cerrado');
-    process.exit(0);
+  const shutdown = (signal) => {
+    logger.info(`${signal} recibido. Cerrando servidor gracefully...`);
+    serverInstance.close(() => {
+      logger.info('Servidor cerrado');
+      process.exit(0);
+    });
+  };
+
+  process.on('SIGTERM', () => shutdown('SIGTERM'));
+  process.on('SIGINT', () => shutdown('SIGINT'));
+}
+
+function startServer() {
+  ensureRuntimeDirectories();
+  const app = createApp();
+  const server = app.listen(config.port, config.host, () => {
+    logger.info('🚀 Servidor iniciado', {
+      puerto: config.port,
+      entorno: config.env,
+      url: `http://${config.host}:${config.port}`,
+    });
   });
-});
 
-module.exports = app;
+  attachProcessHandlers(server);
+  return { app, server };
+}
+
+if (require.main === module) {
+  startServer();
+}
+
+module.exports = {
+  createApp,
+  startServer,
+};

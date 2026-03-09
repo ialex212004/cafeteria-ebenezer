@@ -10,6 +10,7 @@ const logger = require('../utils/logger')('Routes/Pedidos');
 const { readJSON, writeJSON, getNextId } = require('../utils/dataManager');
 const { validatePedido, validateActualizarPedido } = require('../middleware/validation');
 const { createPedidoLimiter } = require('../middleware/rateLimiter');
+const { requireAdminAuth } = require('../middleware/auth');
 const config = require('../config');
 
 const PEDIDOS_FILE = path.join(config.dataDir, 'pedidos.json');
@@ -97,7 +98,7 @@ router.post(
  * Query: ?estado=pendiente|confirmado|entregado para filtrar
  * Query: ?limit=10&page=1 para paginación
  */
-router.get('/', (req, res) => {
+router.get('/', requireAdminAuth, (req, res) => {
   try {
     let pedidos = readJSON(PEDIDOS_FILE);
 
@@ -148,7 +149,7 @@ router.get('/', (req, res) => {
  * GET /api/pedidos/:id
  * Obtener un pedido específico
  */
-router.get('/:id', (req, res) => {
+router.get('/:id', requireAdminAuth, (req, res) => {
   try {
     const id = Number(req.params.id);
     const pedidos = readJSON(PEDIDOS_FILE);
@@ -178,7 +179,7 @@ router.get('/:id', (req, res) => {
  * PATCH /api/pedidos/:id
  * Actualizar estado de un pedido
  */
-router.patch('/:id', validateActualizarPedido, (req, res) => {
+router.patch('/:id', requireAdminAuth, validateActualizarPedido, (req, res) => {
   try {
     const id = Number(req.params.id);
     const { estado } = req.validatedBody;
@@ -231,7 +232,7 @@ router.patch('/:id', validateActualizarPedido, (req, res) => {
  * DELETE /api/pedidos/:id
  * Eliminar un pedido
  */
-router.delete('/:id', (req, res) => {
+router.delete('/:id', requireAdminAuth, (req, res) => {
   try {
     const id = Number(req.params.id);
     const pedidos = readJSON(PEDIDOS_FILE);

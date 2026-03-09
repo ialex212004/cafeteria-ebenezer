@@ -1,6 +1,7 @@
 node_modules/
 .env
 .env.local
+.env.*.local
 .DS_Store
 *.log
 npm-debug.log*
@@ -9,3 +10,14 @@ yarn-error.log*
 .vscode/settings.json
 dist/
 build/
+logs/
+
+# Vercel
+.vercel
+.vercel/output
+.env.production
+.env.preview
+
+# Sistema
+.idea/
+.cache/

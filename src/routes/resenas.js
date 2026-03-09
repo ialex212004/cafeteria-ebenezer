@@ -10,6 +10,7 @@ const logger = require('../utils/logger')('Routes/Resenas');
 const { readJSON, writeJSON, getNextId } = require('../utils/dataManager');
 const { validateResena } = require('../middleware/validation');
 const { createResenaLimiter } = require('../middleware/rateLimiter');
+const { hasValidAdminKey, requireAdminAuth } = require('../middleware/auth');
 const config = require('../config');
 
 const RESENAS_FILE = path.join(config.dataDir, 'resenas.json');
@@ -78,9 +79,27 @@ router.get('/', (req, res) => {
     const resenas = readJSON(RESENAS_FILE);
     const showAll = req.query.all === 'true'; // ?all=true para admin
 
-    const filtered = showAll
-      ? resenas
-      : resenas.filter(r => r.estado === 'publicada');
+    if (showAll) {
+      if (!hasValidAdminKey(req)) {
+        return res.status(401).json({
+          error: true,
+          message: 'No autorizado. API key inválida o ausente.',
+        });
+      }
+
+      const sortedAll = resenas.sort(
+        (a, b) => new Date(b.fechaCreacion) - new Date(a.fechaCreacion),
+      );
+
+      return res.json({
+        error: false,
+        data: sortedAll,
+        total: sortedAll.length,
+        pendientes: sortedAll.filter(r => r.estado === 'pendiente').length,
+      });
+    }
+
+    const filtered = resenas.filter(r => r.estado === 'publicada');
 
     const sorted = filtered.sort(
       (a, b) => new Date(b.fechaCreacion) - new Date(a.fechaCreacion),
@@ -90,9 +109,6 @@ router.get('/', (req, res) => {
       error: false,
       data: sorted,
       total: sorted.length,
-      ...(showAll && {
-        pendientes: filtered.filter(r => r.estado === 'pendiente').length,
-      }),
     });
   } catch (error) {
     logger.error('Error al obtener reseñas', { error: error.message });
@@ -107,7 +123,7 @@ router.get('/', (req, res) => {
  * GET /api/resenas/todas (privado)
  * Obtener TODAS las reseñas (incluyendo pendientes)
  */
-router.get('/todas', (req, res) => {
+router.get('/todas', requireAdminAuth, (req, res) => {
   try {
     const resenas = readJSON(RESENAS_FILE);
     const sorted = resenas.sort(
@@ -163,7 +179,7 @@ router.get('/:id', (req, res) => {
  * PATCH /api/resenas/:id
  * Actualizar estado de una reseña (publicar/rechazar)
  */
-router.patch('/:id', (req, res) => {
+router.patch('/:id', requireAdminAuth, (req, res) => {
   try {
     const id = Number(req.params.id);
     const { estado } = req.body;
@@ -221,7 +237,7 @@ router.patch('/:id', (req, res) => {
  * DELETE /api/resenas/:id
  * Eliminar una reseña
  */
-router.delete('/:id', (req, res) => {
+router.delete('/:id', requireAdminAuth, (req, res) => {
   try {
     const id = Number(req.params.id);
     const resenas = readJSON(RESENAS_FILE);

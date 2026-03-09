@@ -17,10 +17,9 @@ Todos los requests deben incluir:
 Content-Type: application/json
 ```
 
-Opcional para endpoints protegidos:
+Requerido en endpoints administrativos:
 
 ```
-Authorization: Bearer <JWT_TOKEN>
 X-API-Key: <API_KEY>
 ```
 
@@ -120,6 +119,7 @@ Crear nuevo pedido.
 #### GET /api/pedidos
 
 Obtener todos los pedidos (más recientes primero).
+**⚠️ Administrativo (requiere `X-API-Key`)**
 
 **Query Parameters**
 
@@ -157,6 +157,7 @@ Obtener todos los pedidos (más recientes primero).
 #### GET /api/pedidos/:id
 
 Obtener un pedido específico.
+**⚠️ Administrativo (requiere `X-API-Key`)**
 
 **Path Parameters**
 
@@ -184,12 +185,14 @@ Obtener un pedido específico.
 
 - `200` - Pedido encontrado
 - `404` - Pedido no encontrado
+- `401` - No autorizado
 
 ---
 
 #### PATCH /api/pedidos/:id
 
 Actualizar estado de un pedido.
+**⚠️ Administrativo (requiere `X-API-Key`)**
 
 **Path Parameters**
 
@@ -228,6 +231,7 @@ Actualizar estado de un pedido.
 #### DELETE /api/pedidos/:id
 
 Eliminar un pedido.
+**⚠️ Administrativo (requiere `X-API-Key`)**
 
 **Path Parameters**
 
@@ -288,6 +292,7 @@ Crear nueva reseña.
 #### GET /api/resenas
 
 Obtener reseñas publicadas (públicas).
+Para incluir pendientes/rechazadas, usar `GET /api/resenas?all=true` con `X-API-Key`.
 
 **Response (200)**
 
@@ -315,6 +320,7 @@ Obtener reseñas publicadas (públicas).
 **⚠️ Administrativo**
 
 Obtener todas las reseñas (incluyendo pendientes y rechazadas).
+Requiere `X-API-Key`.
 
 **Response (200)**
 
@@ -347,6 +353,7 @@ Obtener todas las reseñas (incluyendo pendientes y rechazadas).
 #### PATCH /api/resenas/:id
 
 Cambiar estado de una reseña (publicar/rechazar).
+**⚠️ Administrativo (requiere `X-API-Key`)**
 
 **Path Parameters**
 
