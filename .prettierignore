@@ -1,0 +1,12 @@
+node_modules/
+dist/
+build/
+coverage/
+.git/
+.next/
+out/
+data/*.json
+logs/
+*.log
+.env
+.env.*

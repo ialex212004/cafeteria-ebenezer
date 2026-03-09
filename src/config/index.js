@@ -1,0 +1,65 @@
+// ============================================================
+//  CONFIGURACIÓN CENTRALIZADA
+// ============================================================
+
+require('dotenv').config();
+
+const config = {
+  // Entorno
+  env: process.env.NODE_ENV || 'development',
+  isDev: process.env.NODE_ENV !== 'production',
+  isProduction: process.env.NODE_ENV === 'production',
+
+  // Servidor
+  port: parseInt(process.env.PORT || '3000', 10),
+  host: process.env.HOST || '0.0.0.0',
+
+  // Rutas
+  dataDir: process.env.DATA_DIR || './data',
+  logsDir: process.env.LOG_DIR || './logs',
+
+  // CORS
+  allowedOrigins: (process.env.ALLOWED_ORIGINS || 'http://localhost:3000').split(','),
+
+  // Rate Limiting
+  rateLimit: {
+    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000', 10), // 15 minutos
+    maxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100', 10),
+  },
+
+  // Logging
+  logLevel: process.env.LOG_LEVEL || 'info',
+
+  // Seguridad
+  jwtSecret: process.env.JWT_SECRET || 'dev-secret-key-change-in-production',
+  apiKey: process.env.API_KEY || 'dev-api-key',
+
+  // Validación
+  maxRequestBodySize: '10mb',
+  maxJsonSize: '10mb',
+
+  // Limites de datos
+  limits: {
+    maxPedidosPerMinuto: 10,
+    maxReseniasPerMinuto: 20,
+    maxLengthNombre: 100,
+    maxLengthTelefono: 20,
+    maxLengthProducto: 200,
+    maxLengthNotas: 500,
+    maxLengthResenia: 1000,
+    maxLengthCiudad: 100,
+  },
+};
+
+// Validar configuración requerida
+if (config.isProduction) {
+  if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
+    throw new Error('JWT_SECRET debe estar configurado con al menos 32 caracteres');
+  }
+  if (process.env.ALLOWED_ORIGINS === 'http://localhost:3000') {
+    // eslint-disable-next-line no-console
+    console.warn('⚠️  ALLOWED_ORIGINS aún contiene localhost. Configúralo antes de producción.');
+  }
+}
+
+module.exports = config;
