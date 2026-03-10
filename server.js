@@ -5,6 +5,7 @@
 
 const express = require('express');
 const fs = require('fs');
+const jsfs = fs;
 const path = require('path');
 
 // Cargar configuración y utilidades
@@ -22,9 +23,16 @@ const pedidosRoutes = require('./src/routes/pedidos');
 const reseniasRoutes = require('./src/routes/resenas');
 
 function ensureRuntimeDirectories() {
-  if (!fs.existsSync(config.dataDir)) {
-    fs.mkdirSync(config.dataDir, { recursive: true });
-    logger.info(`Directorio de datos creado: ${config.dataDir}`);
+  const runtimeDataDir = process.env.VERCEL ? '/tmp/data' : config.dataDir;
+  config.dataDir = runtimeDataDir;
+
+  if (!jsfs.existsSync(runtimeDataDir)) {
+    if (process.env.VERCEL) {
+      jsfs.mkdirSync('/tmp/data', { recursive: true });
+    } else {
+      jsfs.mkdirSync(runtimeDataDir, { recursive: true });
+    }
+    logger.info(`Directorio de datos creado: ${runtimeDataDir}`);
   }
   if (!fs.existsSync(config.logsDir)) {
     fs.mkdirSync(config.logsDir, { recursive: true });
