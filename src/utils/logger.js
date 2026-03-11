@@ -6,10 +6,16 @@ const fs = require('fs');
 const path = require('path');
 const config = require('../config');
 
-// Crear directorio de logs si no existe
 const logsDir = config.logsDir;
-if (!fs.existsSync(logsDir)) {
-  fs.mkdirSync(logsDir, { recursive: true });
+const shouldWriteToFile = config.isProduction && !process.env.VERCEL;
+
+function ensureLogsDir() {
+  if (!shouldWriteToFile) {
+    return;
+  }
+  if (!fs.existsSync(logsDir)) {
+    fs.mkdirSync(logsDir, { recursive: true });
+  }
 }
 
 const logLevels = {
@@ -45,6 +51,7 @@ class Logger {
   }
 
   writeToFile(level, message) {
+    ensureLogsDir();
     const date = new Date().toISOString().split('T')[0];
     const logFile = path.join(logsDir, `${level}.${date}.log`);
     const formatted = this.formatMessage(level.toUpperCase(), message);
@@ -63,8 +70,8 @@ class Logger {
     // eslint-disable-next-line no-console
     console.log(`${color}${formatted}${colors.reset}`);
 
-    // Archivo (solo para prod)
-    if (config.isProduction) {
+    // Archivo (solo para prod fuera de Vercel)
+    if (shouldWriteToFile) {
       this.writeToFile(level, `${message} ${data ? JSON.stringify(data) : ''}`);
     }
   }

@@ -3,116 +3,143 @@
 // ============================================================
 
 const express = require('express');
-const path = require('path');
 const router = express.Router();
 
 const logger = require('../utils/logger')('Routes/Resenas');
-const { readJSON, writeJSON, getNextId } = require('../utils/dataManager');
+const { query } = require('../db');
 const { validateResena } = require('../middleware/validation');
 const { createResenaLimiter } = require('../middleware/rateLimiter');
 const { hasValidAdminKey, requireAdminAuth } = require('../middleware/auth');
-const config = require('../config');
 
-const RESENAS_FILE = path.join(config.dataDir, 'resenas.json');
+function parseComentario(comentario) {
+  if (!comentario) {
+    return { texto: '', ciudad: '', estado: null };
+  }
+
+  if (typeof comentario === 'object') {
+    return {
+      texto: comentario.texto || comentario.comentario || '',
+      ciudad: comentario.ciudad || '',
+      estado: comentario.estado || null,
+    };
+  }
+
+  try {
+    const parsed = JSON.parse(comentario);
+    if (parsed && typeof parsed === 'object') {
+      return {
+        texto: parsed.texto || parsed.comentario || '',
+        ciudad: parsed.ciudad || '',
+        estado: parsed.estado || null,
+      };
+    }
+  } catch (_error) {
+    // ignore parse error
+  }
+
+  return { texto: comentario, ciudad: '', estado: null };
+}
+
+function buildComentario({ texto, ciudad, estado }) {
+  return JSON.stringify({ texto, ciudad, estado });
+}
+
+function mapResena(row) {
+  const parsed = parseComentario(row.comentario);
+  const createdAt = row.created_at ? new Date(row.created_at).toISOString() : null;
+  const estado = parsed.estado || (row.aprobada ? 'publicada' : 'pendiente');
+
+  return {
+    id: row.id,
+    nombre: row.nombre || '',
+    ciudad: parsed.ciudad || '',
+    texto: parsed.texto || '',
+    calificacion: row.calificacion ?? 5,
+    estado,
+    fechaCreacion: createdAt,
+    fechaActualizacion: createdAt,
+  };
+}
 
 /**
  * POST /api/resenas
  * Crear nueva reseña
  */
-router.post(
-  '/',
-  createResenaLimiter,
-  validateResena,
-  (req, res) => {
-    try {
-      const { nombre, ciudad, texto } = req.validatedBody;
+router.post('/', createResenaLimiter, validateResena, async (req, res) => {
+  try {
+    const { nombre, ciudad, texto } = req.validatedBody;
+    const comentario = buildComentario({
+      texto: texto.trim(),
+      ciudad: (ciudad || '').trim(),
+      estado: 'pendiente',
+    });
 
-      const resenas = readJSON(RESENAS_FILE);
-      const resena = {
-        id: getNextId(resenas),
-        nombre: nombre.trim(),
-        ciudad: (ciudad || '').trim(),
-        texto: texto.trim(),
-        calificacion: 5, // Por defecto 5 estrellas (opcional para future)
-        estado: 'pendiente', // pendiente o publicada (para moderar)
-        fechaCreacion: new Date().toISOString(),
-      };
+    const insertResult = await query(
+      'insert into resenas (nombre, email, calificacion, comentario, aprobada) values ($1, $2, $3, $4, $5) returning *',
+      [nombre.trim(), null, 5, comentario, false],
+    );
 
-      resenas.push(resena);
-      const success = writeJSON(RESENAS_FILE, resenas);
+    const resena = mapResena(insertResult.rows[0]);
 
-      if (!success) {
-        logger.error('Error al guardar reseña');
-        return res.status(500).json({
-          error: true,
-          message: 'Error al guardar la reseña',
-        });
-      }
+    logger.info('Reseña creada', {
+      id: resena.id,
+      nombre: resena.nombre,
+      ciudad: resena.ciudad,
+    });
 
-      logger.info('Reseña creada', {
-        id: resena.id,
-        nombre: resena.nombre,
-        ciudad: resena.ciudad,
-      });
-
-      res.status(201).json({
-        error: false,
-        message: 'Reseña creada exitosamente',
-        data: resena,
-      });
-    } catch (error) {
-      logger.error('Error al crear reseña', { error: error.message });
-      res.status(500).json({
-        error: true,
-        message: 'Error al procesar la reseña',
-      });
-    }
-  },
-);
+    return res.status(201).json({
+      error: false,
+      message: 'Reseña creada exitosamente',
+      data: resena,
+    });
+  } catch (error) {
+    logger.error('Error al crear reseña', { error: error.message });
+    return res.status(500).json({
+      error: true,
+      message: 'Error al procesar la reseña',
+    });
+  }
+});
 
 /**
  * GET /api/resenas
  * Obtener reseñas (públicas por defecto, todas si ?all=true)
  */
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const resenas = readJSON(RESENAS_FILE);
-    const showAll = req.query.all === 'true'; // ?all=true para admin
+    const showAll = req.query.all === 'true';
 
-    if (showAll) {
-      if (!hasValidAdminKey(req)) {
-        return res.status(401).json({
-          error: true,
-          message: 'No autorizado. API key inválida o ausente.',
-        });
-      }
-
-      const sortedAll = resenas.sort(
-        (a, b) => new Date(b.fechaCreacion) - new Date(a.fechaCreacion),
-      );
-
-      return res.json({
-        error: false,
-        data: sortedAll,
-        total: sortedAll.length,
-        pendientes: sortedAll.filter(r => r.estado === 'pendiente').length,
+    if (showAll && !hasValidAdminKey(req)) {
+      return res.status(401).json({
+        error: true,
+        message: 'No autorizado. API key inválida o ausente.',
       });
     }
 
-    const filtered = resenas.filter(r => r.estado === 'publicada');
+    const resenasResult = showAll
+      ? await query('select * from resenas order by created_at desc')
+      : await query('select * from resenas where aprobada = true order by created_at desc');
 
-    const sorted = filtered.sort(
-      (a, b) => new Date(b.fechaCreacion) - new Date(a.fechaCreacion),
-    );
+    const resenas = resenasResult.rows.map(mapResena);
+    const pendientes = resenas.filter(r => r.estado === 'pendiente').length;
 
-    res.json({
+    if (showAll) {
+      return res.json({
+        error: false,
+        data: resenas,
+        total: resenas.length,
+        pendientes,
+      });
+    }
+
+    return res.json({
       error: false,
-      data: sorted,
-      total: sorted.length,
+      data: resenas,
+      total: resenas.length,
     });
   } catch (error) {
     logger.error('Error al obtener reseñas', { error: error.message });
-    res.status(500).json({
+    return res.status(500).json({
       error: true,
       message: 'Error al obtener las reseñas',
     });
@@ -123,18 +150,16 @@ router.get('/', (req, res) => {
  * GET /api/resenas/todas (privado)
  * Obtener TODAS las reseñas (incluyendo pendientes)
  */
-router.get('/todas', requireAdminAuth, (req, res) => {
+router.get('/todas', requireAdminAuth, async (req, res) => {
   try {
-    const resenas = readJSON(RESENAS_FILE);
-    const sorted = resenas.sort(
-      (a, b) => new Date(b.fechaCreacion) - new Date(a.fechaCreacion),
-    );
+    const resenasResult = await query('select * from resenas order by created_at desc');
+    const resenas = resenasResult.rows.map(mapResena);
 
     res.json({
       error: false,
-      data: sorted,
-      total: sorted.length,
-      pendientes: sorted.filter(r => r.estado === 'pendiente').length,
+      data: resenas,
+      total: resenas.length,
+      pendientes: resenas.filter(r => r.estado === 'pendiente').length,
     });
   } catch (error) {
     logger.error('Error al obtener todas las reseñas', { error: error.message });
@@ -149,26 +174,25 @@ router.get('/todas', requireAdminAuth, (req, res) => {
  * GET /api/resenas/:id
  * Obtener una reseña específica
  */
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const id = Number(req.params.id);
-    const resenas = readJSON(RESENAS_FILE);
-    const resena = resenas.find(r => r.id === id);
+    const resenaResult = await query('select * from resenas where id = $1', [id]);
 
-    if (!resena) {
+    if (resenaResult.rows.length === 0) {
       return res.status(404).json({
         error: true,
         message: 'Reseña no encontrada',
       });
     }
 
-    res.json({
+    return res.json({
       error: false,
-      data: resena,
+      data: mapResena(resenaResult.rows[0]),
     });
   } catch (error) {
     logger.error('Error al obtener reseña', { error: error.message });
-    res.status(500).json({
+    return res.status(500).json({
       error: true,
       message: 'Error al obtener la reseña',
     });
@@ -179,7 +203,7 @@ router.get('/:id', (req, res) => {
  * PATCH /api/resenas/:id
  * Actualizar estado de una reseña (publicar/rechazar)
  */
-router.patch('/:id', requireAdminAuth, (req, res) => {
+router.patch('/:id', requireAdminAuth, async (req, res) => {
   try {
     const id = Number(req.params.id);
     const { estado } = req.body;
@@ -191,42 +215,47 @@ router.patch('/:id', requireAdminAuth, (req, res) => {
       });
     }
 
-    const resenas = readJSON(RESENAS_FILE);
-    const resena = resenas.find(r => r.id === id);
+    const resenaResult = await query('select * from resenas where id = $1', [id]);
 
-    if (!resena) {
+    if (resenaResult.rows.length === 0) {
       return res.status(404).json({
         error: true,
         message: 'Reseña no encontrada',
       });
     }
 
-    resena.estado = estado;
-    resena.fechaActualizacion = new Date().toISOString();
+    const existing = resenaResult.rows[0];
+    const parsed = parseComentario(existing.comentario);
+    const comentario = buildComentario({
+      texto: parsed.texto || '',
+      ciudad: parsed.ciudad || '',
+      estado,
+    });
 
-    const success = writeJSON(RESENAS_FILE, resenas);
+    const updateResult = await query(
+      'update resenas set comentario = $1, aprobada = $2 where id = $3 returning *',
+      [comentario, estado === 'publicada', id],
+    );
 
-    if (!success) {
-      logger.error('Error al actualizar reseña');
-      return res.status(500).json({
-        error: true,
-        message: 'Error al actualizar la reseña',
-      });
-    }
+    const resena = mapResena(updateResult.rows[0]);
+    const fechaActualizacion = new Date().toISOString();
 
     logger.info('Reseña actualizada', {
       id: resena.id,
-      estado: estado,
+      estado,
     });
 
-    res.json({
+    return res.json({
       error: false,
       message: 'Reseña actualizada exitosamente',
-      data: resena,
+      data: {
+        ...resena,
+        fechaActualizacion,
+      },
     });
   } catch (error) {
     logger.error('Error al actualizar reseña', { error: error.message });
-    res.status(500).json({
+    return res.status(500).json({
       error: true,
       message: 'Error al actualizar la reseña',
     });
@@ -237,42 +266,29 @@ router.patch('/:id', requireAdminAuth, (req, res) => {
  * DELETE /api/resenas/:id
  * Eliminar una reseña
  */
-router.delete('/:id', requireAdminAuth, (req, res) => {
+router.delete('/:id', requireAdminAuth, async (req, res) => {
   try {
     const id = Number(req.params.id);
-    const resenas = readJSON(RESENAS_FILE);
-    const index = resenas.findIndex(r => r.id === id);
+    const deleteResult = await query('delete from resenas where id = $1 returning id', [id]);
 
-    if (index === -1) {
+    if (deleteResult.rows.length === 0) {
       return res.status(404).json({
         error: true,
         message: 'Reseña no encontrada',
       });
     }
 
-    const [resenaEliminada] = resenas.splice(index, 1);
-    const success = writeJSON(RESENAS_FILE, resenas);
-
-    if (!success) {
-      logger.error('Error al eliminar reseña');
-      return res.status(500).json({
-        error: true,
-        message: 'Error al eliminar la reseña',
-      });
-    }
-
     logger.info('Reseña eliminada', {
-      id: resenaEliminada.id,
-      nombre: resenaEliminada.nombre,
+      id,
     });
 
-    res.json({
+    return res.json({
       error: false,
       message: 'Reseña eliminada exitosamente',
     });
   } catch (error) {
     logger.error('Error al eliminar reseña', { error: error.message });
-    res.status(500).json({
+    return res.status(500).json({
       error: true,
       message: 'Error al eliminar la reseña',
     });

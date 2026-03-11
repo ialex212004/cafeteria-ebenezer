@@ -3,94 +3,122 @@
 // ============================================================
 
 const express = require('express');
-const path = require('path');
 const router = express.Router();
 
 const logger = require('../utils/logger')('Routes/Pedidos');
-const { readJSON, writeJSON, getNextId } = require('../utils/dataManager');
+const { query } = require('../db');
 const { validatePedido, validateActualizarPedido } = require('../middleware/validation');
 const { createPedidoLimiter } = require('../middleware/rateLimiter');
 const { requireAdminAuth } = require('../middleware/auth');
-const config = require('../config');
 
-const PEDIDOS_FILE = path.join(config.dataDir, 'pedidos.json');
+function buildPedidoItems({ producto, cantidad, telefono }) {
+  return [
+    {
+      producto,
+      cantidad,
+      telefono,
+    },
+  ];
+}
+
+function parseItems(items) {
+  if (!items) {
+    return [];
+  }
+  if (Array.isArray(items)) {
+    return items;
+  }
+  try {
+    const parsed = JSON.parse(items);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (_error) {
+    return [];
+  }
+}
+
+function mapPedido(row) {
+  const items = parseItems(row.items);
+  const first = items[0] || {};
+  const createdAt = row.created_at ? new Date(row.created_at).toISOString() : null;
+
+  return {
+    id: row.id,
+    nombre: row.cliente_nombre || first.nombre || '',
+    telefono: first.telefono || '',
+    producto: first.producto || '',
+    cantidad: first.cantidad || 1,
+    notas: row.notas || '',
+    estado: row.estado,
+    fechaCreacion: createdAt,
+    fechaActualizacion: createdAt,
+  };
+}
 
 /**
  * POST /api/pedidos
  * Crear nuevo pedido
  */
-router.post(
-  '/',
-  createPedidoLimiter,
-  validatePedido,
-  (req, res) => {
-    try {
-      const { nombre, telefono, producto, cantidad, notas } = req.validatedBody;
+router.post('/', createPedidoLimiter, validatePedido, async (req, res) => {
+  try {
+    const { nombre, telefono, producto, cantidad, notas } = req.validatedBody;
 
-      const pedidos = readJSON(PEDIDOS_FILE);
+    const duplicateResult = await query(
+      'select id from pedidos where estado = any($1) and items::jsonb @> $2::jsonb limit 1',
+      [['pendiente', 'confirmado'], JSON.stringify([{ telefono }])],
+    );
 
-      // Validación: No permitir 2 pedidos activos del mismo teléfono
-      const pedidoActivo = pedidos.find(
-        p =>
-          p.telefono === telefono &&
-          ['pendiente', 'confirmado'].includes(p.estado),
-      );
-
-      if (pedidoActivo) {
-        logger.warn('Intento de duplicado', {
-          telefono,
-          pedidoExistente: pedidoActivo.id,
-        });
-        return res.status(409).json({
-          error: true,
-          message: 'Ya existe un pedido activo con este teléfono',
-          conflictId: pedidoActivo.id,
-        });
-      }
-
-      const pedido = {
-        id: getNextId(pedidos),
-        nombre: nombre.trim(),
-        telefono: telefono.trim(),
-        producto: producto.trim(),
-        cantidad: cantidad || 1,
-        notas: (notas || '').trim(),
-        estado: 'pendiente',
-        fechaCreacion: new Date().toISOString(),
-        fechaActualizacion: new Date().toISOString(),
-      };
-
-      pedidos.push(pedido);
-      const success = writeJSON(PEDIDOS_FILE, pedidos);
-
-      if (!success) {
-        logger.error('Error al guardar pedido');
-        return res.status(500).json({
-          error: true,
-          message: 'Error al guardar el pedido',
-        });
-      }
-
-      logger.info('Pedido creado', {
-        id: pedido.id,
-        nombre: pedido.nombre,
-        producto: pedido.producto,
+    if (duplicateResult.rows.length > 0) {
+      const pedidoExistente = duplicateResult.rows[0];
+      logger.warn('Intento de duplicado', {
+        telefono,
+        pedidoExistente: pedidoExistente.id,
       });
-
-      res.status(201).json({
-        error: false,
-        message: 'Pedido creado exitosamente',
-        data: pedido,
-      });
-    } catch (error) {
-      logger.error('Error al crear pedido', { error: error.message });
-      res.status(500).json({
+      return res.status(409).json({
         error: true,
-        message: 'Error al procesar el pedido',
+        message: 'Ya existe un pedido activo con este teléfono',
+        conflictId: pedidoExistente.id,
       });
     }
-  },
-);
+
+    const items = buildPedidoItems({
+      producto: producto.trim(),
+      cantidad: cantidad || 1,
+      telefono: telefono.trim(),
+    });
+
+    const insertResult = await query(
+      'insert into pedidos (cliente_nombre, cliente_email, items, total, estado, notas) values ($1, $2, $3, $4, $5, $6) returning *',
+      [
+        nombre.trim(),
+        null,
+        JSON.stringify(items),
+        0,
+        'pendiente',
+        (notas || '').trim(),
+      ],
+    );
+
+    const pedido = mapPedido(insertResult.rows[0]);
+
+    logger.info('Pedido creado', {
+      id: pedido.id,
+      nombre: pedido.nombre,
+      producto: pedido.producto,
+    });
+
+    return res.status(201).json({
+      error: false,
+      message: 'Pedido creado exitosamente',
+      data: pedido,
+    });
+  } catch (error) {
+    logger.error('Error al crear pedido', { error: error.message });
+    return res.status(500).json({
+      error: true,
+      message: 'Error al procesar el pedido',
+    });
+  }
+});
 
 /**
  * GET /api/pedidos
@@ -98,47 +126,55 @@ router.post(
  * Query: ?estado=pendiente|confirmado|entregado para filtrar
  * Query: ?limit=10&page=1 para paginación
  */
-router.get('/', requireAdminAuth, (req, res) => {
+router.get('/', requireAdminAuth, async (req, res) => {
   try {
-    let pedidos = readJSON(PEDIDOS_FILE);
+    const estadoFiltro = req.query.estado ? req.query.estado.toLowerCase() : null;
+    const estadosValidos = ['pendiente', 'confirmado', 'entregado'];
 
-    // Filtrar por estado si se proporciona
-    if (req.query.estado) {
-      const estadoFiltro = req.query.estado.toLowerCase();
-      const estadosValidos = ['pendiente', 'confirmado', 'entregado'];
-      if (estadosValidos.includes(estadoFiltro)) {
-        pedidos = pedidos.filter(p => p.estado === estadoFiltro);
-      } else {
-        return res.status(400).json({
-          error: true,
-          message: `Estado inválido. Usa: ${estadosValidos.join(', ')}`,
-        });
-      }
+    if (estadoFiltro && !estadosValidos.includes(estadoFiltro)) {
+      return res.status(400).json({
+        error: true,
+        message: `Estado inválido. Usa: ${estadosValidos.join(', ')}`,
+      });
     }
 
-    // Ordenar por fecha descendente (más recientes primero)
-    const sorted = pedidos.sort(
-      (a, b) => new Date(b.fechaCreacion) - new Date(a.fechaCreacion),
+    const page = Math.max(parseInt(req.query.page || '1', 10), 1);
+    const limit = Math.min(parseInt(req.query.limit || '50', 10), 200);
+    const offset = (page - 1) * limit;
+
+    let whereClause = '';
+    let whereParams = [];
+    if (estadoFiltro) {
+      whereClause = 'where estado = $1';
+      whereParams = [estadoFiltro];
+    }
+
+    const countResult = await query(
+      `select count(*)::int as total from pedidos ${whereClause}`,
+      whereParams,
     );
 
-    // Paginación básica
-    const page = parseInt(req.query.page || '1', 10);
-    const limit = parseInt(req.query.limit || '50', 10);
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    const paginated = sorted.slice(start, end);
+    const dataParams = estadoFiltro
+      ? [estadoFiltro, limit, offset]
+      : [limit, offset];
+    const dataQuery = estadoFiltro
+      ? 'select * from pedidos where estado = $1 order by created_at desc limit $2 offset $3'
+      : 'select * from pedidos order by created_at desc limit $1 offset $2';
 
-    res.json({
+    const pedidosResult = await query(dataQuery, dataParams);
+    const pedidos = pedidosResult.rows.map(mapPedido);
+
+    return res.json({
       error: false,
-      data: paginated,
-      total: sorted.length,
+      data: pedidos,
+      total: countResult.rows[0]?.total || 0,
       page,
       limit,
-      pages: Math.ceil(sorted.length / limit),
+      pages: Math.ceil((countResult.rows[0]?.total || 0) / limit) || 1,
     });
   } catch (error) {
     logger.error('Error al obtener pedidos', { error: error.message });
-    res.status(500).json({
+    return res.status(500).json({
       error: true,
       message: 'Error al obtener los pedidos',
     });
@@ -149,26 +185,25 @@ router.get('/', requireAdminAuth, (req, res) => {
  * GET /api/pedidos/:id
  * Obtener un pedido específico
  */
-router.get('/:id', requireAdminAuth, (req, res) => {
+router.get('/:id', requireAdminAuth, async (req, res) => {
   try {
     const id = Number(req.params.id);
-    const pedidos = readJSON(PEDIDOS_FILE);
-    const pedido = pedidos.find(p => p.id === id);
+    const pedidoResult = await query('select * from pedidos where id = $1', [id]);
 
-    if (!pedido) {
+    if (pedidoResult.rows.length === 0) {
       return res.status(404).json({
         error: true,
         message: 'Pedido no encontrado',
       });
     }
 
-    res.json({
+    return res.json({
       error: false,
-      data: pedido,
+      data: mapPedido(pedidoResult.rows[0]),
     });
   } catch (error) {
     logger.error('Error al obtener pedido', { error: error.message });
-    res.status(500).json({
+    return res.status(500).json({
       error: true,
       message: 'Error al obtener el pedido',
     });
@@ -179,49 +214,42 @@ router.get('/:id', requireAdminAuth, (req, res) => {
  * PATCH /api/pedidos/:id
  * Actualizar estado de un pedido
  */
-router.patch('/:id', requireAdminAuth, validateActualizarPedido, (req, res) => {
+router.patch('/:id', requireAdminAuth, validateActualizarPedido, async (req, res) => {
   try {
     const id = Number(req.params.id);
     const { estado } = req.validatedBody;
 
-    const pedidos = readJSON(PEDIDOS_FILE);
-    const pedido = pedidos.find(p => p.id === id);
+    const updateResult = await query(
+      'update pedidos set estado = $1 where id = $2 returning *',
+      [estado, id],
+    );
 
-    if (!pedido) {
+    if (updateResult.rows.length === 0) {
       return res.status(404).json({
         error: true,
         message: 'Pedido no encontrado',
       });
     }
 
-    const estadoAnterior = pedido.estado;
-    pedido.estado = estado;
-    pedido.fechaActualizacion = new Date().toISOString();
-
-    const success = writeJSON(PEDIDOS_FILE, pedidos);
-
-    if (!success) {
-      logger.error('Error al actualizar pedido');
-      return res.status(500).json({
-        error: true,
-        message: 'Error al actualizar el pedido',
-      });
-    }
+    const pedido = mapPedido(updateResult.rows[0]);
+    const fechaActualizacion = new Date().toISOString();
 
     logger.info('Pedido actualizado', {
       id: pedido.id,
-      estadoAnterior,
       estadoNuevo: estado,
     });
 
-    res.json({
+    return res.json({
       error: false,
       message: 'Pedido actualizado exitosamente',
-      data: pedido,
+      data: {
+        ...pedido,
+        fechaActualizacion,
+      },
     });
   } catch (error) {
     logger.error('Error al actualizar pedido', { error: error.message });
-    res.status(500).json({
+    return res.status(500).json({
       error: true,
       message: 'Error al actualizar el pedido',
     });
@@ -232,42 +260,29 @@ router.patch('/:id', requireAdminAuth, validateActualizarPedido, (req, res) => {
  * DELETE /api/pedidos/:id
  * Eliminar un pedido
  */
-router.delete('/:id', requireAdminAuth, (req, res) => {
+router.delete('/:id', requireAdminAuth, async (req, res) => {
   try {
     const id = Number(req.params.id);
-    const pedidos = readJSON(PEDIDOS_FILE);
-    const index = pedidos.findIndex(p => p.id === id);
+    const deleteResult = await query('delete from pedidos where id = $1 returning id', [id]);
 
-    if (index === -1) {
+    if (deleteResult.rows.length === 0) {
       return res.status(404).json({
         error: true,
         message: 'Pedido no encontrado',
       });
     }
 
-    const [pedidoEliminado] = pedidos.splice(index, 1);
-    const success = writeJSON(PEDIDOS_FILE, pedidos);
-
-    if (!success) {
-      logger.error('Error al eliminar pedido');
-      return res.status(500).json({
-        error: true,
-        message: 'Error al eliminar el pedido',
-      });
-    }
-
     logger.info('Pedido eliminado', {
-      id: pedidoEliminado.id,
-      nombre: pedidoEliminado.nombre,
+      id,
     });
 
-    res.json({
+    return res.json({
       error: false,
       message: 'Pedido eliminado exitosamente',
     });
   } catch (error) {
     logger.error('Error al eliminar pedido', { error: error.message });
-    res.status(500).json({
+    return res.status(500).json({
       error: true,
       message: 'Error al eliminar el pedido',
     });

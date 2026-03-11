@@ -4,8 +4,6 @@
 // ============================================================
 
 const express = require('express');
-const fs = require('fs');
-const jsfs = fs;
 const path = require('path');
 
 // Cargar configuración y utilidades
@@ -21,23 +19,6 @@ const { errorHandler, notFound } = require('./src/middleware/errorHandler');
 const healthRoutes = require('./src/routes/health');
 const pedidosRoutes = require('./src/routes/pedidos');
 const reseniasRoutes = require('./src/routes/resenas');
-
-function ensureRuntimeDirectories() {
-  const runtimeDataDir = process.env.VERCEL ? '/tmp/data' : config.dataDir;
-  config.dataDir = runtimeDataDir;
-
-  if (!jsfs.existsSync(runtimeDataDir)) {
-    if (process.env.VERCEL) {
-      jsfs.mkdirSync('/tmp/data', { recursive: true });
-    } else {
-      jsfs.mkdirSync(runtimeDataDir, { recursive: true });
-    }
-    logger.info(`Directorio de datos creado: ${runtimeDataDir}`);
-  }
-  if (!fs.existsSync(config.logsDir)) {
-    fs.mkdirSync(config.logsDir, { recursive: true });
-  }
-}
 
 function createApp() {
   // Inicializar Express
@@ -99,7 +80,6 @@ function attachProcessHandlers(serverInstance) {
 }
 
 function startServer() {
-  ensureRuntimeDirectories();
   const app = createApp();
   const server = app.listen(config.port, config.host, () => {
     logger.info('🚀 Servidor iniciado', {

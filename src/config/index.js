@@ -16,7 +16,7 @@ const config = {
 
   // Rutas
   dataDir: process.env.DATA_DIR || './data',
-  logsDir: process.env.LOG_DIR || './logs',
+  logsDir: process.env.LOG_DIR || (process.env.VERCEL ? '/tmp/logs' : './logs'),
 
   // CORS
   allowedOrigins: (process.env.ALLOWED_ORIGINS || 'http://localhost:3000').split(','),
