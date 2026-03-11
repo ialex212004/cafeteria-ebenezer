@@ -3,11 +3,13 @@ import config from '../../../../src/config/index.js';
 import { query } from '../../../../src/db/index.js';
 import validators from '../../../../src/validators/index.js';
 import requestIdUtils from '../../../../src/utils/requestId.js';
+import safeCompareUtils from '../../../../src/utils/safeCompare.js';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const { createRequestId } = requestIdUtils;
+const { safeCompare } = safeCompareUtils;
 
 function jsonWithRequestId(payload, init, requestId) {
   const response = NextResponse.json(payload, init);
@@ -17,13 +19,13 @@ function jsonWithRequestId(payload, init, requestId) {
 
 function hasValidAdminKey(request) {
   const directKey = request.headers.get('x-api-key');
-  if (directKey && directKey.trim() === config.apiKey) {
+  if (directKey && safeCompare(directKey.trim(), config.apiKey)) {
     return true;
   }
 
   const authHeader = request.headers.get('authorization');
   if (authHeader && authHeader.startsWith('Bearer ')) {
-    return authHeader.slice('Bearer '.length).trim() === config.apiKey;
+    return safeCompare(authHeader.slice('Bearer '.length).trim(), config.apiKey);
   }
 
   return false;

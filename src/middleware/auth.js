@@ -4,6 +4,7 @@
 
 const config = require('../config');
 const logger = require('../utils/logger')('Auth');
+const { safeCompare } = require('../utils/safeCompare');
 
 /**
  * Extrae API key desde header x-api-key o Authorization: Bearer <token>
@@ -26,7 +27,7 @@ function getApiKeyFromRequest(req) {
 
 function hasValidAdminKey(req) {
   const providedKey = getApiKeyFromRequest(req);
-  return Boolean(providedKey && providedKey === config.apiKey);
+  return Boolean(providedKey && safeCompare(providedKey, config.apiKey));
 }
 
 /**
@@ -42,6 +43,7 @@ function requireAdminAuth(req, res, next) {
     return res.status(401).json({
       error: true,
       message: 'No autorizado. API key inválida o ausente.',
+      requestId: req.requestId,
     });
   }
 
