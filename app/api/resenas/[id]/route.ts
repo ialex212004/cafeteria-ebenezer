@@ -68,9 +68,24 @@ function mapResenaRow(row) {
   };
 }
 
+function parseId(value) {
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed <= 0) {
+    return null;
+  }
+  return parsed;
+}
+
 export async function GET(_request, { params }) {
   const requestId = createRequestId();
-  const id = Number(params.id);
+  const id = parseId(params.id);
+  if (!id) {
+    return jsonWithRequestId(
+      { error: true, message: 'ID inválido', requestId },
+      { status: 400 },
+      requestId,
+    );
+  }
   const result = await query(
     `SELECT id, nombre, email, calificacion, comentario, aprobada, created_at
      FROM resenas
@@ -123,7 +138,14 @@ export async function PATCH(request, { params }) {
     );
   }
 
-  const id = Number(params.id);
+  const id = parseId(params.id);
+  if (!id) {
+    return jsonWithRequestId(
+      { error: true, message: 'ID inválido', requestId },
+      { status: 400 },
+      requestId,
+    );
+  }
   const aprobada = estado === 'publicada';
 
   const updateResult = await query(
@@ -167,7 +189,14 @@ export async function DELETE(request, { params }) {
     );
   }
 
-  const id = Number(params.id);
+  const id = parseId(params.id);
+  if (!id) {
+    return jsonWithRequestId(
+      { error: true, message: 'ID inválido', requestId },
+      { status: 400 },
+      requestId,
+    );
+  }
   const deleteResult = await query(
     `DELETE FROM resenas
      WHERE id = $1

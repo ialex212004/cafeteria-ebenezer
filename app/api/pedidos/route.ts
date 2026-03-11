@@ -46,6 +46,14 @@ function mapPedidoRow(row) {
   };
 }
 
+function parsePositiveInt(value, fallback) {
+  const parsed = Number.parseInt(value, 10);
+  if (Number.isNaN(parsed) || parsed <= 0) {
+    return fallback;
+  }
+  return parsed;
+}
+
 export async function POST(request) {
   const requestId = createRequestId();
   let body;
@@ -153,8 +161,8 @@ export async function GET(request) {
     estadoFiltro = estado;
   }
 
-  const page = Number.parseInt(searchParams.get('page') || '1', 10);
-  const limit = Number.parseInt(searchParams.get('limit') || '50', 10);
+  const page = parsePositiveInt(searchParams.get('page') || '1', 1);
+  const limit = Math.min(parsePositiveInt(searchParams.get('limit') || '50', 50), 200);
   const offset = (page - 1) * limit;
 
   const whereClause = estadoFiltro ? 'WHERE estado = $1' : '';

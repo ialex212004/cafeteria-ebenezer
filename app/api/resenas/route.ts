@@ -95,6 +95,7 @@ export async function POST(request) {
   const comentarioPayload = {
     texto: texto.trim(),
     ciudad: (ciudad || '').trim(),
+    estado: 'pendiente',
   };
 
   const insertResult = await query(

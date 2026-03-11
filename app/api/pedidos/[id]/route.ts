@@ -46,6 +46,14 @@ function mapPedidoRow(row) {
   };
 }
 
+function parseId(value) {
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed <= 0) {
+    return null;
+  }
+  return parsed;
+}
+
 export async function GET(request, { params }) {
   const requestId = createRequestId();
   if (!hasValidAdminKey(request)) {
@@ -56,7 +64,14 @@ export async function GET(request, { params }) {
     );
   }
 
-  const id = Number(params.id);
+  const id = parseId(params.id);
+  if (!id) {
+    return jsonWithRequestId(
+      { error: true, message: 'ID inválido', requestId },
+      { status: 400 },
+      requestId,
+    );
+  }
   const result = await query(
     `SELECT id, cliente_nombre, items, total, estado, notas, created_at
      FROM pedidos
@@ -112,7 +127,14 @@ export async function PATCH(request, { params }) {
     );
   }
 
-  const id = Number(params.id);
+  const id = parseId(params.id);
+  if (!id) {
+    return jsonWithRequestId(
+      { error: true, message: 'ID inválido', requestId },
+      { status: 400 },
+      requestId,
+    );
+  }
   const updateResult = await query(
     `UPDATE pedidos
      SET estado = $1
@@ -154,7 +176,14 @@ export async function DELETE(request, { params }) {
     );
   }
 
-  const id = Number(params.id);
+  const id = parseId(params.id);
+  if (!id) {
+    return jsonWithRequestId(
+      { error: true, message: 'ID inválido', requestId },
+      { status: 400 },
+      requestId,
+    );
+  }
   const deleteResult = await query(
     `DELETE FROM pedidos
      WHERE id = $1

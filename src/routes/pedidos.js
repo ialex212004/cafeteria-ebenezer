@@ -12,33 +12,39 @@ const { createPedidoLimiter } = require('../middleware/rateLimiter');
 const { requireAdminAuth } = require('../middleware/auth');
 
 function buildPedidoItems({ producto, cantidad, telefono }) {
-  return [
-    {
-      producto,
-      cantidad,
-      telefono,
-    },
-  ];
+  return {
+    producto,
+    cantidad,
+    telefono,
+  };
 }
 
-function parseItems(items) {
+function normalizeItems(items) {
   if (!items) {
-    return [];
+    return {};
   }
   if (Array.isArray(items)) {
+    return items[0] || {};
+  }
+  if (typeof items === 'object') {
     return items;
   }
   try {
     const parsed = JSON.parse(items);
-    return Array.isArray(parsed) ? parsed : [];
+    if (Array.isArray(parsed)) {
+      return parsed[0] || {};
+    }
+    if (parsed && typeof parsed === 'object') {
+      return parsed;
+    }
   } catch (_error) {
-    return [];
+    return {};
   }
+  return {};
 }
 
 function mapPedido(row) {
-  const items = parseItems(row.items);
-  const first = items[0] || {};
+  const first = normalizeItems(row.items);
   const createdAt = row.created_at ? new Date(row.created_at).toISOString() : null;
 
   return {
@@ -54,6 +60,14 @@ function mapPedido(row) {
   };
 }
 
+function parseId(value) {
+  const id = Number(value);
+  if (!Number.isInteger(id) || id <= 0) {
+    return null;
+  }
+  return id;
+}
+
 /**
  * POST /api/pedidos
  * Crear nuevo pedido
@@ -63,8 +77,8 @@ router.post('/', createPedidoLimiter, validatePedido, async (req, res) => {
     const { nombre, telefono, producto, cantidad, notas } = req.validatedBody;
 
     const duplicateResult = await query(
-      'select id from pedidos where estado = any($1) and items::jsonb @> $2::jsonb limit 1',
-      [['pendiente', 'confirmado'], JSON.stringify([{ telefono }])],
+      "select id from pedidos where estado = any($1) and (items->>'telefono' = $2 or (items::jsonb -> 0 ->> 'telefono') = $2) limit 1",
+      [['pendiente', 'confirmado'], telefono],
     );
 
     if (duplicateResult.rows.length > 0) {
@@ -187,7 +201,13 @@ router.get('/', requireAdminAuth, async (req, res) => {
  */
 router.get('/:id', requireAdminAuth, async (req, res) => {
   try {
-    const id = Number(req.params.id);
+    const id = parseId(req.params.id);
+    if (!id) {
+      return res.status(400).json({
+        error: true,
+        message: 'ID inválido',
+      });
+    }
     const pedidoResult = await query('select * from pedidos where id = $1', [id]);
 
     if (pedidoResult.rows.length === 0) {
@@ -216,7 +236,13 @@ router.get('/:id', requireAdminAuth, async (req, res) => {
  */
 router.patch('/:id', requireAdminAuth, validateActualizarPedido, async (req, res) => {
   try {
-    const id = Number(req.params.id);
+    const id = parseId(req.params.id);
+    if (!id) {
+      return res.status(400).json({
+        error: true,
+        message: 'ID inválido',
+      });
+    }
     const { estado } = req.validatedBody;
 
     const updateResult = await query(
@@ -262,7 +288,13 @@ router.patch('/:id', requireAdminAuth, validateActualizarPedido, async (req, res
  */
 router.delete('/:id', requireAdminAuth, async (req, res) => {
   try {
-    const id = Number(req.params.id);
+    const id = parseId(req.params.id);
+    if (!id) {
+      return res.status(400).json({
+        error: true,
+        message: 'ID inválido',
+      });
+    }
     const deleteResult = await query('delete from pedidos where id = $1 returning id', [id]);
 
     if (deleteResult.rows.length === 0) {

@@ -61,6 +61,14 @@ function mapResena(row) {
   };
 }
 
+function parseId(value) {
+  const id = Number(value);
+  if (!Number.isInteger(id) || id <= 0) {
+    return null;
+  }
+  return id;
+}
+
 /**
  * POST /api/resenas
  * Crear nueva reseña
@@ -176,7 +184,13 @@ router.get('/todas', requireAdminAuth, async (req, res) => {
  */
 router.get('/:id', async (req, res) => {
   try {
-    const id = Number(req.params.id);
+    const id = parseId(req.params.id);
+    if (!id) {
+      return res.status(400).json({
+        error: true,
+        message: 'ID inválido',
+      });
+    }
     const resenaResult = await query('select * from resenas where id = $1', [id]);
 
     if (resenaResult.rows.length === 0) {
@@ -205,7 +219,13 @@ router.get('/:id', async (req, res) => {
  */
 router.patch('/:id', requireAdminAuth, async (req, res) => {
   try {
-    const id = Number(req.params.id);
+    const id = parseId(req.params.id);
+    if (!id) {
+      return res.status(400).json({
+        error: true,
+        message: 'ID inválido',
+      });
+    }
     const { estado } = req.body;
 
     if (!['publicada', 'rechazada', 'pendiente'].includes(estado)) {
@@ -268,7 +288,13 @@ router.patch('/:id', requireAdminAuth, async (req, res) => {
  */
 router.delete('/:id', requireAdminAuth, async (req, res) => {
   try {
-    const id = Number(req.params.id);
+    const id = parseId(req.params.id);
+    if (!id) {
+      return res.status(400).json({
+        error: true,
+        message: 'ID inválido',
+      });
+    }
     const deleteResult = await query('delete from resenas where id = $1 returning id', [id]);
 
     if (deleteResult.rows.length === 0) {
