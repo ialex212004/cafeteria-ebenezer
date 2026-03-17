@@ -11,6 +11,8 @@ yarn-error.log*
 dist/
 build/
 logs/
+ebenezer-glow-up/node_modules/
+ebenezer-glow-up/dist/
 .next/
 out/
 next-env.d.ts

@@ -33,7 +33,10 @@ function createApp() {
   app.use(express.urlencoded({ limit: config.maxRequestBodySize, extended: true }));
 
   // ── ARCHIVOS ESTÁTICOS ──────────────────────────────────
-  app.use(express.static(path.join(__dirname, 'public')));
+  const clientDistPath = path.join(__dirname, 'ebenezer-glow-up', 'dist');
+  const publicPath = path.join(__dirname, 'public');
+  const staticPath = config.isProduction ? clientDistPath : publicPath;
+  app.use(express.static(staticPath));
 
   // ── RATE LIMITING ───────────────────────────────────────
   app.use('/api/', apiLimiter);
@@ -45,7 +48,10 @@ function createApp() {
 
   // ── FALLBACK SPA (Serve index.html para rutas no reconocidas)
   app.get('*', (_req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    const indexPath = config.isProduction
+      ? path.join(clientDistPath, 'index.html')
+      : path.join(publicPath, 'index.html');
+    res.sendFile(indexPath);
   });
 
   // ── MANEJO DE ERRORES ───────────────────────────────────
