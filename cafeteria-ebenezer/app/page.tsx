@@ -1,22 +1,81 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-type Tab = "cafe" | "pizza";
+type MenuTab = "cafe" | "pizza";
+
+type Review = {
+  name: string;
+  text: string;
+  stars: number;
+  avatarStyle: string;
+};
+
+const initialReviews: Review[] = [
+  {
+    name: "María González",
+    text: "El café de especialidad es simplemente increíble. El latte art que hacen es digno de fotografiar. ¡Vuelvo cada semana sin falta!",
+    stars: 5,
+    avatarStyle: "background:rgba(212,168,83,0.15);color:var(--gold2)",
+  },
+  {
+    name: "Carlos Ruiz",
+    text: "La Ébenezer Suprema es una pizza que no se olvida. Masa perfecta, ingredientes frescos y ese ambiente nocturno tan especial.",
+    stars: 5,
+    avatarStyle: "background:rgba(168,50,40,0.15);color:var(--red2)",
+  },
+  {
+    name: "Ana Martínez",
+    text: "Me encanta que puedo desayunar rico por la mañana y cenar pizza de noche en el mismo lugar. El croissant es el mejor que he probado.",
+    stars: 4,
+    avatarStyle: "background:rgba(212,168,83,0.1);color:var(--gold)",
+  },
+  {
+    name: "Luis Herrera",
+    text: "El Cold Brew de 12 horas tiene un sabor incomparable. Vine una vez por recomendación y ya no puedo dejar de venir cada semana.",
+    stars: 5,
+    avatarStyle: "background:rgba(212,168,83,0.15);color:var(--gold2)",
+  },
+  {
+    name: "Sofía Peña",
+    text: "La pizza Mediterránea con jamón serrano y rúcula es una obra maestra. El ambiente, la música, el servicio… todo perfecto.",
+    stars: 5,
+    avatarStyle: "background:rgba(168,50,40,0.15);color:var(--red2)",
+  },
+  {
+    name: "Roberto Díaz",
+    text: "El Mocha con crema batida es adictivo. Lo pido cada mañana camino al trabajo. Un lugar que se convierte en parte de tu rutina.",
+    stars: 5,
+    avatarStyle: "background:rgba(212,168,83,0.12);color:var(--gold)",
+  },
+];
+
+function starsText(value: number) {
+  return `${"★".repeat(value)}${"☆".repeat(5 - value)}`;
+}
 
 export default function Home() {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<Tab>("cafe");
+  const [activeTab, setActiveTab] = useState<MenuTab>("cafe");
   const [scrolled, setScrolled] = useState(false);
+  const [rating, setRating] = useState(5);
+  const [name, setName] = useState("");
+  const [text, setText] = useState("");
+  const [message, setMessage] = useState("");
+  const [messageError, setMessageError] = useState(false);
+  const [reviews, setReviews] = useState<Review[]>(initialReviews);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const galleryTrackRef = useRef<HTMLDivElement | null>(null);
+
+  const duplicatedReviews = useMemo(() => [...reviews, ...reviews], [reviews]);
 
   useEffect(() => {
-    const onScroll = () => {
+    const handleScroll = () => {
       setScrolled(window.scrollY > 40);
     };
 
-    onScroll();
-    window.addEventListener("scroll", onScroll);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -27,20 +86,121 @@ export default function Home() {
           }
         });
       },
-      { threshold: 0.15 },
+      { threshold: 0.12 },
     );
 
-    const elements = document.querySelectorAll(".reveal, .reveal-left");
-    elements.forEach((element) => observer.observe(element));
+    const revealElements = document.querySelectorAll(".reveal");
+    revealElements.forEach((element) => observer.observe(element));
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      elements.forEach((element) => observer.unobserve(element));
+      window.removeEventListener("scroll", handleScroll);
+      revealElements.forEach((element) => observer.unobserve(element));
       observer.disconnect();
     };
   }, []);
 
-  const closeMobile = () => setMobileOpen(false);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const context = canvas.getContext("2d");
+    if (!context) return;
+
+    let width = 0;
+    let height = 0;
+    let animationFrame = 0;
+
+    const palette = ["rgba(212,168,83,", "rgba(168,50,40,", "rgba(242,236,224,"];
+    const particles = Array.from({ length: 55 }, () => ({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      r: Math.random() * 1.4 + 0.3,
+      vx: (Math.random() - 0.5) * 0.18,
+      vy: -Math.random() * 0.22 - 0.05,
+      a: Math.random() * 0.45 + 0.1,
+      c: palette[Math.floor(Math.random() * palette.length)],
+    }));
+
+    const resize = () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+
+    const draw = () => {
+      context.clearRect(0, 0, width, height);
+
+      particles.forEach((particle) => {
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+
+        if (particle.y < -5) {
+          particle.y = height + 5;
+          particle.x = Math.random() * width;
+        }
+
+        if (particle.x < -5) particle.x = width + 5;
+        if (particle.x > width + 5) particle.x = -5;
+
+        context.beginPath();
+        context.arc(particle.x, particle.y, particle.r, 0, Math.PI * 2);
+        context.fillStyle = `${particle.c}${particle.a})`;
+        context.fill();
+      });
+
+      animationFrame = window.requestAnimationFrame(draw);
+    };
+
+    resize();
+    draw();
+    window.addEventListener("resize", resize);
+
+    return () => {
+      window.removeEventListener("resize", resize);
+      window.cancelAnimationFrame(animationFrame);
+    };
+  }, []);
+
+  const scrollGallery = (direction: number) => {
+    galleryTrackRef.current?.scrollBy({
+      left: direction * 300,
+      behavior: "smooth",
+    });
+  };
+
+  const submitReview = () => {
+    const trimmedName = name.trim();
+    const trimmedText = text.trim();
+
+    if (!trimmedName || !trimmedText) {
+      setMessageError(true);
+      setMessage("Por favor completa tu nombre y reseña.");
+      return;
+    }
+
+    const avatarStyles = [
+      "background:rgba(212,168,83,0.15);color:var(--gold2)",
+      "background:rgba(168,50,40,0.15);color:var(--red2)",
+      "background:rgba(212,168,83,0.1);color:var(--gold)",
+    ];
+
+    const nextReview: Review = {
+      name: trimmedName,
+      text: trimmedText,
+      stars: rating,
+      avatarStyle: avatarStyles[Math.floor(Math.random() * avatarStyles.length)],
+    };
+
+    setReviews((current) => [nextReview, ...current]);
+    setName("");
+    setText("");
+    setRating(5);
+    setMessageError(false);
+    setMessage(`¡Gracias ${trimmedName}! Tu reseña aparece en el carrusel.`);
+
+    window.setTimeout(() => {
+      setMessage("");
+    }, 4000);
+  };
 
   return (
     <>
@@ -48,292 +208,648 @@ export default function Home() {
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-          --bg: hsl(210, 40%, 98%);
-          --fg: hsl(215, 25%, 20%);
-          --card: hsl(0, 0%, 100%);
-          --card-fg: hsl(215, 25%, 25%);
-          --primary: hsl(217, 91%, 60%);
-          --primary-fg: hsl(210, 40%, 98%);
-          --secondary: hsl(210, 40%, 90%);
-          --muted: hsl(210, 40%, 95%);
-          --muted-fg: hsl(215, 20%, 55%);
-          --accent: hsl(38, 95%, 55%);
-          --accent-fg: hsl(215, 25%, 20%);
-          --border: hsl(215, 20%, 88%);
-          --hero-dark: hsl(215, 25%, 12%);
-          --hero-dark-fg: hsl(210, 40%, 95%);
-          --radius: 0.5rem;
-          --shadow-card: 0 0 0 1px hsl(215 20% 88% / 0.5), 0 1px 2px -1px hsl(215 25% 20% / 0.05);
-          --shadow-card-hover: 0 0 0 1px hsl(215 20% 88% / 0.7), 0 4px 12px hsl(215 25% 20% / 0.08);
-          --shadow-btn: 0 0 0 1px hsl(215 25% 20% / 0.07), 0 2px 4px hsl(215 25% 20% / 0.05);
+          --bg: #0e0b08;
+          --bg2: #131009;
+          --bg3: #18140d;
+          --surface: #201a11;
+          --border: rgba(210,185,140,0.08);
+          --border2: rgba(210,185,140,0.16);
+          --fg: #f2ece0;
+          --fg2: #a89880;
+          --fg3: #5c5040;
+          --gold: #d4a853;
+          --gold2: #edc97a;
+          --gold-dim: rgba(212,168,83,0.12);
+          --red: #a83228;
+          --red2: #d4503f;
+          --red-dim: rgba(168,50,40,0.14);
+          --font-display: 'Poppins', sans-serif;
+          --font-body: 'Libre Baskerville', Georgia, serif;
+          --ease: cubic-bezier(0.34, 1.56, 0.64, 1);
+          --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         html { scroll-behavior: smooth; }
-        body { font-family: 'Satoshi', sans-serif; background: var(--bg); color: var(--fg); line-height: 1.6; -webkit-font-smoothing: antialiased; }
-        h1, h2, h3, h4, h5, h6 { font-family: 'General Sans', sans-serif; letter-spacing: -0.03em; text-wrap: balance; }
-        p { text-wrap: pretty; }
-        a { text-decoration: none; color: inherit; }
-        img { display: block; max-width: 100%; }
-        button { cursor: pointer; border: none; font-family: inherit; }
+        body {
+          font-family: var(--font-body);
+          background: var(--bg);
+          color: var(--fg);
+          overflow-x: hidden;
+          font-size: 0.9rem;
+          line-height: 1.8;
+        }
+        h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); letter-spacing: -0.01em; }
+        a { color: inherit; text-decoration: none; }
+        button { font: inherit; cursor: pointer; }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
-        .font-display { font-family: 'General Sans', sans-serif; }
-        .font-body { font-family: 'Satoshi', sans-serif; }
+        nav {
+          position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+          transition: background 0.4s, backdrop-filter 0.4s;
+          padding: 0;
+        }
+        nav.scrolled {
+          background: rgba(14,11,8,0.92);
+          backdrop-filter: blur(20px);
+          border-bottom: 1px solid var(--border);
+        }
+        .nav-inner {
+          max-width: 1280px; margin: 0 auto;
+          display: flex; align-items: center; justify-content: space-between;
+          padding: 1.25rem 2rem;
+        }
+        .nav-logo {
+          font-family: var(--font-display);
+          font-size: 1.1rem; font-weight: 600;
+          color: var(--fg);
+          letter-spacing: 0.01em;
+          transition: color 0.2s;
+        }
+        .nav-logo span { color: var(--gold); font-style: italic; }
+        .nav-links { display: flex; align-items: center; gap: 2.5rem; list-style: none; }
+        .nav-links a {
+          font-size: 0.78rem; font-weight: 500; letter-spacing: 0.12em;
+          text-transform: uppercase; color: var(--fg2);
+          transition: color 0.2s;
+          position: relative;
+        }
+        .nav-links a::after {
+          content: ''; position: absolute; bottom: -3px; left: 0; right: 0;
+          height: 1px; background: var(--gold);
+          transform: scaleX(0); transform-origin: left;
+          transition: transform 0.3s var(--ease-smooth);
+        }
+        .nav-links a:hover { color: var(--gold); }
+        .nav-links a:hover::after { transform: scaleX(1); }
 
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
-
-        .animate-fade-up { animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
-        .animate-fade-in { animation: fadeIn 0.6s ease both; }
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
-        .delay-4 { animation-delay: 0.4s; }
-        .delay-5 { animation-delay: 0.5s; }
-
-        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
-        .reveal.visible { opacity: 1; transform: translateY(0); }
-        .reveal-left { opacity: 0; transform: translateX(-30px); transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
-        .reveal-left.visible { opacity: 1; transform: translateX(0); }
-
-        .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 50; transition: all 0.3s ease; animation: slideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
-        .navbar.scrolled { background: hsl(0 0% 100% / 0.9); backdrop-filter: blur(12px); box-shadow: var(--shadow-card); }
-        .navbar-inner { display: flex; align-items: center; justify-content: space-between; padding: 1rem 0; }
-        .navbar-brand { font-family: 'General Sans', sans-serif; font-size: 1.25rem; font-weight: 700; letter-spacing: -0.03em; color: var(--fg); }
-        .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
-        .nav-links a { font-family: 'Satoshi', sans-serif; font-size: 0.875rem; font-weight: 500; color: var(--muted-fg); transition: color 0.2s; }
-        .nav-links a:hover { color: var(--fg); }
-        .mobile-toggle { display: none; background: none; color: var(--fg); padding: 0.5rem; }
-        .mobile-menu { display: none; background: hsl(0 0% 100% / 0.95); backdrop-filter: blur(12px); border-top: 1px solid var(--border); padding: 1rem 0; }
-        .mobile-menu.open { display: block; }
-        .mobile-menu ul { list-style: none; display: flex; flex-direction: column; gap: 1rem; padding: 0 1.5rem; }
-        .mobile-menu a { font-size: 1rem; color: var(--fg); }
-
-        @media (max-width: 768px) {
-          .nav-links { display: none; }
-          .mobile-toggle { display: block; }
+        #inicio {
+          height: 100vh; min-height: 600px;
+          display: flex; overflow: hidden;
+        }
+        .hero-panel {
+          position: relative; flex: 1;
+          display: flex; align-items: flex-end;
+          overflow: hidden;
+          transition: flex 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+          min-width: 0;
+        }
+        .hero-panel:hover { flex: 1.25; }
+        .hero-panel img {
+          position: absolute; inset: 0;
+          width: 100%; height: 100%; object-fit: cover;
+          transition: transform 0.8s var(--ease-smooth);
+          filter: brightness(0.45) saturate(0.8);
+        }
+        .hero-panel:hover img { transform: scale(1.06); filter: brightness(0.5) saturate(0.9); }
+        .hero-grad {
+          position: absolute; inset: 0;
+          background: linear-gradient(to top, rgba(10,10,15,0.97) 0%, rgba(10,10,15,0.4) 50%, transparent 100%);
+        }
+        .hero-panel-day .hero-grad {
+          background:
+            linear-gradient(to top, rgba(14,11,8,0.97) 0%, rgba(14,11,8,0.5) 40%, rgba(14,11,8,0.1) 100%),
+            linear-gradient(to right, rgba(14,11,8,0.6) 0%, transparent 55%),
+            radial-gradient(ellipse 60% 40% at 30% 80%, rgba(212,168,83,0.08) 0%, transparent 70%);
+        }
+        .hero-panel-night .hero-grad {
+          background:
+            linear-gradient(to top, rgba(14,11,8,0.97) 0%, rgba(14,11,8,0.5) 40%, rgba(14,11,8,0.1) 100%),
+            linear-gradient(to left, rgba(14,11,8,0.6) 0%, transparent 55%),
+            radial-gradient(ellipse 60% 40% at 70% 80%, rgba(168,50,40,0.1) 0%, transparent 70%);
+        }
+        .hero-divider {
+          position: absolute; top: 0; bottom: 0; right: 0;
+          width: 1px;
+          background: linear-gradient(to bottom, transparent 0%, var(--border2) 30%, var(--border2) 70%, transparent 100%);
+          z-index: 5;
+        }
+        .hero-content {
+          position: relative; z-index: 10;
+          padding: 3rem 3.5rem; width: 100%;
+        }
+        .hero-tag {
+          display: inline-flex; align-items: center; gap: 0.5rem;
+          font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+          color: var(--gold); font-weight: 500; margin-bottom: 1.2rem;
+          opacity: 0; animation: fadeUp 0.8s 0.3s both;
+        }
+        .hero-tag::before {
+          content: ''; width: 24px; height: 1px; background: var(--gold);
+        }
+        .hero-night .hero-tag { color: var(--red2); }
+        .hero-night .hero-tag::before { background: var(--red2); }
+        .hero-title {
+          font-family: var(--font-display);
+          font-size: clamp(2rem, 4vw, 3.2rem);
+          font-weight: 600; line-height: 1.1;
+          color: var(--fg); margin-bottom: 1rem;
+          opacity: 0; animation: fadeUp 0.8s 0.45s both;
+        }
+        .hero-title em { font-style: italic; color: var(--gold); }
+        .hero-night .hero-title em { color: var(--red2); }
+        .hero-sub {
+          font-size: 0.85rem; color: var(--fg2); line-height: 1.8;
+          max-width: 34ch; margin-bottom: 2rem; font-family: var(--font-body);
+          opacity: 0; animation: fadeUp 0.8s 0.6s both;
+        }
+        .hero-btn {
+          display: inline-flex; align-items: center; gap: 0.6rem;
+          font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
+          font-weight: 500; font-family: var(--font-body);
+          padding: 0.75rem 1.6rem; border: 1px solid;
+          transition: all 0.3s;
+        }
+        .hero-btn-day { border-color: var(--gold); color: var(--gold); }
+        .hero-btn-day:hover { background: var(--gold); color: var(--bg); }
+        .hero-btn-night { border-color: var(--red2); color: var(--red2); }
+        .hero-btn-night:hover { background: var(--red2); color: var(--fg); }
+        .hero-btn svg { width: 14px; height: 14px; transition: transform 0.3s; }
+        .hero-btn:hover svg { transform: translateX(4px); }
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(24px); }
+          to { opacity: 1; transform: translateY(0); }
         }
 
-        .hero { display: flex; min-height: 100vh; }
-        .hero-side { position: relative; flex: 1; display: flex; align-items: center; justify-content: center; min-height: 50vh; overflow: hidden; cursor: pointer; transition: flex-grow 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        .hero-side:hover { flex-grow: 1.15; }
-        .hero-side:hover .hero-img { transform: scale(1.05); }
-        .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease; }
-        .hero-overlay-light { position: absolute; inset: 0; background: hsl(210 40% 98% / 0.6); }
-        .hero-overlay-dark { position: absolute; inset: 0; background: hsl(215 25% 12% / 0.7); }
-        .hero-content { position: relative; z-index: 10; text-align: center; padding: 2rem; max-width: 28rem; }
-        .hero-label { font-size: 0.875rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1rem; }
-        .hero-title { font-size: clamp(2rem, 5vw, 3.75rem); font-weight: 700; margin-bottom: 1rem; }
-        .hero-desc { font-size: 1.125rem; max-width: 45ch; margin: 0 auto 2rem; }
-        .btn-primary { display: inline-block; font-family: 'General Sans', sans-serif; font-weight: 600; font-size: 0.875rem; padding: 0.75rem 1.5rem; border-radius: var(--radius); background: var(--primary); color: var(--primary-fg); box-shadow: var(--shadow-btn); transition: all 0.2s; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px hsl(215 25% 20% / 0.07), 0 4px 8px hsl(215 25% 20% / 0.07); }
-        .btn-accent { display: inline-block; font-family: 'General Sans', sans-serif; font-weight: 600; font-size: 0.875rem; padding: 0.75rem 1.5rem; border-radius: var(--radius); background: var(--accent); color: var(--accent-fg); box-shadow: var(--shadow-btn); transition: all 0.2s; }
-        .btn-accent:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px hsl(215 25% 20% / 0.07), 0 4px 8px hsl(215 25% 20% / 0.07); }
+        .section { padding: 7rem 2rem; }
+        .section-dark {
+          background: var(--bg2);
+          background-image:
+            radial-gradient(ellipse 80% 60% at 10% 20%, rgba(212,168,83,0.04) 0%, transparent 70%),
+            radial-gradient(ellipse 60% 40% at 90% 80%, rgba(168,50,40,0.05) 0%, transparent 70%);
+        }
+        .section-surface {
+          background: var(--bg3);
+          background-image:
+            radial-gradient(ellipse 70% 50% at 85% 15%, rgba(212,168,83,0.05) 0%, transparent 70%),
+            radial-gradient(ellipse 50% 60% at 5% 90%, rgba(168,50,40,0.04) 0%, transparent 70%);
+        }
+        .container { max-width: 1180px; margin: 0 auto; }
+        .eyebrow {
+          display: flex; align-items: center; gap: 0.75rem;
+          font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+          color: var(--gold); font-weight: 500; margin-bottom: 1.25rem;
+        }
+        .eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--gold); }
+        .section-title {
+          font-family: var(--font-display);
+          font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+          font-weight: 600; line-height: 1.15;
+          color: var(--fg);
+        }
+        .section-title em { font-style: italic; color: var(--gold); }
 
-        @media (max-width: 768px) {
-          .hero { flex-direction: column; }
+        .about-grid {
+          display: grid; grid-template-columns: 5fr 7fr;
+          gap: 5rem; align-items: center;
+        }
+        .about-img-wrap { position: relative; }
+        .about-img-frame {
+          position: relative; overflow: hidden;
+          border: 1px solid var(--border);
+          min-height: 520px;
+        }
+        .about-img-frame img {
+          width: 100%; aspect-ratio: 3/4; object-fit: cover;
+          display: block; filter: brightness(0.85) saturate(0.9);
+          transition: transform 0.8s var(--ease-smooth), filter 0.5s;
+        }
+        .about-img-frame:hover img { transform: scale(1.04); filter: brightness(0.9) saturate(1); }
+        .about-img-accent {
+          position: absolute; bottom: -1.5rem; right: -1.5rem;
+          width: 8rem; height: 8rem;
+          border: 1px solid var(--gold);
+          z-index: -1;
+        }
+        .about-text .section-title { margin-bottom: 1.75rem; }
+        .about-text p {
+          color: var(--fg2); font-size: 0.95rem; line-height: 1.85;
+          margin-bottom: 1.25rem;
+        }
+        .timeline {
+          display: flex; gap: 0;
+          margin-top: 3rem; border-top: 1px solid var(--border);
+        }
+        .timeline-item {
+          flex: 1; padding: 1.5rem 0 0; border-right: 1px solid var(--border);
+          padding-right: 1.5rem; padding-left: 0;
+        }
+        .timeline-item:last-child { border-right: none; padding-right: 0; }
+        .timeline-item:not(:first-child) { padding-left: 1.5rem; }
+        .t-time {
+          font-family: var(--font-display); font-size: 1.8rem;
+          font-weight: 600; color: var(--gold); display: block; margin-bottom: 0.3rem;
+        }
+        .t-label { font-size: 0.72rem; color: var(--fg3); letter-spacing: 0.1em; text-transform: uppercase; }
+
+        .menu-header { text-align: center; margin-bottom: 3.5rem; }
+        .menu-tabs-wrap { display: flex; justify-content: center; margin-bottom: 3.5rem; }
+        .menu-tabs {
+          display: inline-flex; gap: 0;
+          border: 1px solid var(--border2); padding: 4px;
+        }
+        .menu-tab {
+          font-family: var(--font-body); font-size: 0.75rem;
+          letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500;
+          padding: 0.65rem 2.2rem; border: none;
+          background: transparent; color: var(--fg3);
+          transition: all 0.3s; position: relative;
+        }
+        .menu-tab.active { background: var(--gold); color: var(--bg); }
+        .menu-tab:not(.active):hover { color: var(--fg); }
+        .menu-content { max-width: 720px; margin: 0 auto; }
+        .menu-section-title {
+          font-family: var(--font-display); font-size: 1.2rem;
+          font-weight: 600; color: var(--fg2); text-transform: uppercase; letter-spacing: 0.08em;
+          margin-bottom: 1.25rem; padding-bottom: 0.75rem;
+          border-bottom: 1px solid var(--border);
+          font-style: italic;
+        }
+        .menu-cat { margin-bottom: 2.75rem; }
+        .menu-item {
+          display: flex; align-items: baseline;
+          justify-content: space-between; gap: 1rem;
+          padding: 0.9rem 1.1rem;
+          border: 1px solid transparent;
+          transition: border-color 0.25s, background 0.25s;
+        }
+        .menu-item:hover {
+          border-color: var(--border);
+          background: var(--surface);
+        }
+        .item-name {
+          font-family: var(--font-display); font-weight: 500;
+          font-size: 0.9rem; color: var(--fg); margin-bottom: 0.2rem;
+        }
+        .item-desc { font-size: 0.78rem; color: var(--fg3); }
+        .item-price {
+          font-family: var(--font-display); font-size: 0.95rem;
+          font-weight: 600; color: var(--gold); white-space: nowrap; flex-shrink: 0;
         }
 
-        .about { padding: 6rem 0; }
-        .about-grid { display: grid; grid-template-columns: 2fr 3fr; gap: 4rem; align-items: center; }
-        .about-img-wrapper { position: relative; overflow: hidden; border-radius: 1rem; }
-        .about-img-wrapper img { width: 100%; aspect-ratio: 3/4; object-fit: cover; }
-        .about-img-wrapper::after { content: ''; position: absolute; inset: 0; border-radius: 1rem; box-shadow: inset 0 0 0 1px hsl(215 25% 20% / 0.1); }
-        .about-label { font-size: 0.875rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--primary); margin-bottom: 1rem; }
-        .about-title { font-size: clamp(1.75rem, 4vw, 3rem); font-weight: 700; color: var(--fg); margin-bottom: 1.5rem; }
-        .about-text { font-size: 1.125rem; color: var(--muted-fg); line-height: 1.7; max-width: 65ch; }
-        .about-text + .about-text { margin-top: 1rem; }
-        .about-stats { display: flex; gap: 3rem; margin-top: 2.5rem; }
-        .about-stat-value { font-family: 'General Sans', sans-serif; font-size: 1.875rem; font-weight: 700; color: var(--fg); }
-        .about-stat-label { font-size: 0.875rem; color: var(--muted-fg); margin-top: 0.25rem; }
-
-        @media (max-width: 768px) {
-          .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-          .about-stats { gap: 2rem; flex-wrap: wrap; }
-        }
-
-        .menu-section { padding: 6rem 0; background: hsl(210 40% 95% / 0.5); }
-        .menu-header { text-align: center; margin-bottom: 4rem; }
-        .menu-label { font-size: 0.875rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--primary); margin-bottom: 1rem; }
-        .menu-title { font-size: clamp(1.75rem, 4vw, 3rem); font-weight: 700; color: var(--fg); }
-        .menu-tabs { display: flex; justify-content: center; margin-bottom: 3rem; }
-        .tab-container { display: inline-flex; background: var(--card); border-radius: 0.75rem; padding: 0.375rem; box-shadow: var(--shadow-card); }
-        .tab-btn { position: relative; font-family: 'General Sans', sans-serif; font-weight: 600; font-size: 0.875rem; padding: 0.75rem 2rem; border-radius: 0.5rem; background: transparent; color: var(--muted-fg); transition: color 0.2s; }
-        .tab-btn.active { color: var(--primary-fg); background: var(--primary); }
-        .tab-btn:not(.active):hover { color: var(--fg); }
-        .menu-content { max-width: 48rem; margin: 0 auto; }
-        .menu-category { margin-bottom: 3rem; }
-        .menu-category:last-child { margin-bottom: 0; }
-        .menu-cat-title { font-family: 'General Sans', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--fg); margin-bottom: 1.5rem; }
-        .menu-items { display: flex; flex-direction: column; gap: 0.75rem; }
-        .menu-item { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: 1.25rem; border-radius: 0.75rem; background: var(--card); box-shadow: var(--shadow-card); transition: box-shadow 0.3s; }
-        .menu-item:hover { box-shadow: var(--shadow-card-hover); }
-        .menu-item-name { font-family: 'General Sans', sans-serif; font-weight: 600; color: var(--card-fg); }
-        .menu-item-desc { font-size: 0.875rem; color: var(--muted-fg); margin-top: 0.25rem; }
-        .menu-item-price { font-family: 'General Sans', sans-serif; font-weight: 700; color: var(--primary); white-space: nowrap; }
-        .menu-panel { display: none; }
-        .menu-panel.active { display: block; animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
-
-        .gallery { padding: 6rem 0; overflow: hidden; }
         .gallery-header { margin-bottom: 3rem; }
-        .gallery-label { font-size: 0.875rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--primary); margin-bottom: 1rem; }
-        .gallery-title { font-size: clamp(1.75rem, 4vw, 3rem); font-weight: 700; color: var(--fg); }
-        .gallery-track { display: flex; gap: 1.5rem; padding: 0 1.5rem; mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%); }
-        .gallery-item { flex-shrink: 0; width: 18rem; overflow: hidden; border-radius: 1rem; }
-        .gallery-item img { width: 100%; aspect-ratio: 4/5; object-fit: cover; transition: transform 0.7s ease; }
-        .gallery-item:hover img { transform: scale(1.05); }
-
-        @media (min-width: 768px) {
-          .gallery-item { width: 24rem; }
+        .gallery-track-wrap {
+          overflow: hidden;
+          -webkit-mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
+          mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
         }
+        .gallery-track {
+          display: flex; gap: 1rem;
+          overflow-x: auto; padding: 0 2rem 1rem;
+          scrollbar-width: none;
+          scroll-snap-type: x mandatory;
+          -webkit-overflow-scrolling: touch;
+        }
+        .gallery-track::-webkit-scrollbar { display: none; }
+        .gallery-card {
+          flex-shrink: 0; width: 280px;
+          scroll-snap-align: start;
+          position: relative; overflow: hidden;
+          border: 1px solid var(--border);
+        }
+        .gallery-card img {
+          width: 100%; aspect-ratio: 3/4; object-fit: cover;
+          display: block; filter: brightness(0.75) saturate(0.8);
+          transition: transform 0.7s var(--ease-smooth), filter 0.5s;
+        }
+        .gallery-card:hover img { transform: scale(1.06); filter: brightness(0.9) saturate(1.1); }
+        .gallery-card-label {
+          position: absolute; bottom: 0; left: 0; right: 0;
+          padding: 1.5rem 1rem 1rem;
+          background: linear-gradient(to top, rgba(10,10,15,0.9) 0%, transparent 100%);
+          font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+          color: var(--fg2); transform: translateY(4px);
+          transition: transform 0.3s;
+        }
+        .gallery-card:hover .gallery-card-label { transform: translateY(0); color: var(--fg); }
+        .gallery-nav {
+          display: flex; justify-content: center; gap: 0.75rem; margin-top: 2rem;
+        }
+        .gallery-nav button {
+          width: 2.5rem; height: 2.5rem;
+          border: 1px solid var(--border2); background: transparent;
+          color: var(--fg2);
+          display: flex; align-items: center; justify-content: center;
+          transition: all 0.25s;
+        }
+        .gallery-nav button:hover { border-color: var(--gold); color: var(--gold); }
+        .gallery-nav button svg { width: 16px; height: 16px; }
 
-        .contact { padding: 6rem 0; background: hsl(210 40% 95% / 0.5); }
-        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
-        .contact-map { border-radius: 1rem; overflow: hidden; min-height: 400px; box-shadow: var(--shadow-card); }
-        .contact-map iframe { width: 100%; height: 100%; min-height: 400px; border: 0; }
-        .contact-label { font-size: 0.875rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--primary); margin-bottom: 1rem; }
-        .contact-title { font-size: clamp(1.75rem, 4vw, 3rem); font-weight: 700; color: var(--fg); margin-bottom: 2.5rem; }
-        .contact-info { display: flex; flex-direction: column; justify-content: center; }
-        .contact-items { display: flex; flex-direction: column; gap: 2rem; }
-        .contact-item { display: flex; gap: 1rem; }
-        .contact-icon { width: 2.5rem; height: 2.5rem; border-radius: 0.5rem; background: hsl(217 91% 60% / 0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--primary); }
-        .contact-item-title { font-family: 'General Sans', sans-serif; font-weight: 600; color: var(--fg); }
-        .contact-item-text { font-size: 0.9375rem; color: var(--muted-fg); margin-top: 0.25rem; }
-        .contact-item-text a { transition: color 0.2s; }
-        .contact-item-text a:hover { color: var(--primary); }
-        .social-links { display: flex; gap: 1rem; margin-top: 2.5rem; }
-        .social-link { width: 3rem; height: 3rem; border-radius: 0.75rem; background: var(--card); box-shadow: var(--shadow-card); display: flex; align-items: center; justify-content: center; color: var(--muted-fg); transition: all 0.2s; }
-        .social-link:hover { color: var(--primary); transform: scale(1.1); }
-        .social-link svg { width: 1.25rem; height: 1.25rem; fill: currentColor; }
+        .reviews-stage {
+          position: relative; overflow: hidden; margin: 3.5rem 0 4rem;
+          -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+          mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+        }
+        .reviews-track {
+          display: flex; gap: 1.5rem;
+          width: max-content;
+          animation: scrollReviews 38s linear infinite;
+        }
+        .reviews-stage:hover .reviews-track { animation-play-state: paused; }
+        @keyframes scrollReviews {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .review-card {
+          width: 320px; flex-shrink: 0;
+          background: var(--surface);
+          border: 1px solid var(--border);
+          padding: 2rem 1.75rem 1.5rem;
+          position: relative; overflow: hidden;
+          transition: border-color 0.3s;
+        }
+        .review-card:hover { border-color: var(--border2); }
+        .review-quote {
+          font-family: var(--font-display); font-size: 4.5rem;
+          color: var(--gold); opacity: 0.12; line-height: 0.8;
+          margin-bottom: 0.75rem; display: block;
+        }
+        .review-text {
+          font-size: 0.83rem; color: var(--fg2); line-height: 1.85;
+          font-style: italic; margin-bottom: 1.5rem;
+          min-height: 80px;
+        }
+        .review-footer { display: flex; align-items: center; gap: 0.75rem; }
+        .review-avatar {
+          width: 2.2rem; height: 2.2rem; border-radius: 50%; flex-shrink: 0;
+          display: flex; align-items: center; justify-content: center;
+          font-family: var(--font-display); font-weight: 700; font-size: 0.85rem;
+        }
+        .review-name { font-family: var(--font-display); font-weight: 600; font-size: 0.82rem; color: var(--fg); }
+        .review-stars { font-size: 0.72rem; color: var(--gold); letter-spacing: 1px; margin-top: 0.15rem; }
+        .reviews-pause-hint {
+          text-align: center; margin-top: 1.25rem;
+          font-size: 0.7rem; color: var(--fg3); letter-spacing: 0.1em; text-transform: uppercase;
+          opacity: 0; transition: opacity 0.3s;
+        }
+        .reviews-stage:hover .reviews-pause-hint { opacity: 1; }
+
+        .review-form-wrap {
+          display: grid; grid-template-columns: 1fr 2fr;
+          gap: 3rem; align-items: start;
+          background: var(--surface); border: 1px solid var(--border);
+          padding: 2.5rem;
+        }
+        .review-form-title {
+          font-family: var(--font-display); font-size: 1.6rem;
+          font-weight: 600; color: var(--fg); line-height: 1.2;
+          margin-top: 0.5rem;
+        }
+        .review-form-title em { color: var(--gold); font-style: italic; }
+        .rform-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .rform-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+        .rform-group label {
+          font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+          color: var(--fg3); font-family: var(--font-display);
+        }
+        .rform-group input,
+        .rform-group textarea {
+          background: var(--bg2); border: 1px solid var(--border2);
+          color: var(--fg); padding: 0.7rem 0.9rem;
+          font-family: var(--font-body); font-size: 0.83rem;
+          outline: none; resize: none;
+          transition: border-color 0.2s;
+        }
+        .rform-group input:focus,
+        .rform-group textarea:focus { border-color: var(--gold); }
+        .rform-group input::placeholder,
+        .rform-group textarea::placeholder { color: var(--fg3); }
+        .rstar-picker { display: flex; gap: 0.2rem; padding: 0.5rem 0; }
+        .rstar-picker span {
+          font-size: 1.6rem; color: var(--fg3);
+          cursor: pointer; transition: color 0.12s, transform 0.12s; user-select: none;
+        }
+        .rstar-picker span:hover,
+        .rstar-picker span.lit { color: var(--gold); transform: scale(1.15); }
+        .rsubmit-btn {
+          display: inline-flex; align-items: center; gap: 0.6rem;
+          background: var(--gold); color: var(--bg);
+          border: none; padding: 0.75rem 1.75rem;
+          font-family: var(--font-display); font-size: 0.75rem;
+          font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+          cursor: pointer; transition: background 0.2s, transform 0.2s;
+        }
+        .rsubmit-btn:hover { background: var(--gold2); transform: translateY(-2px); }
+        .rform-msg {
+          margin-top: 0.9rem; padding: 0.65rem 1rem;
+          font-size: 0.8rem; border-left: 2px solid var(--gold);
+          background: var(--gold-dim); color: var(--fg2);
+          font-family: var(--font-body);
+        }
+        .rform-msg.error { border-color: var(--red2); background: var(--red-dim); }
+
+        .contact-grid {
+          display: grid; grid-template-columns: 1fr 1fr;
+          gap: 5rem; align-items: start;
+        }
+        .map-frame {
+          border: 1px solid var(--border); overflow: hidden;
+          position: relative;
+        }
+        .map-frame::before {
+          content: ''; position: absolute; inset: 0; z-index: 1;
+          pointer-events: none;
+          box-shadow: inset 0 0 0 1px var(--border);
+        }
+        .map-frame iframe {
+          display: block; width: 100%; height: 400px; border: 0;
+          filter: invert(1) hue-rotate(180deg) brightness(0.85) saturate(0.6);
+        }
+        .contact-info .section-title { margin-bottom: 2.5rem; }
+        .contact-row {
+          display: flex; gap: 1.25rem; padding: 1.25rem 0;
+          border-bottom: 1px solid var(--border);
+        }
+        .contact-icon-box {
+          width: 2.5rem; height: 2.5rem; flex-shrink: 0;
+          border: 1px solid var(--border); display: flex;
+          align-items: center; justify-content: center;
+        }
+        .contact-icon-box svg {
+          width: 1rem; height: 1rem; stroke: var(--gold);
+          fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+        }
+        .contact-row h4 {
+          font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+          color: var(--fg3); margin-bottom: 0.4rem;
+        }
+        .contact-row p, .contact-row a {
+          font-size: 0.9rem; color: var(--fg2); line-height: 1.6;
+          transition: color 0.2s;
+        }
+        .contact-row a:hover { color: var(--gold); }
+        .social-row { display: flex; gap: 0.75rem; margin-top: 2rem; }
+        .social-btn {
+          width: 2.75rem; height: 2.75rem;
+          border: 1px solid var(--border);
+          display: flex; align-items: center; justify-content: center;
+          color: var(--fg3);
+          transition: border-color 0.25s, color 0.25s, transform 0.25s;
+        }
+        .social-btn:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-3px); }
+        .social-btn svg { width: 1rem; height: 1rem; fill: currentColor; }
+
+        footer {
+          background: var(--bg);
+          border-top: 1px solid var(--border);
+          background-image: radial-gradient(ellipse 80% 100% at 50% 100%, rgba(212,168,83,0.03) 0%, transparent 70%);
+          padding: 2rem;
+        }
+        .footer-inner {
+          max-width: 1180px; margin: 0 auto;
+          display: flex; align-items: center; justify-content: space-between;
+          flex-wrap: wrap; gap: 1rem;
+        }
+        .footer-logo { font-family: var(--font-display); font-size: 1rem; color: var(--fg2); }
+        .footer-logo em { color: var(--gold); font-style: italic; }
+        .footer-copy { font-size: 0.75rem; color: var(--fg3); letter-spacing: 0.05em; }
+
+        #particles { mix-blend-mode: screen; }
+        body::before {
+          content: '';
+          position: fixed; inset: 0; z-index: 0; pointer-events: none;
+          background:
+            radial-gradient(ellipse 40% 30% at 15% 50%, rgba(212,168,83,0.04) 0%, transparent 100%),
+            radial-gradient(ellipse 35% 25% at 85% 30%, rgba(168,50,40,0.05) 0%, transparent 100%),
+            radial-gradient(ellipse 50% 40% at 50% 90%, rgba(212,168,83,0.03) 0%, transparent 100%);
+        }
+        .reveal {
+          opacity: 0; transform: translateY(32px);
+          transition: opacity 0.7s var(--ease-smooth), transform 0.7s var(--ease-smooth);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
 
         @media (max-width: 768px) {
-          .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+          #inicio { flex-direction: column; height: auto; }
+          .hero-panel { min-height: 55vh; }
+          .hero-content { padding: 2rem 1.5rem; }
+          .hero-divider { display: none; }
+          .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+          .about-img-accent { display: none; }
+          .nav-links { display: none; }
+          .section { padding: 5rem 1.25rem; }
+          .gallery-card { width: 240px; }
+          .footer-inner { justify-content: center; text-align: center; }
+          .review-form-wrap { grid-template-columns: 1fr; gap: 1.5rem; padding: 1.5rem; }
+          .rform-row { grid-template-columns: 1fr; }
+          .review-card { width: 280px; }
+          .timeline { flex-direction: column; gap: 1rem; }
+          .timeline-item, .timeline-item:not(:first-child) {
+            border-right: none;
+            padding-left: 0;
+            padding-right: 0;
+          }
         }
-
-        .footer { padding: 2rem 0; border-top: 1px solid var(--border); }
-        .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
-        .footer-brand { font-family: 'General Sans', sans-serif; font-weight: 600; color: var(--fg); }
-        .footer-tagline { font-size: 0.875rem; color: var(--muted-fg); }
       `}</style>
-
-      <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="" />
-      <link
-        href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&f[]=satoshi@400,400i,500,700&display=swap"
-        rel="stylesheet"
+      <canvas
+        id="particles"
+        ref={canvasRef}
+        style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0, opacity: 0.5 }}
       />
 
-      <nav className={`navbar${scrolled ? " scrolled" : ""}`} id="navbar">
-        <div className="container">
-          <div className="navbar-inner">
-            <a href="#inicio" className="navbar-brand">
-              Cafeteria Ebenezer
-            </a>
-            <ul className="nav-links">
-              <li><a href="#inicio">Inicio</a></li>
-              <li><a href="#nosotros">Nosotros</a></li>
-              <li><a href="#menu">Menu</a></li>
-              <li><a href="#galeria">Galeria</a></li>
-              <li><a href="#contacto">Contacto</a></li>
-            </ul>
-            <button
-              className="mobile-toggle"
-              aria-label="Toggle menu"
-              onClick={() => setMobileOpen((open) => !open)}
-            >
-              {mobileOpen ? (
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-              ) : (
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="3" y1="6" x2="21" y2="6" />
-                  <line x1="3" y1="12" x2="21" y2="12" />
-                  <line x1="3" y1="18" x2="21" y2="18" />
-                </svg>
-              )}
-            </button>
-          </div>
-        </div>
-        <div className={`mobile-menu${mobileOpen ? " open" : ""}`} id="mobileMenu">
-          <ul>
-            <li><a href="#inicio" onClick={closeMobile}>Inicio</a></li>
-            <li><a href="#nosotros" onClick={closeMobile}>Nosotros</a></li>
-            <li><a href="#menu" onClick={closeMobile}>Menu</a></li>
-            <li><a href="#galeria" onClick={closeMobile}>Galeria</a></li>
-            <li><a href="#contacto" onClick={closeMobile}>Contacto</a></li>
+      <nav id="navbar" className={scrolled ? "scrolled" : ""}>
+        <div className="nav-inner">
+          <a href="#inicio" className="nav-logo">
+            Cafetería <span>Ébenezer</span>
+          </a>
+          <ul className="nav-links">
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#nosotros">Nosotros</a></li>
+            <li><a href="#menu">Menú</a></li>
+            <li><a href="#galeria">Galería</a></li>
+            <li><a href="#resenas">Reseñas</a></li>
+            <li><a href="#contacto">Contacto</a></li>
           </ul>
         </div>
       </nav>
 
-      <section id="inicio" className="hero">
-        <div className="hero-side" onClick={() => document.getElementById("menu")?.scrollIntoView({ behavior: "smooth" })}>
+      <section id="inicio">
+        <div className="hero-panel hero-panel-day" onClick={() => document.getElementById("menu")?.scrollIntoView({ behavior: "smooth" })}>
           <Image
-            src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900&q=80"
-            alt="Cafe artesanal con latte art"
-            className="hero-img"
+            src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&q=85"
+            alt="Café artesanal"
             fill
             priority
             sizes="(max-width: 768px) 100vw, 50vw"
           />
-          <div className="hero-overlay-light" />
-          <div className="hero-content animate-fade-up delay-2">
-            <p className="hero-label" style={{ color: "var(--muted-fg)" }}>Mananas en Ebenezer</p>
-            <h1 className="hero-title" style={{ color: "var(--fg)" }}>El arte del buen cafe</h1>
-            <p className="hero-desc" style={{ color: "var(--muted-fg)" }}>Despierta tus mananas con granos seleccionados y preparaciones artesanales.</p>
-            <a href="#menu" className="btn-primary" onClick={(event) => event.stopPropagation()}>Ver Menu de Cafe</a>
+          <div className="hero-grad" />
+          <div className="hero-divider" />
+          <div className="hero-content">
+            <span className="hero-tag">Mañanas en Ébenezer</span>
+            <h1 className="hero-title">
+              El arte del
+              <br />
+              <em>buen café</em>
+            </h1>
+            <p className="hero-sub">Granos seleccionados, preparaciones artesanales. Cada taza cuenta una historia.</p>
+            <a href="#menu" className="hero-btn hero-btn-day" onClick={(event) => event.stopPropagation()}>
+              Ver menú de café
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+            </a>
           </div>
         </div>
-        <div className="hero-side" onClick={() => document.getElementById("menu")?.scrollIntoView({ behavior: "smooth" })}>
+
+        <div className="hero-panel hero-panel-night hero-night" onClick={() => document.getElementById("menu")?.scrollIntoView({ behavior: "smooth" })}>
           <Image
-            src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=900&q=80"
-            alt="Pizza artesanal con mozzarella fresca"
-            className="hero-img"
+            src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=1200&q=85"
+            alt="Pizza artesanal"
             fill
             priority
             sizes="(max-width: 768px) 100vw, 50vw"
           />
-          <div className="hero-overlay-dark" />
-          <div className="hero-content animate-fade-up delay-4">
-            <p className="hero-label" style={{ color: "hsl(210 40% 95% / 0.6)" }}>Noches en Ebenezer</p>
-            <h2 className="hero-title" style={{ color: "var(--hero-dark-fg)" }}>La noche pide pizza</h2>
-            <p className="hero-desc" style={{ color: "hsl(210 40% 95% / 0.7)" }}>Ingredientes frescos, horno caliente. Pizzas artesanales que hablan por si solas.</p>
-            <a href="#menu" className="btn-accent" onClick={(event) => event.stopPropagation()}>Ver Menu de Pizza</a>
+          <div className="hero-grad" />
+          <div className="hero-content">
+            <span className="hero-tag">Noches en Ébenezer</span>
+            <h2 className="hero-title">
+              La noche
+              <br />
+              <em>pide pizza</em>
+            </h2>
+            <p className="hero-sub">Ingredientes frescos, horno de piedra. Pizzas artesanales que hablan por sí solas.</p>
+            <a href="#menu" className="hero-btn hero-btn-night" onClick={(event) => event.stopPropagation()}>
+              Ver menú de pizza
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+            </a>
           </div>
         </div>
       </section>
 
-      <section id="nosotros" className="about">
+      <section id="nosotros" className="section section-dark">
         <div className="container">
           <div className="about-grid">
-            <div className="reveal-left">
-              <div className="about-img-wrapper">
+            <div className="about-img-wrap reveal">
+              <div className="about-img-frame">
                 <Image
-                  src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=700&q=80"
-                  alt="Interior de Cafeteria Ebenezer"
+                  src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=85"
+                  alt="Interior Cafetería Ébenezer"
                   fill
                   sizes="(max-width: 768px) 100vw, 40vw"
                 />
               </div>
+              <div className="about-img-accent" />
             </div>
-            <div className="reveal">
-              <p className="about-label">Nuestra historia</p>
-              <h2 className="about-title">De la manana a la noche, una misma pasion</h2>
-              <p className="about-text">En Cafeteria Ebenezer creemos que los mejores momentos del dia merecen ser acompanados con lo mejor. Por las mananas, nuestro cafe de especialidad despierta los sentidos con aromas que llenan el espacio.</p>
-              <p className="about-text">Al caer la tarde, el horno cobra vida y nuestras pizzas artesanales se convierten en el centro de la mesa. Dos experiencias, un solo lugar donde la calidad es la constante.</p>
-              <div className="about-stats">
-                <div>
-                  <p className="about-stat-value">08:00</p>
-                  <p className="about-stat-label">Apertura Cafeteria</p>
+            <div className="about-text">
+              <div className="eyebrow reveal">Nuestra historia</div>
+              <h2 className="section-title reveal reveal-delay-1">
+                De la mañana a la noche,
+                <br />
+                <em>una misma pasión</em>
+              </h2>
+              <p className="reveal reveal-delay-2">En Cafetería Ébenezer creemos que los mejores momentos del día merecen ser acompañados con lo mejor. Por las mañanas, nuestro café de especialidad despierta los sentidos con aromas que llenan el espacio.</p>
+              <p className="reveal reveal-delay-2">Al caer la tarde, el horno cobra vida y nuestras pizzas artesanales se convierten en el centro de la mesa. Dos experiencias, un solo lugar donde la calidad es la constante.</p>
+              <div className="timeline reveal reveal-delay-3">
+                <div className="timeline-item">
+                  <span className="t-time">08:00</span>
+                  <span className="t-label">Apertura Cafetería</span>
                 </div>
-                <div>
-                  <p className="about-stat-value">16:00</p>
-                  <p className="about-stat-label">Apertura Pizzeria</p>
+                <div className="timeline-item">
+                  <span className="t-time">16:00</span>
+                  <span className="t-label">Apertura Pizzería</span>
                 </div>
-                <div>
-                  <p className="about-stat-value">23:00</p>
-                  <p className="about-stat-label">Cierre</p>
+                <div className="timeline-item">
+                  <span className="t-time">23:00</span>
+                  <span className="t-label">Cierre</span>
                 </div>
               </div>
             </div>
@@ -341,173 +857,208 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="menu" className="menu-section">
+      <section id="menu" className="section section-surface">
         <div className="container">
-          <div className="menu-header reveal">
-            <p className="menu-label">Nuestro menu</p>
-            <h2 className="menu-title">Elige tu experiencia</h2>
+          <div className="menu-header">
+            <div className="eyebrow reveal" style={{ justifyContent: "center" }}>Nuestro menú</div>
+            <h2 className="section-title reveal reveal-delay-1">Elige tu <em>experiencia</em></h2>
           </div>
-          <div className="menu-tabs">
-            <div className="tab-container">
-              <button className={`tab-btn${activeTab === "cafe" ? " active" : ""}`} onClick={() => setActiveTab("cafe")}>Cafeteria</button>
-              <button className={`tab-btn${activeTab === "pizza" ? " active" : ""}`} onClick={() => setActiveTab("pizza")}>Pizzeria</button>
+          <div className="menu-tabs-wrap reveal reveal-delay-2">
+            <div className="menu-tabs">
+              <button className={`menu-tab${activeTab === "cafe" ? " active" : ""}`} onClick={() => setActiveTab("cafe")}>Cafetería</button>
+              <button className={`menu-tab${activeTab === "pizza" ? " active" : ""}`} onClick={() => setActiveTab("pizza")}>Pizzería</button>
             </div>
           </div>
           <div className="menu-content">
-            <div className={`menu-panel${activeTab === "cafe" ? " active" : ""}`} id="panel-cafe">
-              <div className="menu-category">
-                <h3 className="menu-cat-title">Bebidas Calientes</h3>
-                <div className="menu-items">
-                  <div className="menu-item"><div><div className="menu-item-name">Espresso</div><div className="menu-item-desc">Intenso y concentrado, doble shot</div></div><span className="menu-item-price">$3.50</span></div>
-                  <div className="menu-item"><div><div className="menu-item-name">Cappuccino</div><div className="menu-item-desc">Espresso con leche espumada y cacao</div></div><span className="menu-item-price">$4.50</span></div>
-                  <div className="menu-item"><div><div className="menu-item-name">Latte</div><div className="menu-item-desc">Espresso suave con leche cremosa</div></div><span className="menu-item-price">$4.50</span></div>
-                  <div className="menu-item"><div><div className="menu-item-name">Mocha</div><div className="menu-item-desc">Espresso con chocolate y crema batida</div></div><span className="menu-item-price">$5.00</span></div>
-                  <div className="menu-item"><div><div className="menu-item-name">Te Chai</div><div className="menu-item-desc">Te negro con especias y leche</div></div><span className="menu-item-price">$4.00</span></div>
+            {activeTab === "cafe" ? (
+              <div>
+                <div className="menu-cat">
+                  <h3 className="menu-section-title">Bebidas Calientes</h3>
+                  <div className="menu-item"><div><div className="item-name">Espresso</div><div className="item-desc">Intenso y concentrado, doble shot</div></div><span className="item-price">$3.50</span></div>
+                  <div className="menu-item"><div><div className="item-name">Cappuccino</div><div className="item-desc">Espresso con leche espumada y cacao</div></div><span className="item-price">$4.50</span></div>
+                  <div className="menu-item"><div><div className="item-name">Latte</div><div className="item-desc">Espresso suave con leche cremosa</div></div><span className="item-price">$4.50</span></div>
+                  <div className="menu-item"><div><div className="item-name">Mocha</div><div className="item-desc">Espresso con chocolate y crema batida</div></div><span className="item-price">$5.00</span></div>
+                  <div className="menu-item"><div><div className="item-name">Té Chai</div><div className="item-desc">Té negro con especias y leche</div></div><span className="item-price">$4.00</span></div>
+                </div>
+                <div className="menu-cat">
+                  <h3 className="menu-section-title">Bebidas Frías</h3>
+                  <div className="menu-item"><div><div className="item-name">Cold Brew</div><div className="item-desc">Café infusionado en frío 12 horas</div></div><span className="item-price">$5.00</span></div>
+                  <div className="menu-item"><div><div className="item-name">Frappé de Café</div><div className="item-desc">Café helado cremoso y dulce</div></div><span className="item-price">$5.50</span></div>
+                  <div className="menu-item"><div><div className="item-name">Limonada Natural</div><div className="item-desc">Limón fresco con hierbabuena</div></div><span className="item-price">$3.50</span></div>
+                </div>
+                <div className="menu-cat">
+                  <h3 className="menu-section-title">Repostería</h3>
+                  <div className="menu-item"><div><div className="item-name">Croissant de Mantequilla</div><div className="item-desc">Horneado fresco cada mañana</div></div><span className="item-price">$3.00</span></div>
+                  <div className="menu-item"><div><div className="item-name">Cheesecake</div><div className="item-desc">New York style con frutos rojos</div></div><span className="item-price">$5.50</span></div>
+                  <div className="menu-item"><div><div className="item-name">Brownie</div><div className="item-desc">Chocolate belga con nueces</div></div><span className="item-price">$4.00</span></div>
                 </div>
               </div>
-              <div className="menu-category">
-                <h3 className="menu-cat-title">Bebidas Frias</h3>
-                <div className="menu-items">
-                  <div className="menu-item"><div><div className="menu-item-name">Cold Brew</div><div className="menu-item-desc">Cafe infusionado en frio 12 horas</div></div><span className="menu-item-price">$5.00</span></div>
-                  <div className="menu-item"><div><div className="menu-item-name">Frappe de Cafe</div><div className="menu-item-desc">Cafe helado cremoso y dulce</div></div><span className="menu-item-price">$5.50</span></div>
-                  <div className="menu-item"><div><div className="menu-item-name">Limonada Natural</div><div className="menu-item-desc">Limon fresco con hierbabuena</div></div><span className="menu-item-price">$3.50</span></div>
+            ) : (
+              <div>
+                <div className="menu-cat">
+                  <h3 className="menu-section-title">Pizzas Clásicas</h3>
+                  <div className="menu-item"><div><div className="item-name">Margherita</div><div className="item-desc">Salsa de tomate, mozzarella fresca y albahaca</div></div><span className="item-price">$10.00</span></div>
+                  <div className="menu-item"><div><div className="item-name">Pepperoni</div><div className="item-desc">Pepperoni artesanal con mozzarella fundida</div></div><span className="item-price">$12.00</span></div>
+                  <div className="menu-item"><div><div className="item-name">Hawaiana</div><div className="item-desc">Jamón, piña caramelizada y queso</div></div><span className="item-price">$12.00</span></div>
+                  <div className="menu-item"><div><div className="item-name">Cuatro Quesos</div><div className="item-desc">Mozzarella, gorgonzola, parmesano y fontina</div></div><span className="item-price">$13.00</span></div>
+                </div>
+                <div className="menu-cat">
+                  <h3 className="menu-section-title">Pizzas Especiales</h3>
+                  <div className="menu-item"><div><div className="item-name">Ébenezer Suprema</div><div className="item-desc">Carne, chorizo, pimiento, cebolla y aceitunas</div></div><span className="item-price">$15.00</span></div>
+                  <div className="menu-item"><div><div className="item-name">Mediterránea</div><div className="item-desc">Tomate cherry, rúcula, jamón serrano y parmesano</div></div><span className="item-price">$14.00</span></div>
+                  <div className="menu-item"><div><div className="item-name">BBQ Chicken</div><div className="item-desc">Pollo, salsa BBQ, cebolla morada y cilantro</div></div><span className="item-price">$14.00</span></div>
+                </div>
+                <div className="menu-cat">
+                  <h3 className="menu-section-title">Acompañantes</h3>
+                  <div className="menu-item"><div><div className="item-name">Alitas BBQ</div><div className="item-desc">8 piezas con salsa casera</div></div><span className="item-price">$8.00</span></div>
+                  <div className="menu-item"><div><div className="item-name">Breadsticks con Queso</div><div className="item-desc">Pan artesanal con dip de queso</div></div><span className="item-price">$5.00</span></div>
+                  <div className="menu-item"><div><div className="item-name">Ensalada Caesar</div><div className="item-desc">Lechuga, crutones, parmesano y aderezo</div></div><span className="item-price">$6.00</span></div>
                 </div>
               </div>
-              <div className="menu-category">
-                <h3 className="menu-cat-title">Reposteria</h3>
-                <div className="menu-items">
-                  <div className="menu-item"><div><div className="menu-item-name">Croissant de Mantequilla</div><div className="menu-item-desc">Horneado fresco cada manana</div></div><span className="menu-item-price">$3.00</span></div>
-                  <div className="menu-item"><div><div className="menu-item-name">Cheesecake</div><div className="menu-item-desc">New York style con frutos rojos</div></div><span className="menu-item-price">$5.50</span></div>
-                  <div className="menu-item"><div><div className="menu-item-name">Brownie</div><div className="menu-item-desc">Chocolate belga con nueces</div></div><span className="menu-item-price">$4.00</span></div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <section id="galeria" className="section section-dark">
+        <div className="container">
+          <div className="gallery-header">
+            <div className="eyebrow reveal">La experiencia</div>
+            <h2 className="section-title reveal reveal-delay-1">Momentos que nos <em>definen</em></h2>
+          </div>
+        </div>
+        <div className="gallery-track-wrap">
+          <div className="gallery-track" id="galleryTrack" ref={galleryTrackRef}>
+            <div className="gallery-card"><Image src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80" alt="Latte art" width={600} height={800} sizes="280px" /><div className="gallery-card-label">Café de especialidad</div></div>
+            <div className="gallery-card"><Image src="https://images.unsplash.com/photo-1555507036-ab1f4038024a?w=600&q=80" alt="Croissant" width={600} height={800} sizes="280px" /><div className="gallery-card-label">Repostería artesanal</div></div>
+            <div className="gallery-card"><Image src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600&q=80" alt="Espresso" width={600} height={800} sizes="280px" /><div className="gallery-card-label">Espresso perfecto</div></div>
+            <div className="gallery-card"><Image src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=600&q=80" alt="Pizza" width={600} height={800} sizes="280px" /><div className="gallery-card-label">Pizza margherita</div></div>
+            <div className="gallery-card"><Image src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80" alt="Pizza artesanal" width={600} height={800} sizes="280px" /><div className="gallery-card-label">Horno de piedra</div></div>
+            <div className="gallery-card"><Image src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=600&q=80" alt="Ambiente" width={600} height={800} sizes="280px" /><div className="gallery-card-label">Nuestro ambiente</div></div>
+          </div>
+        </div>
+        <div className="gallery-nav">
+          <button onClick={() => scrollGallery(-1)} aria-label="Anterior">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+          </button>
+          <button onClick={() => scrollGallery(1)} aria-label="Siguiente">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+          </button>
+        </div>
+      </section>
+
+      <section id="resenas" className="section section-surface">
+        <div className="container">
+          <div className="eyebrow reveal">Nuestra comunidad</div>
+          <h2 className="section-title reveal reveal-delay-1">Lo que dicen <em>nuestros clientes</em></h2>
+        </div>
+
+        <div className="reviews-stage">
+          <div className="reviews-track" id="reviewsTrack">
+            {duplicatedReviews.map((review, index) => (
+              <div className="review-card" key={`${review.name}-${index}`}>
+                <div className="review-quote">&#8220;</div>
+                <p className="review-text">{review.text}</p>
+                <div className="review-footer">
+                  <div className="review-avatar" style={Object.fromEntries(review.avatarStyle.split(";").filter(Boolean).map((chunk) => {
+                    const [key, value] = chunk.split(":");
+                    return [key.trim().replace(/-([a-z])/g, (_, c) => c.toUpperCase()), value.trim()];
+                  }))}>
+                    {review.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <div className="review-name">{review.name}</div>
+                    <div className="review-stars">{starsText(review.stars)}</div>
+                  </div>
                 </div>
               </div>
+            ))}
+          </div>
+          <div className="reviews-pause-hint">Pasa el cursor para pausar</div>
+        </div>
+
+        <div className="container">
+          <div className="review-form-wrap reveal">
+            <div className="review-form-header">
+              <div className="eyebrow" style={{ marginBottom: "0.5rem" }}>Comparte tu experiencia</div>
+              <h3 className="review-form-title">Deja tu <em>reseña</em></h3>
             </div>
-            <div className={`menu-panel${activeTab === "pizza" ? " active" : ""}`} id="panel-pizza">
-              <div className="menu-category">
-                <h3 className="menu-cat-title">Pizzas Clasicas</h3>
-                <div className="menu-items">
-                  <div className="menu-item"><div><div className="menu-item-name">Margherita</div><div className="menu-item-desc">Salsa de tomate, mozzarella fresca y albahaca</div></div><span className="menu-item-price">$10.00</span></div>
-                  <div className="menu-item"><div><div className="menu-item-name">Pepperoni</div><div className="menu-item-desc">Pepperoni artesanal con mozzarella fundida</div></div><span className="menu-item-price">$12.00</span></div>
-                  <div className="menu-item"><div><div className="menu-item-name">Hawaiana</div><div className="menu-item-desc">Jamon, pina caramelizada y queso</div></div><span className="menu-item-price">$12.00</span></div>
-                  <div className="menu-item"><div><div className="menu-item-name">Cuatro Quesos</div><div className="menu-item-desc">Mozzarella, gorgonzola, parmesano y fontina</div></div><span className="menu-item-price">$13.00</span></div>
+            <div className="review-form-body">
+              <div className="rform-row">
+                <div className="rform-group">
+                  <label>Tu nombre</label>
+                  <input type="text" value={name} onChange={(event) => setName(event.target.value)} placeholder="Ej. Juan López" />
+                </div>
+                <div className="rform-group">
+                  <label>Calificación</label>
+                  <div className="rstar-picker" id="rStarPicker">
+                    {[1, 2, 3, 4, 5].map((value) => (
+                      <span
+                        key={value}
+                        data-v={value}
+                        className={value <= rating ? "lit" : ""}
+                        onClick={() => setRating(value)}
+                      >
+                        ★
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <div className="menu-category">
-                <h3 className="menu-cat-title">Pizzas Especiales</h3>
-                <div className="menu-items">
-                  <div className="menu-item"><div><div className="menu-item-name">Ebenezer Suprema</div><div className="menu-item-desc">Carne, chorizo, pimiento, cebolla y aceitunas</div></div><span className="menu-item-price">$15.00</span></div>
-                  <div className="menu-item"><div><div className="menu-item-name">Mediterranea</div><div className="menu-item-desc">Tomate cherry, rucula, jamon serrano y parmesano</div></div><span className="menu-item-price">$14.00</span></div>
-                  <div className="menu-item"><div><div className="menu-item-name">BBQ Chicken</div><div className="menu-item-desc">Pollo, salsa BBQ, cebolla morada y cilantro</div></div><span className="menu-item-price">$14.00</span></div>
-                </div>
+              <div className="rform-group">
+                <label>Tu reseña</label>
+                <textarea value={text} onChange={(event) => setText(event.target.value)} rows={3} placeholder="¿Qué fue lo que más te gustó de Ébenezer?" />
               </div>
-              <div className="menu-category">
-                <h3 className="menu-cat-title">Acompanantes</h3>
-                <div className="menu-items">
-                  <div className="menu-item"><div><div className="menu-item-name">Alitas BBQ</div><div className="menu-item-desc">8 piezas con salsa casera</div></div><span className="menu-item-price">$8.00</span></div>
-                  <div className="menu-item"><div><div className="menu-item-name">Breadsticks con Queso</div><div className="menu-item-desc">Pan artesanal con dip de queso</div></div><span className="menu-item-price">$5.00</span></div>
-                  <div className="menu-item"><div><div className="menu-item-name">Ensalada Caesar</div><div className="menu-item-desc">Lechuga, crutones, parmesano y aderezo</div></div><span className="menu-item-price">$6.00</span></div>
-                </div>
-              </div>
+              <button className="rsubmit-btn" onClick={submitReview}>
+                Publicar reseña
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: 13, height: 13 }}><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" /></svg>
+              </button>
+              {message ? (
+                <div className={`rform-msg${messageError ? " error" : ""}`}>{message}</div>
+              ) : null}
             </div>
           </div>
         </div>
       </section>
 
-      <section id="galeria" className="gallery">
-        <div className="container gallery-header reveal">
-          <p className="gallery-label">La experiencia</p>
-          <h2 className="gallery-title">Momentos que nos definen</h2>
-        </div>
-        <div className="gallery-track">
-          <div className="gallery-item">
-            <Image
-              src="https://images.unsplash.com/photo-1555507036-ab1f4038024a?w=600&q=80"
-              alt="Croissant artesanal recien horneado"
-              width={600}
-              height={750}
-              sizes="(max-width: 768px) 18rem, 24rem"
-            />
-          </div>
-          <div className="gallery-item">
-            <Image
-              src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600&q=80"
-              alt="Espresso preparado con precision"
-              width={600}
-              height={750}
-              sizes="(max-width: 768px) 18rem, 24rem"
-            />
-          </div>
-          <div className="gallery-item">
-            <Image
-              src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=600&q=80"
-              alt="Pizza margherita con queso derretido"
-              width={600}
-              height={750}
-              sizes="(max-width: 768px) 18rem, 24rem"
-            />
-          </div>
-          <div className="gallery-item">
-            <Image
-              src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=600&q=80"
-              alt="Clientes disfrutando en la cafeteria"
-              width={600}
-              height={750}
-              sizes="(max-width: 768px) 18rem, 24rem"
-            />
-          </div>
-        </div>
-      </section>
-
-      <section id="contacto" className="contact">
+      <section id="contacto" className="section section-surface">
         <div className="container">
           <div className="contact-grid">
-            <div className="contact-map reveal-left">
+            <div className="map-frame reveal">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3021.0!2d-73.9857!3d40.7484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDQ0JzU0LjIiTiA3M8KwNTknMDguNSJX!5e0!3m2!1ses!2sus!4v1234567890"
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Ubicacion de Cafeteria Ebenezer"
+                title="Ubicación Cafetería Ébenezer"
               />
             </div>
-            <div className="contact-info reveal">
-              <p className="contact-label">Visitanos</p>
-              <h2 className="contact-title">Te esperamos</h2>
-              <div className="contact-items">
-                <div className="contact-item">
-                  <div className="contact-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
-                  </div>
-                  <div>
-                    <h4 className="contact-item-title">Direccion</h4>
-                    <p className="contact-item-text">Calle Principal #123, Centro</p>
-                  </div>
+            <div className="contact-info">
+              <div className="eyebrow reveal">Visítanos</div>
+              <h2 className="section-title reveal reveal-delay-1">Te <em>esperamos</em></h2>
+              <div className="contact-row reveal reveal-delay-2">
+                <div className="contact-icon-box">
+                  <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
                 </div>
-                <div className="contact-item">
-                  <div className="contact-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
-                  </div>
-                  <div>
-                    <h4 className="contact-item-title">Horarios</h4>
-                    <p className="contact-item-text">Cafeteria: 08:00 - 16:00</p>
-                    <p className="contact-item-text">Pizzeria: 16:00 - 23:00</p>
-                  </div>
-                </div>
-                <div className="contact-item">
-                  <div className="contact-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
-                  </div>
-                  <div>
-                    <h4 className="contact-item-title">Telefono</h4>
-                    <p className="contact-item-text"><a href="tel:+1234567890">+1 (234) 567-890</a></p>
-                  </div>
-                </div>
+                <div><h4>Dirección</h4><p>Calle Principal #123, Centro</p></div>
               </div>
-              <div className="social-links">
-                <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="WhatsApp">
+              <div className="contact-row reveal reveal-delay-2">
+                <div className="contact-icon-box">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+                </div>
+                <div><h4>Horarios</h4><p>Cafetería: 08:00 – 16:00<br />Pizzería: 16:00 – 23:00</p></div>
+              </div>
+              <div className="contact-row reveal reveal-delay-3">
+                <div className="contact-icon-box">
+                  <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6 19.79 19.79 0 0 1 1.61 5 2 2 0 0 1 3.59 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.09a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
+                </div>
+                <div><h4>Teléfono</h4><a href="tel:+1234567890">+1 (234) 567-890</a></div>
+              </div>
+              <div className="social-row reveal reveal-delay-3">
+                <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" className="social-btn" title="WhatsApp">
                   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
                 </a>
-                <a href="https://instagram.com/cafeteriaebenezer" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="Instagram">
+                <a href="https://instagram.com/cafeteriaebenezer" target="_blank" rel="noopener noreferrer" className="social-btn" title="Instagram">
                   <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" /></svg>
                 </a>
               </div>
@@ -516,12 +1067,10 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="footer">
-        <div className="container">
-          <div className="footer-inner">
-            <p className="footer-brand">Cafeteria Ebenezer</p>
-            <p className="footer-tagline">Cafe de dia. Pizza de noche.</p>
-          </div>
+      <footer>
+        <div className="footer-inner">
+          <p className="footer-logo">Cafetería <em>Ébenezer</em></p>
+          <p className="footer-copy">© 2025 · Café de día. Pizza de noche.</p>
         </div>
       </footer>
     </>
