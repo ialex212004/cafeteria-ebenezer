@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import SplashScreen from "./components/SplashScreen";
 
 type MenuTab = "cafe" | "pizza";
 
@@ -173,6 +174,7 @@ export default function Home() {
 
   return (
     <>
+      <SplashScreen />
       <style jsx global>{`
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
