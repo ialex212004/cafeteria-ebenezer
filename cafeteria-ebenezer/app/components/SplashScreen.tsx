@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
 export default function SplashScreen() {
@@ -56,10 +57,12 @@ export default function SplashScreen() {
         alignItems: 'center',
         justifyContent: 'center',
         background:
-          'radial-gradient(circle at top, rgba(212,168,83,0.09), transparent 35%), linear-gradient(180deg, #131009 0%, #0e0b08 100%)',
+          'radial-gradient(circle at top, rgba(212,168,83,0.08), transparent 32%), linear-gradient(180deg, rgba(19,16,9,0.76) 0%, rgba(14,11,8,0.88) 100%)',
+        backdropFilter: fadeOut ? 'blur(0px)' : 'blur(18px)',
+        WebkitBackdropFilter: fadeOut ? 'blur(0px)' : 'blur(18px)',
         opacity: fadeOut ? 0 : 1,
         pointerEvents: fadeOut ? 'none' : 'all',
-        transition: 'opacity 0.65s ease',
+        transition: 'opacity 0.7s ease, backdrop-filter 0.7s ease, -webkit-backdrop-filter 0.7s ease',
       }}
     >
       <div
@@ -68,26 +71,47 @@ export default function SplashScreen() {
           flexDirection: 'column',
           alignItems: 'center',
           gap: '1rem',
-          transform: fadeOut ? 'translateY(-10px) scale(0.98)' : 'translateY(0) scale(1)',
+          width: 'min(92vw, 420px)',
+          padding: '2rem 1.75rem',
+          borderRadius: '28px',
+          border: '1px solid rgba(212,168,83,0.12)',
+          background: 'linear-gradient(180deg, rgba(32,26,17,0.74) 0%, rgba(19,16,9,0.58) 100%)',
+          boxShadow: '0 24px 60px rgba(0,0,0,0.24), inset 0 1px 0 rgba(242,236,224,0.05)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
+          transform: fadeOut ? 'translateY(-8px) scale(0.985)' : 'translateY(0) scale(1)',
           opacity: fadeOut ? 0 : 1,
-          transition: 'transform 0.65s ease, opacity 0.45s ease',
+          filter: fadeOut ? 'blur(10px)' : 'blur(0px)',
+          transition: 'transform 0.7s ease, opacity 0.55s ease, filter 0.7s ease',
         }}
       >
         <div
           style={{
-            width: '72px',
-            height: '72px',
-            borderRadius: '999px',
+            width: '84px',
+            height: '84px',
+            borderRadius: '24px',
             display: 'grid',
             placeItems: 'center',
-            border: '1px solid rgba(212,168,83,0.22)',
-            background: 'rgba(212,168,83,0.08)',
-            color: '#d4a853',
-            fontSize: '1.8rem',
-            boxShadow: '0 0 30px rgba(212,168,83,0.08)',
+            border: '1px solid rgba(212,168,83,0.18)',
+            background: 'linear-gradient(180deg, rgba(212,168,83,0.12) 0%, rgba(212,168,83,0.04) 100%)',
+            boxShadow: '0 12px 28px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.05)',
+            overflow: 'hidden',
           }}
         >
-          ☕
+          <Image
+            src="/favicon.ico"
+            alt="Logo de Cafetería Ébenezer"
+            width={56}
+            height={56}
+            unoptimized
+            style={{
+              width: '56px',
+              height: '56px',
+              objectFit: 'contain',
+              display: 'block',
+              filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.22))',
+            }}
+          />
         </div>
         <div style={{ textAlign: 'center' }}>
           <p
@@ -95,9 +119,9 @@ export default function SplashScreen() {
               margin: 0,
               color: '#f2ece0',
               fontFamily: 'Poppins, sans-serif',
-              fontSize: '1.35rem',
+              fontSize: '1.3rem',
               fontWeight: 600,
-              letterSpacing: '0.06em',
+              letterSpacing: '0.08em',
               textTransform: 'uppercase',
             }}
           >
