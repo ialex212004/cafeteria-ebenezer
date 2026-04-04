@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     description: "Café de día, pizza de noche. Granos seleccionados y pizzas artesanales.",
     images: [
       {
-        url: "/file.svg", // Cambia por la imagen que prefieras
+        url: "/file.svg",
         width: 1200,
         height: 630,
         alt: "Cafetería Ébenezer",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Cafetería Ébenezer",
     description: "Café de día, pizza de noche. Granos seleccionados y pizzas artesanales.",
-    images: ["/file.svg"], // Cambia por la imagen que prefieras
+    images: ["/file.svg"],
   },
 };
 
