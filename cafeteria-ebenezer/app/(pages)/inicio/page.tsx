@@ -185,7 +185,7 @@ export default function InicioPage() {
         .hero-content {
           position: relative;
           z-index: 10;
-          padding: 3rem 3.5rem;
+          padding: 5rem 7rem;
           width: 100%;
         }
         .hero-tag {
@@ -237,6 +237,7 @@ export default function InicioPage() {
           max-width: 34ch;
           margin-bottom: 2rem;
           font-family: var(--font-body);
+          font-weight: 300;
           opacity: 0;
           animation: fadeUp 0.8s 0.6s both;
         }
@@ -322,7 +323,7 @@ export default function InicioPage() {
         }
       `}</style>
 
-      <canvas ref={canvasRef} id="particles" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0, opacity: 0.5 }} />
+      <canvas ref={canvasRef} id="particles" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0, opacity: 0.3 }} />
 
       <section id="inicio">
         <div className="hero-panel hero-panel-day">

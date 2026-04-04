@@ -203,7 +203,7 @@ export default function ContactoPage() {
           <div className="contact-grid">
             <div className="map-frame reveal">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3021.0!2d-73.9857!3d40.7484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDQ0JzU0LjIiTiA3M8KwNTknMDguNSJX!5e0!3m2!1ses!2sus!4v1234567890"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3111.0!2d-3.3844!3d39.0074!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMznCsDAwJzI2LjciTiAzwrAyMyczMC4yIlc!5e0!3m2!1ses!2ses!4v1234567890"
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
@@ -224,7 +224,7 @@ export default function ContactoPage() {
                 </div>
                 <div>
                   <h4>Dirección</h4>
-                  <p>Calle Principal #123, Centro</p>
+                  <p>Calle la Paz, 28-A · Valdepeñas, 13300 · Ciudad Real, España</p>
                 </div>
               </div>
               <div className="contact-row reveal reveal-delay-2">
@@ -237,9 +237,9 @@ export default function ContactoPage() {
                 <div>
                   <h4>Horarios</h4>
                   <p>
-                    Cafetería: 08:00 – 16:00
+                    Lunes a Domingo: 08:00 – 23:00
                     <br />
-                    Pizzería: 16:00 – 23:00
+                    Servicio continuo
                   </p>
                 </div>
               </div>
@@ -251,7 +251,7 @@ export default function ContactoPage() {
                 </div>
                 <div>
                   <h4>Teléfono</h4>
-                  <a href="tel:+1234567890">+1 (234) 567-890</a>
+                  <a href="tel:+34623272728">+34 623 272 728</a>
                 </div>
               </div>
               <div className="social-row reveal reveal-delay-3">

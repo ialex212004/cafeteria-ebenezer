@@ -45,7 +45,7 @@ export default function MenuPage() {
         }
 
         .section {
-          padding: 7rem 2rem;
+          padding: 7rem 5rem;
           margin-top: 70px;
         }
         .section-surface {
@@ -174,7 +174,7 @@ export default function MenuPage() {
         .reveal {
           opacity: 0;
           transform: translateY(32px);
-          transition: opacity 0.7s var(--ease-smooth), transform 0.7s var(--ease-smooth);
+          transition: opacity 1.5s var(--ease-smooth), transform 1.5s var(--ease-smooth);
         }
         .reveal.visible {
           opacity: 1;
@@ -189,7 +189,7 @@ export default function MenuPage() {
 
         @media (max-width: 768px) {
           .section {
-            padding: 5rem 1.25rem;
+            padding: 5rem 2rem;
           }
         }
       `}</style>
@@ -215,172 +215,172 @@ export default function MenuPage() {
           <div className="menu-content">
             {activeTab === 'Cafe' ? (
               <>
-                <div className="menu-cat">
+                <div className="menu-cat reveal">
                   <h3 className="menu-section-title">Bebidas Calientes</h3>
                   <div className="menu-item">
                     <div>
                       <div className="item-name">Espresso</div>
                       <div className="item-desc">Intenso y concentrado, doble shot</div>
                     </div>
-                    <span className="item-price">$3.50</span>
+                    <span className="item-price">€3,50</span>
                   </div>
                   <div className="menu-item">
                     <div>
                       <div className="item-name">Cappuccino</div>
                       <div className="item-desc">Espresso con leche espumada y cacao</div>
                     </div>
-                    <span className="item-price">$4.50</span>
+                    <span className="item-price">€4,50</span>
                   </div>
                   <div className="menu-item">
                     <div>
                       <div className="item-name">Latte</div>
                       <div className="item-desc">Espresso suave con leche cremosa</div>
                     </div>
-                    <span className="item-price">$4.50</span>
+                    <span className="item-price">€4,50</span>
                   </div>
                   <div className="menu-item">
                     <div>
                       <div className="item-name">Mocha</div>
                       <div className="item-desc">Espresso con chocolate y crema batida</div>
                     </div>
-                    <span className="item-price">$5.00</span>
+                    <span className="item-price">€5,00</span>
                   </div>
                   <div className="menu-item">
                     <div>
                       <div className="item-name">Té Chai</div>
                       <div className="item-desc">Té negro con especias y leche</div>
                     </div>
-                    <span className="item-price">$4.00</span>
+                    <span className="item-price">€4,00</span>
                   </div>
                 </div>
-                <div className="menu-cat">
+                <div className="menu-cat reveal reveal-delay-1">
                   <h3 className="menu-section-title">Bebidas Frías</h3>
                   <div className="menu-item">
                     <div>
                       <div className="item-name">Cold Brew</div>
                       <div className="item-desc">Café infusionado en frío 12 horas</div>
                     </div>
-                    <span className="item-price">$5.00</span>
+                    <span className="item-price">€5,00</span>
                   </div>
                   <div className="menu-item">
                     <div>
                       <div className="item-name">Frappé de Café</div>
                       <div className="item-desc">Café helado cremoso y dulce</div>
                     </div>
-                    <span className="item-price">$5.50</span>
+                    <span className="item-price">€5,50</span>
                   </div>
                   <div className="menu-item">
                     <div>
                       <div className="item-name">Limonada Natural</div>
                       <div className="item-desc">Limón fresco con hierbabuena</div>
                     </div>
-                    <span className="item-price">$3.50</span>
+                    <span className="item-price">€3,50</span>
                   </div>
                 </div>
-                <div className="menu-cat">
+                <div className="menu-cat reveal reveal-delay-2">
                   <h3 className="menu-section-title">Repostería</h3>
                   <div className="menu-item">
                     <div>
                       <div className="item-name">Croissant de Mantequilla</div>
                       <div className="item-desc">Horneado fresco cada mañana</div>
                     </div>
-                    <span className="item-price">$3.00</span>
+                    <span className="item-price">€3,00</span>
                   </div>
                   <div className="menu-item">
                     <div>
                       <div className="item-name">Cheesecake</div>
                       <div className="item-desc">New York style con frutos rojos</div>
                     </div>
-                    <span className="item-price">$5.50</span>
+                    <span className="item-price">€5,50</span>
                   </div>
                   <div className="menu-item">
                     <div>
                       <div className="item-name">Brownie</div>
                       <div className="item-desc">Chocolate belga con nueces</div>
                     </div>
-                    <span className="item-price">$4.00</span>
+                    <span className="item-price">€4,00</span>
                   </div>
                 </div>
               </>
             ) : (
               <>
-                <div className="menu-cat">
+                <div className="menu-cat reveal">
                   <h3 className="menu-section-title">Pizzas Clásicas</h3>
                   <div className="menu-item">
                     <div>
                       <div className="item-name">Margherita</div>
                       <div className="item-desc">Salsa de tomate, mozzarella fresca y albahaca</div>
                     </div>
-                    <span className="item-price">$10.00</span>
+                    <span className="item-price">€10,00</span>
                   </div>
                   <div className="menu-item">
                     <div>
                       <div className="item-name">Pepperoni</div>
                       <div className="item-desc">Pepperoni artesanal con mozzarella fundida</div>
                     </div>
-                    <span className="item-price">$12.00</span>
+                    <span className="item-price">€12,00</span>
                   </div>
                   <div className="menu-item">
                     <div>
                       <div className="item-name">Hawaiana</div>
                       <div className="item-desc">Jamón, piña caramelizada y queso</div>
                     </div>
-                    <span className="item-price">$12.00</span>
+                    <span className="item-price">€12,00</span>
                   </div>
                   <div className="menu-item">
                     <div>
                       <div className="item-name">Cuatro Quesos</div>
                       <div className="item-desc">Mozzarella, gorgonzola, parmesano y fontina</div>
                     </div>
-                    <span className="item-price">$13.00</span>
+                    <span className="item-price">€13,00</span>
                   </div>
                 </div>
-                <div className="menu-cat">
+                <div className="menu-cat reveal reveal-delay-1">
                   <h3 className="menu-section-title">Pizzas Especiales</h3>
                   <div className="menu-item">
                     <div>
                       <div className="item-name">Ébenezer Suprema</div>
                       <div className="item-desc">Carne, chorizo, pimiento, cebolla y aceitunas</div>
                     </div>
-                    <span className="item-price">$15.00</span>
+                    <span className="item-price">€15,00</span>
                   </div>
                   <div className="menu-item">
                     <div>
                       <div className="item-name">Mediterránea</div>
                       <div className="item-desc">Tomate cherry, rúcula, jamón serrano y parmesano</div>
                     </div>
-                    <span className="item-price">$14.00</span>
+                    <span className="item-price">€14,00</span>
                   </div>
                   <div className="menu-item">
                     <div>
                       <div className="item-name">BBQ Chicken</div>
                       <div className="item-desc">Pollo, salsa BBQ, cebolla morada y cilantro</div>
                     </div>
-                    <span className="item-price">$14.00</span>
+                    <span className="item-price">€14,00</span>
                   </div>
                 </div>
-                <div className="menu-cat">
+                <div className="menu-cat reveal reveal-delay-2">
                   <h3 className="menu-section-title">Acompañantes</h3>
                   <div className="menu-item">
                     <div>
                       <div className="item-name">Alitas BBQ</div>
                       <div className="item-desc">8 piezas con salsa casera</div>
                     </div>
-                    <span className="item-price">$8.00</span>
+                    <span className="item-price">€8,00</span>
                   </div>
                   <div className="menu-item">
                     <div>
                       <div className="item-name">Breadsticks con Queso</div>
                       <div className="item-desc">Pan artesanal con dip de queso</div>
                     </div>
-                    <span className="item-price">$5.00</span>
+                    <span className="item-price">€5,00</span>
                   </div>
                   <div className="menu-item">
                     <div>
                       <div className="item-name">Ensalada Caesar</div>
                       <div className="item-desc">Lechuga, crutones, parmesano y aderezo</div>
                     </div>
-                    <span className="item-price">$6.00</span>
+                    <span className="item-price">€6,00</span>
                   </div>
                 </div>
               </>
