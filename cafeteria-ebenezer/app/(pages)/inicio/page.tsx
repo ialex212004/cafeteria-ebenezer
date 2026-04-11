@@ -523,6 +523,8 @@ export default function InicioPage() {
           }`}
           onMouseEnter={() => setHoveredPanel('day')}
           onMouseLeave={() => setHoveredPanel(null)}
+          onFocus={() => setHoveredPanel('day')}
+          onBlur={() => setHoveredPanel(null)}
         >
           <Image
             src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&fit=crop&w=1800&q=85"
@@ -568,6 +570,8 @@ export default function InicioPage() {
           }`}
           onMouseEnter={() => setHoveredPanel('night')}
           onMouseLeave={() => setHoveredPanel(null)}
+          onFocus={() => setHoveredPanel('night')}
+          onBlur={() => setHoveredPanel(null)}
         >
           <Image
             src="https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?auto=format&fit=crop&w=1800&q=85"

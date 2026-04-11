@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SITE } from '@/lib/config/site';
 
 type ReservationForm = {
@@ -27,6 +27,13 @@ export default function ContactoPage() {
   const [form, setForm] = useState<ReservationForm>(initialForm);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
+  const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
+    };
+  }, []);
 
   const onChange = (key: keyof ReservationForm, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -40,7 +47,8 @@ export default function ContactoPage() {
       return;
     }
     setSubmitted(true);
-    setTimeout(() => {
+    if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
+    resetTimerRef.current = setTimeout(() => {
       setSubmitted(false);
       setForm(initialForm);
     }, 6000);
@@ -470,62 +478,75 @@ export default function ContactoPage() {
             </p>
           </div>
 
-          <form className="reservation-form reveal reveal-delay-2" onSubmit={onSubmit}>
+          <form className="reservation-form reveal reveal-delay-2" onSubmit={onSubmit} noValidate>
             <div className="form-row">
               <div className="form-field">
-                <label>Nombre completo *</label>
+                <label htmlFor="contact-name">Nombre completo *</label>
                 <input
+                  id="contact-name"
                   type="text"
                   value={form.name}
                   onChange={(e) => onChange('name', e.target.value)}
                   placeholder="Su nombre"
+                  autoComplete="name"
                   required
+                  aria-required="true"
                 />
               </div>
               <div className="form-field">
-                <label>Teléfono *</label>
+                <label htmlFor="contact-phone">Teléfono *</label>
                 <input
+                  id="contact-phone"
                   type="tel"
                   value={form.phone}
                   onChange={(e) => onChange('phone', e.target.value)}
                   placeholder="+34 600 000 000"
+                  autoComplete="tel"
                   required
+                  aria-required="true"
                 />
               </div>
             </div>
 
             <div className="form-field">
-              <label>Correo electrónico</label>
+              <label htmlFor="contact-email">Correo electrónico</label>
               <input
+                id="contact-email"
                 type="email"
                 value={form.email}
                 onChange={(e) => onChange('email', e.target.value)}
                 placeholder="correo@ejemplo.com"
+                autoComplete="email"
               />
             </div>
 
             <div className="form-row three">
               <div className="form-field">
-                <label>Fecha *</label>
+                <label htmlFor="contact-date">Fecha *</label>
                 <input
+                  id="contact-date"
                   type="date"
                   value={form.date}
                   onChange={(e) => onChange('date', e.target.value)}
                   required
+                  aria-required="true"
                 />
               </div>
               <div className="form-field">
-                <label>Hora *</label>
+                <label htmlFor="contact-time">Hora *</label>
                 <input
+                  id="contact-time"
                   type="time"
                   value={form.time}
                   onChange={(e) => onChange('time', e.target.value)}
                   required
+                  aria-required="true"
                 />
               </div>
               <div className="form-field">
-                <label>Comensales</label>
+                <label htmlFor="contact-guests">Comensales</label>
                 <select
+                  id="contact-guests"
                   value={form.guests}
                   onChange={(e) => onChange('guests', e.target.value)}
                 >
@@ -539,8 +560,9 @@ export default function ContactoPage() {
             </div>
 
             <div className="form-field">
-              <label>Ocasión especial o notas</label>
+              <label htmlFor="contact-notes">Ocasión especial o notas</label>
               <textarea
+                id="contact-notes"
                 value={form.notes}
                 onChange={(e) => onChange('notes', e.target.value)}
                 rows={3}
@@ -558,12 +580,16 @@ export default function ContactoPage() {
             </div>
 
             {submitted && (
-              <div className="form-feedback">
+              <div className="form-feedback" role="alert" aria-live="polite">
                 Gracias, {form.name}. Tu solicitud ha sido recibida. Te confirmaremos la reserva
                 en breve por teléfono.
               </div>
             )}
-            {error && <div className="form-feedback error">{error}</div>}
+            {error && (
+              <div className="form-feedback error" role="alert" aria-live="polite">
+                {error}
+              </div>
+            )}
           </form>
         </div>
       </section>

@@ -105,15 +105,13 @@ export default function RootLayout({
 
   return (
     <html lang="es">
-      <head>
+      <body>
         <Script
           id="restaurant-schema"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(restaurantSchema) }}
-          strategy="afterInteractive"
+          strategy="beforeInteractive"
         />
-      </head>
-      <body>
         <InfoStrip />
         {children}
         <WhatsAppButton />

@@ -372,8 +372,7 @@ export default function GaleriaPage() {
                 />
                 <div className="gal-card-overlay">
                   <div className="gal-card-label">— {img.label}</div>
-                  <h3 className="gal-card-title">{img.alt}</h3>
-                  <p className="gal-card-caption">{img.caption}</p>
+                  <h3 className="gal-card-title">{img.caption}</h3>
                 </div>
               </div>
             ))}

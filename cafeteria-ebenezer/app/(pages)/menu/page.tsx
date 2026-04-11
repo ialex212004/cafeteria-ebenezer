@@ -87,19 +87,32 @@ const pizzaMenu: MenuCategory[] = [
 export default function MenuPage() {
   const [activeTab, setActiveTab] = useState<MenuTab>('Cafe');
 
+  // Re-observe .reveal elements inside the menu body after each tab switch.
+  // A rAF is needed so the effect runs after React commits the new DOM.
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('visible');
-            observer.unobserve(e.target);
-          }
-        }),
-      { threshold: 0.08 }
-    );
-    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+    let observer: IntersectionObserver;
+
+    const frameId = requestAnimationFrame(() => {
+      observer = new IntersectionObserver(
+        (entries) =>
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add('visible');
+              observer.unobserve(e.target);
+            }
+          }),
+        { threshold: 0.08 }
+      );
+      // Only target elements that haven't been revealed yet
+      document
+        .querySelectorAll('.menu-body .reveal:not(.visible)')
+        .forEach((el) => observer.observe(el));
+    });
+
+    return () => {
+      cancelAnimationFrame(frameId);
+      observer?.disconnect();
+    };
   }, [activeTab]);
 
   const categories = activeTab === 'Cafe' ? cafeMenu : pizzaMenu;
@@ -396,8 +409,12 @@ export default function MenuPage() {
       </section>
 
       <div className="menu-tabs-wrap">
-        <div className="menu-tabs reveal">
+        <div className="menu-tabs reveal" role="tablist" aria-label="Sección del menú">
           <button
+            role="tab"
+            aria-selected={activeTab === 'Cafe'}
+            aria-controls="menu-panel"
+            id="tab-cafe"
             className={`menu-tab${activeTab === 'Cafe' ? ' active' : ''}`}
             onClick={() => setActiveTab('Cafe')}
           >
@@ -405,6 +422,10 @@ export default function MenuPage() {
             <small>— Día —</small>
           </button>
           <button
+            role="tab"
+            aria-selected={activeTab === 'Pizza'}
+            aria-controls="menu-panel"
+            id="tab-pizza"
             className={`menu-tab${activeTab === 'Pizza' ? ' active' : ''}`}
             onClick={() => setActiveTab('Pizza')}
           >
@@ -414,7 +435,12 @@ export default function MenuPage() {
         </div>
       </div>
 
-      <section className="menu-body">
+      <section
+        id="menu-panel"
+        className="menu-body"
+        role="tabpanel"
+        aria-labelledby={activeTab === 'Cafe' ? 'tab-cafe' : 'tab-pizza'}
+      >
         <div className="menu-body-inner">
           {categories.map((cat, i) => (
             <div className={`menu-category reveal reveal-delay-${(i % 3) + 1}`} key={`${activeTab}-${cat.title}`}>

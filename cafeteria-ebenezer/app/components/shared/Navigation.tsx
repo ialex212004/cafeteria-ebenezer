@@ -5,12 +5,12 @@ import { useCallback, useEffect, useState } from 'react';
 import { SITE } from '@/lib/config/site';
 
 const NAV_ITEMS = [
-  { href: '/inicio', label: 'Inicio', number: '01' },
-  { href: '/nosotros', label: 'Nosotros', number: '02' },
-  { href: '/menu', label: 'Menú', number: '03' },
-  { href: '/galeria', label: 'Galería', number: '04' },
-  { href: '/resenas', label: 'Reseñas', number: '05' },
-  { href: '/contacto', label: 'Contacto', number: '06' },
+  { href: '/inicio', label: 'Inicio' },
+  { href: '/nosotros', label: 'Nosotros' },
+  { href: '/menu', label: 'Menú' },
+  { href: '/galeria', label: 'Galería' },
+  { href: '/resenas', label: 'Reseñas' },
+  { href: '/contacto', label: 'Contacto' },
 ];
 
 export default function Navigation() {
@@ -305,23 +305,14 @@ export default function Navigation() {
           gap: 1.5rem;
           font-family: var(--font-display);
           font-weight: 300;
-          font-size: clamp(2.8rem, 8vw, 6.2rem);
+          font-size: clamp(2rem, 5.5vw, 4.8rem);
           color: var(--pearl);
           letter-spacing: -0.02em;
-          line-height: 1.05;
+          line-height: 1.1;
           transform: translateY(110%);
           transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s;
           will-change: transform;
-          padding: 0.4rem 0;
-        }
-        .overlay-nav-link .num {
-          font-family: var(--font-sans);
-          font-size: 0.7rem;
-          font-weight: 300;
-          letter-spacing: 0.22em;
-          color: var(--stone);
-          transform: translateY(-0.2em);
-          transition: color 0.4s;
+          padding: 0.3rem 0;
         }
         .overlay-nav-link .label em {
           font-style: italic;
@@ -339,9 +330,6 @@ export default function Navigation() {
 
         .overlay-nav-link:hover {
           color: var(--champagne);
-        }
-        .overlay-nav-link:hover .num {
-          color: var(--pearl);
         }
 
         .overlay-bottom {
@@ -478,6 +466,7 @@ export default function Navigation() {
               onClick={toggleMenu}
               aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
               aria-expanded={menuOpen}
+              aria-controls="main-menu"
             >
               <span className="bar" />
               <span className="bar" />
@@ -487,18 +476,24 @@ export default function Navigation() {
         </div>
       </nav>
 
-      <div className={`menu-overlay${menuOpen ? ' open' : ''}`}>
+      <div className={`menu-overlay${menuOpen ? ' open' : ''}`} aria-hidden="true">
         <div className="overlay-panel" />
         <div className="overlay-panel" />
       </div>
 
-      <div className={`menu-content${menuOpen ? ' open' : ''}`}>
+      <div
+        id="main-menu"
+        className={`menu-content${menuOpen ? ' open' : ''}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menú de navegación"
+        aria-hidden={!menuOpen}
+      >
         <p className="overlay-eyebrow">Carta de navegación</p>
         <ul className="overlay-nav-list">
           {NAV_ITEMS.map((item) => (
             <li key={item.href} className="overlay-nav-item">
               <Link href={item.href} className="overlay-nav-link" onClick={closeMenu}>
-                <span className="num">{item.number}</span>
                 <span className="label">
                   {item.label === 'Menú' ? (
                     <em>Menú</em>

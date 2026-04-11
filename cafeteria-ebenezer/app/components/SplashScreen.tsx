@@ -80,14 +80,11 @@ export default function SplashScreen() {
             radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201, 169, 110, 0.09) 0%, transparent 70%),
             radial-gradient(ellipse 60% 50% at 50% 100%, rgba(180, 92, 50, 0.06) 0%, transparent 70%),
             linear-gradient(180deg, #080603 0%, #0c0905 100%);
-          opacity: ${isExiting ? 0 : 1};
-          transform: scale(${isExiting ? 1.04 : 1});
-          filter: blur(${isExiting ? '6px' : '0px'});
           transition:
             opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
             transform 1.2s cubic-bezier(0.16, 1, 0.3, 1),
-            filter 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-          pointer-events: ${isExiting ? 'none' : 'all'};
+            filter 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+            pointer-events 0s;
           overflow: hidden;
         }
         .splash::before,
@@ -95,7 +92,7 @@ export default function SplashScreen() {
           content: '';
           position: absolute;
           border-radius: 50%;
-          opacity: ${isExiting ? 0 : 0.5};
+          opacity: 0.5;
           transition: opacity 0.9s ease;
           pointer-events: none;
         }
@@ -123,8 +120,6 @@ export default function SplashScreen() {
           gap: 1.6rem;
           text-align: center;
           padding: 2rem;
-          opacity: ${isExiting ? 0 : 1};
-          transform: translateY(${isExiting ? '-14px' : '0'});
           transition: opacity 0.75s ease, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -247,8 +242,23 @@ export default function SplashScreen() {
         }
       `}</style>
 
-      <div className="splash" aria-hidden="true">
-        <div className="splash-inner">
+      <div
+        className="splash"
+        aria-hidden="true"
+        style={{
+          opacity: isExiting ? 0 : 1,
+          transform: isExiting ? 'scale(1.04)' : 'scale(1)',
+          filter: isExiting ? 'blur(6px)' : 'blur(0px)',
+          pointerEvents: isExiting ? 'none' : 'all',
+        }}
+      >
+        <div
+          className="splash-inner"
+          style={{
+            opacity: isExiting ? 0 : 1,
+            transform: isExiting ? 'translateY(-14px)' : 'translateY(0)',
+          }}
+        >
           <p className="splash-mark">Est · MMXXV</p>
           <h1 className="splash-mono">
             {'ÉBENEZER'.split('').map((ch, i) => (

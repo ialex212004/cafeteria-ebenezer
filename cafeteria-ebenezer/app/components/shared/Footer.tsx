@@ -3,9 +3,9 @@
 import Link from 'next/link';
 import { SITE } from '@/lib/config/site';
 
-const year = new Date().getFullYear();
-
 export default function Footer() {
+  const year = new Date().getFullYear();
+
   return (
     <>
       <style jsx>{`
@@ -154,16 +154,12 @@ export default function Footer() {
           display: flex;
           gap: 1.8rem;
         }
-        .footer-legal a {
+        .footer-legal-item {
           font-family: var(--font-sans);
           font-size: 0.6rem;
           letter-spacing: 0.22em;
           text-transform: uppercase;
           color: var(--stone);
-          transition: color 0.3s;
-        }
-        .footer-legal a:hover {
-          color: var(--champagne);
         }
 
         @media (max-width: 900px) {
@@ -259,9 +255,9 @@ export default function Footer() {
               © {year} · <em>Cafetería Ébenezer</em> · Todos los derechos reservados
             </p>
             <div className="footer-legal">
-              <a href="#">Privacidad</a>
-              <a href="#">Cookies</a>
-              <a href="#">Legal</a>
+              <span className="footer-legal-item">Privacidad</span>
+              <span className="footer-legal-item">Cookies</span>
+              <span className="footer-legal-item">Legal</span>
             </div>
           </div>
         </div>

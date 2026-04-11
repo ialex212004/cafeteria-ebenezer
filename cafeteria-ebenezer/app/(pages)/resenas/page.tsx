@@ -76,7 +76,7 @@ export default function ResenasPage() {
     return reviews.reduce((s, r) => s + r.stars, 0) / reviews.length;
   }, [reviews]);
 
-  const submitReview = async () => {
+  const submitReview = () => {
     const n = name.trim();
     const t = text.trim();
     const c = city.trim();
@@ -512,32 +512,41 @@ export default function ResenasPage() {
             </p>
           </div>
 
-          <div className="res-form reveal reveal-delay-2">
+          <form
+            className="res-form reveal reveal-delay-2"
+            onSubmit={(e) => { e.preventDefault(); submitReview(); }}
+            noValidate
+          >
             <div className="res-form-row">
               <div className="res-field">
-                <label>Tu nombre</label>
+                <label htmlFor="res-name">Tu nombre</label>
                 <input
+                  id="res-name"
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Nombre completo"
                   autoComplete="name"
+                  aria-required="true"
+                  aria-invalid={messageError && !name.trim() ? true : undefined}
                 />
               </div>
               <div className="res-field">
-                <label>Ciudad</label>
+                <label htmlFor="res-city">Ciudad</label>
                 <input
+                  id="res-city"
                   type="text"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                   placeholder="Opcional"
+                  autoComplete="address-level2"
                 />
               </div>
             </div>
 
             <div className="res-field">
-              <label>Tu calificación</label>
-              <div className="res-stars-picker" role="radiogroup" aria-label="Calificación">
+              <label id="res-rating-label">Tu calificación</label>
+              <div className="res-stars-picker" role="group" aria-labelledby="res-rating-label">
                 {[1, 2, 3, 4, 5].map((v) => (
                   <button
                     key={v}
@@ -546,7 +555,8 @@ export default function ResenasPage() {
                     onClick={() => setRating(v)}
                     onMouseEnter={() => setHoverRating(v)}
                     onMouseLeave={() => setHoverRating(0)}
-                    aria-label={`${v} estrellas`}
+                    aria-label={`${v} ${v === 1 ? 'estrella' : 'estrellas'}`}
+                    aria-pressed={v === rating}
                   >
                     ★
                   </button>
@@ -555,17 +565,20 @@ export default function ResenasPage() {
             </div>
 
             <div className="res-field">
-              <label>Tu experiencia</label>
+              <label htmlFor="res-text">Tu experiencia</label>
               <textarea
+                id="res-text"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 rows={4}
                 placeholder="¿Qué te llevaste de Ébenezer?"
+                aria-required="true"
+                aria-invalid={messageError && !text.trim() ? true : undefined}
               />
             </div>
 
             <div className="res-submit">
-              <button className="lux-btn" onClick={submitReview}>
+              <button className="lux-btn" type="submit">
                 <span>Publicar reseña</span>
                 <svg viewBox="0 0 24 24">
                   <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
@@ -573,8 +586,16 @@ export default function ResenasPage() {
               </button>
             </div>
 
-            {message && <div className={`res-msg${messageError ? ' error' : ''}`}>{message}</div>}
-          </div>
+            {message && (
+              <div
+                className={`res-msg${messageError ? ' error' : ''}`}
+                role="alert"
+                aria-live="polite"
+              >
+                {message}
+              </div>
+            )}
+          </form>
         </div>
       </section>
     </>

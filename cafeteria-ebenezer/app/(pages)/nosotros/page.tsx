@@ -370,15 +370,16 @@ export default function NosotrosPage() {
 
       <section className="about-hero">
         <div className="about-hero-inner">
-          <div className="eyebrow center reveal">Nuestra casa</div>
+          <div className="eyebrow center reveal">Nuestra historia</div>
           <h1 className="reveal reveal-delay-1">
-            Una herencia
+            Hasta aquí nos ha
             <br />
-            hecha de <em>detalles</em>
+            traído <em>el Señor</em>
           </h1>
           <p className="about-hero-lede reveal reveal-delay-2">
-            Ébenezer nació de la convicción de que un lugar puede cambiar el ritmo de un día.
-            Que un café puede despertar recuerdos. Que una pizza puede sellar una amistad.
+            Ébenezer no es solo un nombre bonito. Es una declaración de fe. Significa
+            &ldquo;la roca fuerte&rdquo; y &ldquo;hasta aquí nos ha traído el Señor&rdquo;.
+            Cada taza, cada mesa, cada día abiertos son evidencia de esa promesa cumplida.
           </p>
         </div>
       </section>
@@ -388,12 +389,12 @@ export default function NosotrosPage() {
           <div className="story-media reveal">
             <div className="story-frame">
               <Image
-                src="/images/nosotros/interior-logo.jpg"
-                alt="Interior de Cafetería Ébenezer"
+                src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=900&q=85"
+                alt="Interior de Cafetería Ébenezer con barra y ambiente cálido"
                 fill
                 sizes="(max-width: 900px) 100vw, 42vw"
               />
-              <div className="story-caption">— Valdepeñas · Desde MMXXV —</div>
+              <div className="story-caption">— Valdepeñas · Ébenezer · MMXXV —</div>
             </div>
             <div className="story-accent" />
           </div>
@@ -401,28 +402,30 @@ export default function NosotrosPage() {
           <div className="story-text">
             <div className="eyebrow reveal">La historia</div>
             <h2 className="reveal reveal-delay-1">
-              De la mañana a la noche,
+              Un sueño nacido
               <br />
-              <em>una misma pasión</em>
+              <em>de la fe y las manos</em>
             </h2>
             <p className="reveal reveal-delay-2">
-              Empezamos con una pregunta sencilla: ¿cómo se siente un lugar donde cada detalle importa?
-              La respuesta nos ha llevado años de oficio, viajes, tostadores visitados y hornos
-              construidos con paciencia. Cada rincón de Ébenezer es la suma de esas pequeñas
-              obsesiones.
+              Esta cafetería nació del corazón de una mujer que creyó que Dios podía usarla
+              incluso entre fogones y tazas de café. No fue fácil. Hubo madrugadas de duda,
+              momentos en los que el camino no estaba claro. Pero había una roca firme debajo
+              de cada paso: la convicción de que esto no era solo un negocio, sino un llamado.
             </p>
             <p className="reveal reveal-delay-2">
-              Por la mañana, el aroma del café inunda la sala. Caen las primeras luces, se escucha
-              el vapor, el murmullo tibio de las conversaciones. Al atardecer, el horno cobra vida
-              y una masa madre que ha descansado 48 horas se convierte en la protagonista de la noche.
+              Ébenezer abrió sus puertas en Valdepeñas no para ser la cafetería más famosa,
+              sino para ser la más fiel. Fiel al producto, fiel a las personas que entran,
+              y sobre todo, fiel a quien nos sostuvo cuando todavía era solo un sueño escrito
+              en un cuaderno.
             </p>
             <p className="reveal reveal-delay-2">
-              Dos oficios, un mismo respeto: el tiempo. El tuyo, el nuestro, el que el producto pide.
+              Dios es el centro de todo lo que hacemos aquí. Eso no es un eslogan; es la razón
+              por la que cada detalle importa, por la que cada persona es recibida como un regalo.
             </p>
             <div className="story-signature reveal reveal-delay-3">
               <div>
-                <div className="story-signature-name">Ébenezer</div>
-                <div className="story-signature-role">Fundador · Chef</div>
+                <div className="story-signature-name">La familia Ébenezer</div>
+                <div className="story-signature-role">Fundadora · Valdepeñas · MMXXV</div>
               </div>
             </div>
           </div>
@@ -432,31 +435,31 @@ export default function NosotrosPage() {
       <section className="chronicle">
         <div className="chronicle-inner">
           <div className="chronicle-header">
-            <div className="eyebrow center reveal">El ritmo del día</div>
+            <div className="eyebrow center reveal">Cuatro piedras en el camino</div>
             <h2 className="reveal reveal-delay-1">
-              Cuatro momentos, <em>una misma mesa</em>
+              Momentos que nos <em>recuerdan quiénes somos</em>
             </h2>
           </div>
           <div className="chronicle-grid">
             <div className="chronicle-slot reveal reveal-delay-1">
-              <span className="chronicle-time">08:00</span>
-              <span className="chronicle-label">Apertura</span>
-              <p className="chronicle-desc">Pan recién horneado y la primera extracción del día</p>
+              <span className="chronicle-time">Fe</span>
+              <span className="chronicle-label">El comienzo</span>
+              <p className="chronicle-desc">Todo empezó con una oración y una hoja en blanco. La fe vino antes que el capital.</p>
             </div>
             <div className="chronicle-slot reveal reveal-delay-2">
-              <span className="chronicle-time">12:00</span>
-              <span className="chronicle-label">Mediodía</span>
-              <p className="chronicle-desc">Luz tibia, conversaciones pausadas y dulces de la casa</p>
+              <span className="chronicle-time">Familia</span>
+              <span className="chronicle-label">El motor</span>
+              <p className="chronicle-desc">Detrás de cada taza hay manos conocidas, risas compartidas y una historia que aún se escribe.</p>
             </div>
             <div className="chronicle-slot reveal reveal-delay-3">
-              <span className="chronicle-time">16:00</span>
-              <span className="chronicle-label">Transición</span>
-              <p className="chronicle-desc">El horno se enciende y comienza el turno de la noche</p>
+              <span className="chronicle-time">Oficio</span>
+              <span className="chronicle-label">La entrega</span>
+              <p className="chronicle-desc">El buen café y la buena pizza piden tiempo, paciencia y el deseo de hacerlo bien aunque nadie mire.</p>
             </div>
             <div className="chronicle-slot reveal reveal-delay-4">
-              <span className="chronicle-time">23:00</span>
-              <span className="chronicle-label">Último servicio</span>
-              <p className="chronicle-desc">Luces tenues, último vino y despedida hasta mañana</p>
+              <span className="chronicle-time">Gracia</span>
+              <span className="chronicle-label">El sustento</span>
+              <p className="chronicle-desc">Cada día abiertos es una evidencia de que &ldquo;hasta aquí nos ha traído el Señor&rdquo;.</p>
             </div>
           </div>
         </div>
@@ -465,19 +468,19 @@ export default function NosotrosPage() {
       <section className="values">
         <div className="values-inner">
           <div className="values-header">
-            <div className="eyebrow reveal">Nuestros valores</div>
+            <div className="eyebrow reveal">Lo que nos define</div>
             <h2 className="reveal reveal-delay-1">
-              Lo que nos
+              Lo que hay
               <br />
-              <em>sostiene</em>
+              <em>detrás de cada taza</em>
             </h2>
             <p className="reveal reveal-delay-2">
-              Son los principios que guían cada decisión, desde la elección del productor
-              hasta la última taza que sale de nuestra barra.
+              No somos perfectos. Pero tenemos claro para quién trabajamos y a quién queremos
+              parecernos en cada gesto, en cada recibimiento, en cada plato que sale de aquí.
             </p>
             <div className="values-cta reveal reveal-delay-3">
               <Link href="/contacto" className="lux-btn">
-                <span>Ven a visitarnos</span>
+                <span>Ven a conocernos</span>
                 <svg viewBox="0 0 24 24">
                   <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
@@ -489,11 +492,12 @@ export default function NosotrosPage() {
               <div className="value-num">I</div>
               <div className="value-body">
                 <h3>
-                  Producto <em>primero</em>
+                  Dios en el <em>centro</em>
                 </h3>
                 <p>
-                  Trabajamos con productores locales siempre que es posible. Sabemos de qué
-                  finca viene cada grano y qué harina alimenta cada masa.
+                  Antes de abrir, hay una oración. Cuando algo sale bien, hay gratitud.
+                  Cuando algo falla, hay humildad. Dios no es un detalle decorativo aquí:
+                  es la razón de todo.
                 </p>
               </div>
             </div>
@@ -501,11 +505,12 @@ export default function NosotrosPage() {
               <div className="value-num">II</div>
               <div className="value-body">
                 <h3>
-                  Tiempo como <em>ingrediente</em>
+                  Las personas, <em>primero</em>
                 </h3>
                 <p>
-                  48 horas para la masa, 12 para el cold brew, 24 meses para el parmesano.
-                  La paciencia es una forma de respeto al comensal.
+                  Quien entra por esa puerta no es un cliente; es alguien a quien recibir.
+                  Puede que venga con prisa, con tristeza, o simplemente con hambre.
+                  Nuestra misión es que salga mejor de como entró.
                 </p>
               </div>
             </div>
@@ -513,11 +518,12 @@ export default function NosotrosPage() {
               <div className="value-num">III</div>
               <div className="value-body">
                 <h3>
-                  Hospitalidad <em>silenciosa</em>
+                  Honradez en el <em>oficio</em>
                 </h3>
                 <p>
-                  El buen servicio no se nota: simplemente todo está donde debe, cuando debe,
-                  como debe. Esa es nuestra búsqueda diaria.
+                  El café lo hacemos bien porque hacerlo mal sería una falta de respeto
+                  al productor, al cliente y a nosotros mismos. La excelencia no es orgullo:
+                  es mayordomía.
                 </p>
               </div>
             </div>
@@ -525,10 +531,12 @@ export default function NosotrosPage() {
               <div className="value-num">IV</div>
               <div className="value-body">
                 <h3>
-                  Sin <em>concesiones</em>
+                  Una mesa <em>abierta</em>
                 </h3>
                 <p>
-                  Si algo no está perfecto, no sale. Así de sencillo. Así de difícil de sostener.
+                  Aquí caben todos. La mesa de Ébenezer no tiene lista de espera para el alma.
+                  Si llegas cansado, hay sitio. Si llegas solo, aquí hay compañía.
+                  Así como Dios nos recibió a nosotros.
                 </p>
               </div>
             </div>
