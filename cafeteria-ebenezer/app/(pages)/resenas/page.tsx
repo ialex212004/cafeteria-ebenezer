@@ -68,7 +68,6 @@ export default function ResenasPage() {
   const [message, setMessage] = useState('');
   const [messageError, setMessageError] = useState(false);
   const [reviews, setReviews] = useState<Review[]>(initialReviews);
-  const [loading, setLoading] = useState(false);
   const messageTimeoutRef = useRef<number | null>(null);
 
   const duplicatedReviews = useMemo(() => [...reviews, ...reviews], [reviews]);
@@ -76,21 +75,6 @@ export default function ResenasPage() {
     if (reviews.length === 0) return 5;
     return reviews.reduce((s, r) => s + r.stars, 0) / reviews.length;
   }, [reviews]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('visible');
-            observer.unobserve(e.target);
-          }
-        }),
-      { threshold: 0.12 }
-    );
-    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
 
   const submitReview = async () => {
     const n = name.trim();
@@ -101,7 +85,6 @@ export default function ResenasPage() {
       setMessage('Por favor, comparte tu nombre y tu experiencia.');
       return;
     }
-    setLoading(true);
     setReviews((prev) => [
       { name: n, city: c || 'Visitante', text: t, stars: rating, date: 'Hoy' },
       ...prev,
@@ -112,7 +95,6 @@ export default function ResenasPage() {
     setRating(5);
     setMessageError(false);
     setMessage(`Gracias, ${n}. Tu reseña ha sido recibida.`);
-    setLoading(false);
     if (messageTimeoutRef.current) window.clearTimeout(messageTimeoutRef.current);
     messageTimeoutRef.current = window.setTimeout(() => setMessage(''), 5000);
   };
@@ -583,8 +565,8 @@ export default function ResenasPage() {
             </div>
 
             <div className="res-submit">
-              <button className="lux-btn" onClick={submitReview} disabled={loading}>
-                <span>{loading ? 'Enviando...' : 'Publicar reseña'}</span>
+              <button className="lux-btn" onClick={submitReview}>
+                <span>Publicar reseña</span>
                 <svg viewBox="0 0 24 24">
                   <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>

@@ -2,24 +2,8 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect } from 'react';
 
 export default function NosotrosPage() {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('visible');
-            observer.unobserve(e.target);
-          }
-        }),
-      { threshold: 0.08 }
-    );
-    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <>
       <style jsx global>{`
@@ -404,7 +388,7 @@ export default function NosotrosPage() {
           <div className="story-media reveal">
             <div className="story-frame">
               <Image
-                src="https://images.unsplash.com/photo-1559496417-e7f25cb247f3?auto=format&fit=crop&w=1200&q=85"
+                src="/images/nosotros/interior-logo.jpg"
                 alt="Interior de Cafetería Ébenezer"
                 fill
                 sizes="(max-width: 900px) 100vw, 42vw"
@@ -424,7 +408,7 @@ export default function NosotrosPage() {
             <p className="reveal reveal-delay-2">
               Empezamos con una pregunta sencilla: ¿cómo se siente un lugar donde cada detalle importa?
               La respuesta nos ha llevado años de oficio, viajes, tostadores visitados y hornos
-              construidos con pacienia. Cada rincón de Ébenezer es la suma de esas pequeñas
+              construidos con paciencia. Cada rincón de Ébenezer es la suma de esas pequeñas
               obsesiones.
             </p>
             <p className="reveal reveal-delay-2">

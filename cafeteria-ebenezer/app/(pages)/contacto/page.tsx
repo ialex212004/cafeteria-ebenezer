@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { SITE } from '@/lib/config/site';
 
 type ReservationForm = {
   name: string;
@@ -26,21 +27,6 @@ export default function ContactoPage() {
   const [form, setForm] = useState<ReservationForm>(initialForm);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('visible');
-            observer.unobserve(e.target);
-          }
-        }),
-      { threshold: 0.1 }
-    );
-    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
 
   const onChange = (key: keyof ReservationForm, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -431,9 +417,9 @@ export default function ContactoPage() {
             </div>
             <div className="contact-cell-label">Dirección</div>
             <div className="contact-cell-value">
-              Calle la Paz, 28-A
+              {SITE.address.street}
               <br />
-              <em>13300 Valdepeñas</em>
+              <em>{SITE.address.postalCode} {SITE.address.city}</em>
             </div>
           </div>
           <div className="contact-cell reveal reveal-delay-2">
@@ -445,7 +431,7 @@ export default function ContactoPage() {
             </div>
             <div className="contact-cell-label">Horarios</div>
             <div className="contact-cell-value">
-              <em>08:00 — 23:00</em>
+              <em>{SITE.hours.display}</em>
               <br />
               Todos los días
             </div>
@@ -458,9 +444,9 @@ export default function ContactoPage() {
             </div>
             <div className="contact-cell-label">Reservas</div>
             <div className="contact-cell-value">
-              <a href="tel:+34623272728">+34 623 272 728</a>
+              <a href={SITE.phone.tel}>{SITE.phone.display}</a>
               <br />
-              <em>reservas@ebenezer</em>
+              <em>{SITE.email}</em>
             </div>
           </div>
         </div>

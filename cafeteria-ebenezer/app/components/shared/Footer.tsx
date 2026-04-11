@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import { SITE } from '@/lib/config/site';
 
-const year = 2026;
+const year = new Date().getFullYear();
 
 export default function Footer() {
   return (
@@ -220,13 +221,13 @@ export default function Footer() {
                 <li><Link href="/nosotros">Nuestra historia</Link></li>
                 <li><Link href="/contacto">Reservar</Link></li>
                 <li>
-                  <a href="https://www.instagram.com/ebenezer_valdepenas/" target="_blank" rel="noopener noreferrer">
+                  <a href={SITE.instagram} target="_blank" rel="noopener noreferrer">
                     Instagram
                   </a>
                 </li>
                 <li>
                   <a
-                    href="https://wa.me/34623272728"
+                    href={SITE.whatsapp.simple}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -239,14 +240,14 @@ export default function Footer() {
             <div className="footer-col">
               <h4>Visítanos</h4>
               <p>
-                <b>Calle la Paz, 28-A</b>
+                <b>{SITE.address.street}</b>
                 <br />
-                13300 Valdepeñas
+                {SITE.address.postalCode} {SITE.address.city}
                 <br />
-                Ciudad Real, España
+                {SITE.address.region}, {SITE.address.country}
               </p>
               <p style={{ marginTop: '0.9rem' }}>
-                <b>08:00 — 23:00</b>
+                <b>{SITE.hours.display}</b>
                 <br />
                 Todos los días
               </p>

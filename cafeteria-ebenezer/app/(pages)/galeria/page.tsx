@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 
 type GalleryImage = {
@@ -13,57 +14,57 @@ type GalleryImage = {
 
 const images: GalleryImage[] = [
   {
-    src: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=1200&q=85',
-    alt: 'Latte art de la casa',
+    src: '/images/galeria/cafe-1.jpg',
+    alt: 'Latte art con diseño espiral',
     label: 'Arte líquido',
     caption: 'Cada taza, una composición efímera',
     index: '01',
   },
   {
-    src: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=1200&q=85',
-    alt: 'Croissants recién horneados',
-    label: 'Repostería',
-    caption: 'Mantequilla francesa, hojaldrado paciente',
+    src: '/images/galeria/cafe-2.jpg',
+    alt: 'Espresso con latte art',
+    label: 'Extracción perfecta',
+    caption: 'Veinticinco segundos, la medida exacta',
     index: '02',
   },
   {
-    src: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=1200&q=85',
-    alt: 'Espresso siendo extraído',
-    label: 'Extracción',
-    caption: 'Veinticinco segundos, la medida exacta',
+    src: '/images/galeria/sandwich.jpg',
+    alt: 'Sándwich artesanal con carnes',
+    label: 'Comida de mano',
+    caption: 'Pan tostado, ingredientes generosos',
     index: '03',
   },
   {
-    src: 'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=1200&q=85',
-    alt: 'Pizza margherita',
-    label: 'Margherita D.O.P.',
-    caption: 'Tomate San Marzano y burrata',
+    src: '/images/galeria/pizza.jpg',
+    alt: 'Pizza pepperoni recién horneada',
+    label: 'Masa madre',
+    caption: 'Cuarenta y ocho horas de espera',
     index: '04',
   },
   {
-    src: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=1200&q=85',
-    alt: 'Horno de piedra',
-    label: 'Horno de piedra',
-    caption: 'Cuatrocientos ochenta grados',
+    src: '/images/galeria/tartitas.jpg',
+    alt: 'Tartitas con frutas y frutos secos',
+    label: 'Repostería artesanal',
+    caption: 'Frutas rojas y almendra tostada',
     index: '05',
   },
   {
-    src: 'https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=1200&q=85',
-    alt: 'Sala principal del restaurante',
-    label: 'La sala',
-    caption: 'Luz cálida, pausa obligatoria',
+    src: '/images/galeria/huevos.jpg',
+    alt: 'Huevos benedictinos con salsa holandesa',
+    label: 'Desayuno completo',
+    caption: 'Receta clásica, ejecución impecable',
     index: '06',
   },
   {
-    src: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=1200&q=85',
-    alt: 'Mesa servida',
-    label: 'La mesa',
-    caption: 'Todo servido con devoción',
+    src: '/images/galeria/interior-logo.jpg',
+    alt: 'Logo de Cafetería Ébenezer en la barra',
+    label: 'La identidad',
+    caption: 'Cuatro años de devoción al oficio',
     index: '07',
   },
   {
-    src: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=85',
-    alt: 'Barra del café',
+    src: '/images/galeria/interior-plantas.jpg',
+    alt: 'Barra con luces doradas y plantas',
     label: 'La barra',
     caption: 'El corazón que nunca descansa',
     index: '08',
@@ -73,21 +74,6 @@ const images: GalleryImage[] = [
 export default function GaleriaPage() {
   const trackRef = useRef<HTMLDivElement | null>(null);
   const [activeIdx, setActiveIdx] = useState(0);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('visible');
-            observer.unobserve(e.target);
-          }
-        }),
-      { threshold: 0.12 }
-    );
-    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -416,12 +402,12 @@ export default function GaleriaPage() {
         <h2 className="reveal reveal-delay-1">
           ...es la que haces <em>en persona</em>
         </h2>
-        <a href="/contacto" className="lux-btn reveal reveal-delay-2">
+        <Link href="/contacto" className="lux-btn reveal reveal-delay-2">
           <span>Reserva tu visita</span>
           <svg viewBox="0 0 24 24">
             <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-        </a>
+        </Link>
       </section>
     </>
   );

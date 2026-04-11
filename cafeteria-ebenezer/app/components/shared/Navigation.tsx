@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { SITE } from '@/lib/config/site';
 
 const NAV_ITEMS = [
   { href: '/inicio', label: 'Inicio', number: '01' },
@@ -15,7 +16,6 @@ const NAV_ITEMS = [
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const menuTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
@@ -45,7 +45,6 @@ export default function Navigation() {
   const toggleMenu = useCallback(() => setMenuOpen((prev) => !prev), []);
   const closeMenu = useCallback(() => {
     setMenuOpen(false);
-    if (menuTimeoutRef.current) window.clearTimeout(menuTimeoutRef.current);
   }, []);
 
   return (
@@ -461,7 +460,7 @@ export default function Navigation() {
           <div className="nav-left" aria-hidden="true">
             <span className="dot" />
             <span>
-              <b>Abierto</b> — 08:00 / 23:00
+              <b>Abierto</b> — {SITE.hours.opens} / {SITE.hours.closes}
             </span>
           </div>
           <Link href="/inicio" className="nav-logo" onClick={closeMenu}>
@@ -516,17 +515,17 @@ export default function Navigation() {
         <div className="overlay-bottom">
           <div className="overlay-address">
             <b>Dirección</b>
-            Calle la Paz, 28-A
+            {SITE.address.street}
             <br />
-            Valdepeñas · Ciudad Real
+            {SITE.address.cityLine}
           </div>
           <div className="overlay-center">Ébenezer</div>
           <div className="overlay-social">
-            <a href="https://www.instagram.com/ebenezer_valdepenas/" target="_blank" rel="noopener noreferrer">
+            <a href={SITE.instagram} target="_blank" rel="noopener noreferrer">
               Instagram
             </a>
             <a
-              href="https://wa.me/34623272728?text=Hola%2C%20me%20gustaría%20reservar%20en%20Cafetería%20Ébenezer"
+              href={SITE.whatsapp.withMessage}
               target="_blank"
               rel="noopener noreferrer"
             >

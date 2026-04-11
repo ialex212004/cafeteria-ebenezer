@@ -69,21 +69,6 @@ export default function InicioPage() {
     };
   }, []);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('visible');
-            observer.unobserve(e.target);
-          }
-        }),
-      { threshold: 0.12 }
-    );
-    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <>
       <SplashScreen />
@@ -458,7 +443,7 @@ export default function InicioPage() {
           text-align: center;
           background:
             linear-gradient(180deg, rgba(8, 6, 3, 0.72) 0%, rgba(8, 6, 3, 0.9) 100%),
-            url('https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=1800&q=80') center/cover;
+            url('/images/inicio/interior-luces.jpg') center/cover;
           background-attachment: fixed;
         }
         .invitation-inner {
@@ -540,7 +525,7 @@ export default function InicioPage() {
           onMouseLeave={() => setHoveredPanel(null)}
         >
           <Image
-            src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1800&q=85"
+            src="/images/inicio/cafe.jpg"
             alt="Espresso en taza de porcelana"
             fill
             priority
@@ -585,7 +570,7 @@ export default function InicioPage() {
           onMouseLeave={() => setHoveredPanel(null)}
         >
           <Image
-            src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1800&q=85"
+            src="/images/inicio/pizza.jpg"
             alt="Pizza artesanal en horno de leña"
             fill
             priority

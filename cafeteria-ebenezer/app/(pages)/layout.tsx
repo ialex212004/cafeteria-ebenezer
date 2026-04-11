@@ -1,7 +1,6 @@
-'use client';
-
 import Navigation from '../components/shared/Navigation';
 import Footer from '../components/shared/Footer';
+import RevealObserver from '../components/RevealObserver';
 
 export default function PagesLayout({
   children,
@@ -11,6 +10,7 @@ export default function PagesLayout({
   return (
     <>
       <Navigation />
+      <RevealObserver />
       {children}
       <Footer />
     </>

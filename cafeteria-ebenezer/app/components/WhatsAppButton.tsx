@@ -1,5 +1,7 @@
 'use client';
 
+import { SITE } from '@/lib/config/site';
+
 export default function WhatsAppButton() {
   return (
     <>
@@ -135,7 +137,7 @@ export default function WhatsAppButton() {
       <div className="whatsapp-wrap">
         <span className="whatsapp-label">Escríbenos</span>
         <a
-          href="https://wa.me/34623272728?text=Hola%2C%20me%20gustaría%20reservar%20en%20Cafetería%20Ébenezer"
+          href={SITE.whatsapp.withMessage}
           target="_blank"
           rel="noopener noreferrer"
           className="whatsapp-btn"

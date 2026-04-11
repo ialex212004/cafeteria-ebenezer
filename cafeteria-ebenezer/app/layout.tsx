@@ -3,6 +3,7 @@ import "./globals.css";
 import WhatsAppButton from "./components/WhatsAppButton";
 import InfoStrip from "./components/InfoStrip";
 import Script from "next/script";
+import { SITE } from "@/lib/config/site";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://cafeteria-ebenezer.vercel.app";
 
@@ -81,20 +82,20 @@ export default function RootLayout({
       "Cafetería de especialidad y pizzería artesanal en Valdepeñas. Café de día, pizza de noche.",
     address: {
       "@type": "PostalAddress",
-      streetAddress: "Calle la Paz, 28-A",
-      addressLocality: "Valdepeñas",
-      addressRegion: "Ciudad Real",
-      postalCode: "13300",
+      streetAddress: SITE.address.street,
+      addressLocality: SITE.address.city,
+      addressRegion: SITE.address.region,
+      postalCode: SITE.address.postalCode,
       addressCountry: "ES",
     },
-    telephone: "+34623272728",
+    telephone: SITE.phone.display,
     url: baseUrl,
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
         dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-        opens: "08:00",
-        closes: "23:00",
+        opens: SITE.hours.opens,
+        closes: SITE.hours.closes,
       },
     ],
     servesCuisine: ["Coffee", "Italian", "Pizza", "Brunch"],
