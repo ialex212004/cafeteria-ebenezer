@@ -129,13 +129,13 @@ router.get('/', async (req, res) => {
 
     const resenasResult = showAll
       ? await query('select * from resenas order by created_at desc limit $1 offset $2', [
-          limit,
-          offset,
-        ])
+        limit,
+        offset,
+      ])
       : await query(
-          'select * from resenas where aprobada = true order by created_at desc limit $1 offset $2',
-          [limit, offset],
-        );
+        'select * from resenas where aprobada = true order by created_at desc limit $1 offset $2',
+        [limit, offset],
+      );
 
     const resenas = resenasResult.rows.map(mapResena);
     const totalResult = showAll
