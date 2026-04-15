@@ -198,6 +198,21 @@ export default function Footer() {
           .footer-col ul li {
             margin-bottom: 0.7rem;
           }
+          .footer-col a {
+            font-size: 0.9rem;
+          }
+          .footer-col p {
+            font-size: 0.88rem;
+          }
+          .footer-copy,
+          .footer-legal-item {
+            font-size: 0.56rem;
+          }
+        }
+        @media (max-width: 360px) {
+          .footer-top {
+            gap: 1.5rem;
+          }
         }
       `}</style>
 

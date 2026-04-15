@@ -68,6 +68,7 @@ export default function ResenasPage() {
   const [message, setMessage] = useState('');
   const [messageError, setMessageError] = useState(false);
   const [reviews, setReviews] = useState<Review[]>(initialReviews);
+  const [carouselPaused, setCarouselPaused] = useState(false);
   const messageTimeoutRef = useRef<number | null>(null);
 
   const duplicatedReviews = useMemo(() => [...reviews, ...reviews], [reviews]);
@@ -198,7 +199,8 @@ export default function ResenasPage() {
           padding: 2rem 0;
           animation: slideTrack 64s linear infinite;
         }
-        .res-carousel:hover .res-track {
+        .res-carousel:hover .res-track,
+        .res-track.paused {
           animation-play-state: paused;
         }
         @keyframes slideTrack {
@@ -300,6 +302,26 @@ export default function ResenasPage() {
           color: var(--stone);
           margin-top: 2rem;
           opacity: 0.6;
+        }
+        /* En táctil: ocultar hint de cursor y mostrar hint de deslizamiento */
+        .res-pause-touch {
+          display: none;
+        }
+        @media (hover: none) {
+          .res-pause {
+            display: none;
+          }
+          .res-pause-touch {
+            display: block;
+            text-align: center;
+            font-family: var(--font-sans);
+            font-size: 0.6rem;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--stone);
+            margin-top: 2rem;
+            opacity: 0.6;
+          }
         }
 
         /* ── Form ── */
@@ -516,8 +538,12 @@ export default function ResenasPage() {
         </div>
       </section>
 
-      <section className="res-carousel">
-        <div className="res-track">
+      <section
+        className="res-carousel"
+        onTouchStart={() => setCarouselPaused(true)}
+        onTouchEnd={() => setCarouselPaused(false)}
+      >
+        <div className={`res-track${carouselPaused ? ' paused' : ''}`}>
           {duplicatedReviews.map((review, i) => (
             <article className="res-card" key={`${review.name}-${i}`}>
               <div className="res-card-quote">&ldquo;</div>
@@ -536,6 +562,7 @@ export default function ResenasPage() {
           ))}
         </div>
         <div className="res-pause">— Pasa el cursor para pausar —</div>
+        <div className="res-pause-touch">— Desliza para explorar —</div>
       </section>
 
       <section className="res-form-section">

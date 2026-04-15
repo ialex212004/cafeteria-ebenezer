@@ -514,22 +514,22 @@ export default function InicioPage() {
         }
         @media (max-width: 600px) {
           .hero-panel {
-            min-height: 50vh;
+            min-height: 44vh;
           }
           .hero-content {
-            padding: 2rem 1.5rem 2.5rem;
+            padding: 1.75rem 1.5rem 2.25rem;
             max-width: 100%;
           }
           .hero-title {
-            font-size: clamp(2.2rem, 8vw, 2.8rem);
-            margin-bottom: 1.25rem;
+            font-size: clamp(2rem, 8vw, 2.6rem);
+            margin-bottom: 1.1rem;
           }
           .hero-sub {
-            font-size: 0.88rem;
-            margin-bottom: 2rem;
+            font-size: 0.86rem;
+            margin-bottom: 1.75rem;
           }
           .hero-meta {
-            padding: 0.75rem 1.5rem 1.75rem;
+            padding: 0.75rem 1.5rem 1.5rem;
             font-size: 0.52rem;
           }
           .philosophy {
@@ -550,24 +550,31 @@ export default function InicioPage() {
         }
         @media (max-width: 400px) {
           .hero-panel {
-            min-height: 46vh;
+            min-height: 40vh;
           }
           .hero-content {
-            padding: 1.75rem 1.25rem 2rem;
+            padding: 1.5rem 1.25rem 1.75rem;
           }
           .hero-title {
-            font-size: 2rem;
-            margin-bottom: 1rem;
+            font-size: 1.9rem;
+            margin-bottom: 0.85rem;
           }
           .hero-sub {
-            font-size: 0.85rem;
-            line-height: 1.7;
+            font-size: 0.83rem;
+            line-height: 1.65;
           }
           .hero-index {
-            margin-bottom: 1.25rem;
+            margin-bottom: 1rem;
           }
           .hero-tag {
-            margin-bottom: 1rem;
+            margin-bottom: 0.85rem;
+          }
+        }
+        /* Desactivar expand/shrink en dispositivos táctiles */
+        @media (hover: none) {
+          .hero-panel.expanded,
+          .hero-panel.shrunk {
+            flex: 1 !important;
           }
         }
       `}</style>

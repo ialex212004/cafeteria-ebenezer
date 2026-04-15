@@ -476,6 +476,25 @@ export default function Navigation() {
             font-size: 1.2rem;
           }
         }
+        @media (max-width: 360px) {
+          .menu-content {
+            padding-top: max(4rem, calc(var(--stack) + 1rem));
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
+          }
+          .overlay-nav-link {
+            font-size: 1.55rem;
+          }
+          .overlay-eyebrow {
+            display: none;
+          }
+          .overlay-bottom {
+            padding-top: 1rem;
+          }
+          .overlay-center {
+            font-size: 1rem;
+          }
+        }
       `}</style>
 
       <nav className={scrolled ? 'scrolled' : ''}>
