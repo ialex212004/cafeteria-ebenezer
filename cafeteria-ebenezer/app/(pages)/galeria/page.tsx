@@ -149,7 +149,7 @@ export default function GaleriaPage() {
         .gallery-hero p {
           font-family: var(--font-serif);
           font-style: italic;
-          font-size: 0.95rem;
+          font-size: 1.0625rem;
           color: var(--taupe);
           line-height: 1.9;
           max-width: 52ch;
@@ -421,15 +421,15 @@ export default function GaleriaPage() {
       `}</style>
 
       <section className="gallery-hero">
-        <div className="eyebrow center reveal">Lo que encontrarás</div>
+        <div className="eyebrow center reveal">Un vistazo a Ébenezer</div>
         <h1 className="reveal reveal-delay-1">
-          Nuestros platos,
+          Así de bonito
           <br />
-          <em>nuestro local</em>
+          <em>sabe el sabor cubano</em>
         </h1>
         <p className="reveal reveal-delay-2">
-          Cafés, tostas, brunch y pizza. Sin filtros. Así es Ébenezer cada día.
-          Ven a verlo en persona.
+          Cafés con leche, brunch de temporada, tostas generosas y pizzas que se hablan solas.
+          Esto es Ébenezer. Cada día, sin filtros ni excusas.
         </p>
       </section>
 
@@ -473,12 +473,12 @@ export default function GaleriaPage() {
       </section>
 
       <section className="gallery-footer">
-        <div className="eyebrow center reveal">¿Te ha entrado hambre?</div>
+        <div className="eyebrow center reveal">¿Ya tienes antojo?</div>
         <h2 className="reveal reveal-delay-1">
-          Ven hoy. <em>Reserva tu mesa.</em>
+          La mesa está puesta. <em>Solo falta que vengas.</em>
         </h2>
         <Link href="/contacto" className="lux-btn reveal reveal-delay-2">
-          <span>Reservar ahora</span>
+          <span>Reservar mi mesa</span>
           <svg viewBox="0 0 24 24">
             <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
           </svg>

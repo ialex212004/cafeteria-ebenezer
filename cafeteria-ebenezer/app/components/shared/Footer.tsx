@@ -56,10 +56,10 @@ export default function Footer() {
           margin-top: 1rem;
           font-family: var(--font-serif);
           font-style: italic;
-          font-size: 0.85rem;
+          font-size: 0.9375rem;
           color: var(--taupe);
           line-height: 1.7;
-          max-width: 26ch;
+          max-width: 28ch;
         }
         .footer-brand .tagline b {
           color: var(--champagne);
@@ -222,8 +222,8 @@ export default function Footer() {
             <div className="footer-brand">
               <span className="logo">Ébenezer</span>
               <p className="tagline">
-                <b>Café de día</b>, <b>pizza de noche</b>. Un santuario
-                para el paladar en el corazón de Valdepeñas.
+                Sabor cubano auténtico en <b>Valdepeñas</b>. Café de día,
+                pizza de noche y el calor de una familia que recibe a todos como en casa.
               </p>
               <div className="footer-stars">
                 <span>★</span>

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { SITE } from '@/lib/config/site';
+import ThemeToggle from '../ThemeToggle';
 
 const NAV_ITEMS = [
   { href: '/inicio', label: 'Inicio' },
@@ -63,10 +64,32 @@ export default function Navigation() {
           border-bottom: 1px solid transparent;
         }
         nav.scrolled {
-          background: rgba(8, 6, 3, 0.72);
+          background: rgba(28, 16, 8, 0.82);
           backdrop-filter: blur(24px) saturate(1.1);
           -webkit-backdrop-filter: blur(24px) saturate(1.1);
-          border-bottom-color: rgba(201, 169, 110, 0.1);
+          border-bottom-color: rgba(218, 165, 32, 0.12);
+        }
+        :root[data-theme="light"] nav.scrolled {
+          background: rgba(255, 248, 240, 0.88);
+          border-bottom-color: rgba(184, 134, 11, 0.18);
+        }
+        :root[data-theme="light"] .nav-logo {
+          color: var(--color-text-primary);
+        }
+        :root[data-theme="light"] .nav-left {
+          color: var(--color-text-primary);
+        }
+        :root[data-theme="light"] .nav-left b {
+          color: var(--color-accent);
+        }
+        :root[data-theme="light"] .nav-left .dot {
+          background: var(--color-accent);
+        }
+        :root[data-theme="light"] .menu-toggle .bar {
+          background: var(--color-text-primary);
+        }
+        :root[data-theme="light"] .overlay-nav-link {
+          color: var(--color-text-primary);
         }
         .nav-inner {
           position: relative;
@@ -87,8 +110,8 @@ export default function Navigation() {
           font-size: 0.58rem;
           letter-spacing: 0.38em;
           text-transform: uppercase;
-          color: var(--taupe);
-          font-weight: 300;
+          color: var(--pearl);
+          font-weight: 400;
         }
         .nav-left .dot {
           width: 5px;
@@ -103,18 +126,18 @@ export default function Navigation() {
         }
         .nav-logo {
           font-family: var(--font-italiana);
-          font-size: clamp(1.5rem, 2vw, 1.85rem);
+          font-size: clamp(1.1rem, 1.55vw, 1.45rem);
           color: var(--pearl);
           letter-spacing: 0.04em;
           position: relative;
           z-index: 301;
           text-align: center;
           transition: color 0.4s var(--ease-silk);
-          text-transform: uppercase;
           display: flex;
           align-items: center;
           justify-content: center;
           gap: 0.55rem;
+          white-space: nowrap;
         }
 .nav-logo-bracket {
           color: var(--champagne);
@@ -268,12 +291,58 @@ export default function Navigation() {
           transition: opacity 0.5s 0.4s, visibility 0s;
         }
 
+        .overlay-close {
+          position: absolute;
+          top: 1.5rem;
+          right: clamp(2rem, 8vw, 8vw);
+          z-index: 500;
+          font-family: var(--font-italiana);
+          font-size: 2.2rem;
+          color: var(--champagne);
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          line-height: 1;
+          opacity: 0;
+          transform: rotate(-15deg) scale(0.8);
+          transition: opacity 0.5s 0.5s, transform 0.5s 0.5s, color 0.3s;
+        }
+        .menu-content.open .overlay-close {
+          opacity: 0.85;
+          transform: rotate(0deg) scale(1);
+        }
+        .overlay-close:hover {
+          color: var(--pearl);
+          opacity: 1;
+        }
+
+        .overlay-theme {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          margin-bottom: 2rem;
+          opacity: 0;
+          transform: translateY(16px);
+          transition: opacity 0.7s 0.82s, transform 0.7s 0.82s;
+        }
+        .menu-content.open .overlay-theme {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .overlay-theme-label {
+          font-family: var(--font-sans);
+          font-size: 0.6rem;
+          letter-spacing: 0.3em;
+          text-transform: uppercase;
+          color: var(--stone);
+        }
+
         .overlay-eyebrow {
           display: flex;
           align-items: center;
           gap: 1rem;
           font-family: var(--font-sans);
-          font-size: 0.62rem;
+          font-size: 0.65rem;
           letter-spacing: 0.34em;
           text-transform: uppercase;
           color: var(--champagne);
@@ -282,12 +351,7 @@ export default function Navigation() {
           transform: translateY(16px);
           transition: opacity 0.7s 0.75s, transform 0.7s 0.75s;
         }
-        .overlay-eyebrow::before {
-          content: '';
-          width: 48px;
-          height: 1px;
-          background: var(--champagne);
-        }
+
         .menu-content.open .overlay-eyebrow {
           opacity: 1;
           transform: translateY(0);
@@ -318,10 +382,7 @@ export default function Navigation() {
           will-change: transform;
           padding: 0.3rem 0;
         }
-        .overlay-nav-link .label em {
-          font-style: italic;
-          color: var(--champagne);
-        }
+
         .menu-content.open .overlay-nav-link {
           transform: translateY(0);
         }
@@ -342,7 +403,7 @@ export default function Navigation() {
           align-items: end;
           gap: 2rem;
           padding-top: 2.5rem;
-          border-top: 1px solid rgba(201, 169, 110, 0.12);
+
           opacity: 0;
           transform: translateY(20px);
           transition: opacity 0.8s 0.95s, transform 0.8s 0.95s;
@@ -367,7 +428,19 @@ export default function Navigation() {
           letter-spacing: 0.22em;
           text-transform: uppercase;
           display: block;
-          margin-bottom: 0.4rem;
+          margin-top: 0.75rem;
+          margin-bottom: 0.3rem;
+        }
+        .overlay-address b:first-child {
+          margin-top: 0;
+        }
+        .overlay-address a {
+          color: var(--champagne);
+          font-style: normal;
+          transition: color 0.3s;
+        }
+        .overlay-address a:hover {
+          color: var(--pearl);
         }
         .overlay-center {
           text-align: center;
@@ -530,7 +603,7 @@ export default function Navigation() {
             </span>
           </div>
           <Link href="/inicio" className="nav-logo" onClick={closeMenu}>
-            Ébenezer
+            Cafetería Ébenezer
           </Link>
           <div className="nav-right">
             <Link href="/contacto" className="nav-reserve" onClick={closeMenu}>
@@ -567,20 +640,23 @@ export default function Navigation() {
         aria-label="Menú de navegación"
         aria-hidden={!menuOpen}
       >
+        <button
+          className="overlay-close"
+          onClick={closeMenu}
+          aria-label="Cerrar menú"
+        >
+          ×
+        </button>
+        <div className="overlay-theme">
+          <span className="overlay-theme-label">Apariencia</span>
+          <ThemeToggle />
+        </div>
         <p className="overlay-eyebrow">Carta de navegación</p>
         <ul className="overlay-nav-list">
           {NAV_ITEMS.map((item) => (
             <li key={item.href} className="overlay-nav-item">
               <Link href={item.href} className="overlay-nav-link" onClick={closeMenu}>
-                <span className="label">
-                  {item.label === 'Menú' ? (
-                    <em>Menú</em>
-                  ) : item.label === 'Contacto' ? (
-                    <em>Contacto</em>
-                  ) : (
-                    item.label
-                  )}
-                </span>
+                <span className="label">{item.label}</span>
               </Link>
             </li>
           ))}
@@ -591,8 +667,14 @@ export default function Navigation() {
             {SITE.address.street}
             <br />
             {SITE.address.cityLine}
+            <br />
+            <b>Horario</b>
+            {SITE.hours.display}
+            <br />
+            <b>Teléfono</b>
+            <a href={SITE.phone.tel}>{SITE.phone.display}</a>
           </div>
-          <div className="overlay-center">Ébenezer</div>
+          <div className="overlay-center">Cafetería Ébenezer</div>
           <div className="overlay-social">
             <a href={SITE.instagram} target="_blank" rel="noopener noreferrer">
               Instagram

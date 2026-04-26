@@ -40,18 +40,34 @@ export default function ContactoPage() {
     setError('');
   };
 
-  const onSubmit = (e: React.FormEvent) => {
+  const [sending, setSending] = useState(false);
+
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name.trim() || !form.phone.trim() || !form.date || !form.time) {
       setError('Por favor completa los campos obligatorios.');
       return;
     }
-    setSubmitted(true);
-    if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
-    resetTimerRef.current = setTimeout(() => {
-      setSubmitted(false);
-      setForm(initialForm);
-    }, 6000);
+    setSending(true);
+    setError('');
+    try {
+      const res = await fetch('/api/reserva', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error();
+      setSubmitted(true);
+      if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
+      resetTimerRef.current = setTimeout(() => {
+        setSubmitted(false);
+        setForm(initialForm);
+      }, 6000);
+    } catch {
+      setError('No se pudo enviar la reserva. Inténtalo de nuevo o llámanos.');
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -82,7 +98,7 @@ export default function ContactoPage() {
         .contact-hero p {
           font-family: var(--font-serif);
           font-style: italic;
-          font-size: 0.95rem;
+          font-size: 1.0625rem;
           color: var(--taupe);
           line-height: 1.9;
           max-width: 52ch;
@@ -195,7 +211,7 @@ export default function ContactoPage() {
         .contact-main-head p {
           font-family: var(--font-serif);
           font-style: italic;
-          font-size: 0.92rem;
+          font-size: 1.0625rem;
           color: var(--taupe);
           line-height: 1.9;
           max-width: 46ch;
@@ -466,15 +482,15 @@ export default function ContactoPage() {
       `}</style>
 
       <section className="contact-hero">
-        <div className="eyebrow center reveal">Te esperamos</div>
+        <div className="eyebrow center reveal">Aquí estamos para ti</div>
         <h1 className="reveal reveal-delay-1">
-          Reserva tu
+          Ven cuando quieras.
           <br />
-          <em>experiencia</em>
+          <em>Te guardamos sitio.</em>
         </h1>
         <p className="reveal reveal-delay-2">
-          Una mesa en Ébenezer es una invitación al disfrute pausado. Nuestro equipo estará
-          encantado de recibirte con la delicadeza que mereces.
+          Llama, escribe o reserva aquí mismo. En Ébenezer siempre hay alguien dispuesto
+          a recibirte con una sonrisa y el mejor café de Valdepeñas.
         </p>
       </section>
 
@@ -534,8 +550,9 @@ export default function ContactoPage() {
               <em>tu mesa</em>
             </h2>
             <p className="reveal reveal-delay-2">
-              Indícanos tus datos y la hora deseada. Nuestro equipo confirmará tu reserva
-              en menos de dos horas. Para ocasiones especiales, no dudes en dejarnos una nota.
+              Cuéntanos cuándo vienes y para cuántos. Confirmamos tu reserva en menos de dos horas.
+              Si es una ocasión especial — cumpleaños, aniversario, lo que sea — déjanos una nota
+              y lo hacemos especial de verdad.
             </p>
             <p className="reveal reveal-delay-2" style={{ fontStyle: 'normal', fontFamily: 'var(--font-sans)', fontSize: '0.58rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: 'var(--stone)' }}>
               Para grupos de más de <span style={{ color: 'var(--champagne)' }}>8 personas</span>, recomendamos llamar directamente.
@@ -635,8 +652,8 @@ export default function ContactoPage() {
             </div>
 
             <div className="form-submit">
-              <button className="lux-btn" type="submit">
-                <span>Solicitar reserva</span>
+              <button className="lux-btn" type="submit" disabled={sending}>
+                <span>{sending ? 'Enviando…' : 'Solicitar reserva'}</span>
                 <svg viewBox="0 0 24 24">
                   <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>

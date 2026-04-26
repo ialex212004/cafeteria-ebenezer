@@ -1,35 +1,65 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Italiana&family=Jost:wght@300;400;500;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+/* ── Google Fonts are loaded via next/font/google in layout.tsx ── */
 
+/* ────────────────────────────────────────────────────────────────
+   DESIGN TOKENS — Light mode (default)
+   Palette: warm vanilla / café / bronze Caribbean energy
+   ──────────────────────────────────────────────────────────────── */
 :root {
-  /* ── Color system — Michelin noir & champagne ── */
-  --ink: #080603;
-  --obsidian: #0c0905;
-  --onyx: #100c07;
-  --charcoal: #15110a;
-  --cocoa: #1c170e;
-  --slate: #241e14;
-  --border-hair: rgba(201, 169, 110, 0.08);
-  --border-soft: rgba(201, 169, 110, 0.14);
-  --border-bright: rgba(201, 169, 110, 0.28);
-  --pearl: #f6eedd;
-  --ivory: #ecdfc6;
-  --cream: #d8c9ab;
-  --taupe: #b4a284;
-  --stone: #7a6a52;
-  --shadow: #3a3223;
-  --champagne: #c9a96e;
-  --gold: #d4af6a;
-  --gold-light: #e7c98a;
-  --gold-pale: rgba(201, 169, 110, 0.12);
-  --gold-glow: rgba(201, 169, 110, 0.28);
-  --burgundy: #8b2a1f;
-  --copper: #b45c32;
+  /* ── Background layers ── */
+  --color-bg: #FFF8F0;
+  --color-surface: #FAEBD7;
+  --color-surface-2: #F0E6D3;
+  --color-surface-raised: #FFFFFF;
 
-  /* ── Typography ── */
-  --font-display: 'Cormorant Garamond', 'Times New Roman', serif;
-  --font-serif: 'Libre Baskerville', Georgia, serif;
-  --font-sans: 'Jost', 'Helvetica Neue', sans-serif;
-  --font-italiana: 'Italiana', 'Cormorant Garamond', serif;
+  /* ── Text ── */
+  --color-text-primary: #3D1F0A;
+  --color-text-secondary: #6B3A2A;
+  --color-text-muted: #8B6250;
+  --color-text-inverse: #FFF8F0;
+
+  /* ── Accent ── */
+  --color-accent: #C49A2E;
+  --color-accent-hover: #B8891F;
+  --color-accent-secondary: #CD853F;
+  --color-gold: #B8860B;
+  --color-gold-light: rgba(184, 134, 11, 0.12);
+  --color-gold-glow: rgba(184, 134, 11, 0.25);
+
+  /* ── Borders ── */
+  --color-border: #D4A574;
+  --color-border-soft: rgba(107, 58, 42, 0.15);
+  --color-border-hair: rgba(107, 58, 42, 0.08);
+  --color-border-bright: rgba(184, 134, 11, 0.4);
+
+  /* ── Legacy semantic aliases (for backward compat with existing components) ── */
+  --ink: #3D1F0A;
+  --obsidian: #FFF8F0;
+  --onyx: #FAEBD7;
+  --charcoal: #F0E6D3;
+  --cocoa: #E8DCC8;
+  --slate: #D8CEBC;
+  --border-hair: rgba(107, 58, 42, 0.08);
+  --border-soft: rgba(107, 58, 42, 0.18);
+  --border-bright: rgba(184, 134, 11, 0.4);
+  --pearl: #3D1F0A;
+  --ivory: #4A2810;
+  --cream: #6B3A2A;
+  --taupe: #7A4832;
+  --stone: #8B6250;
+  --shadow: #C4A882;
+  --champagne: #B8860B;
+  --gold: #CD853F;
+  --gold-light: #E8D5A8;
+  --gold-pale: rgba(184, 134, 11, 0.10);
+  --gold-glow: rgba(184, 134, 11, 0.25);
+  --burgundy: #8b2a1f;
+  --copper: #C49A2E;
+
+  /* ── Typography — references CSS vars injected by next/font ── */
+  --font-display: var(--font-playfair, 'Playfair Display', 'Times New Roman', serif);
+  --font-serif: var(--font-lato, 'Lato', 'Helvetica Neue', sans-serif);
+  --font-sans: var(--font-lato, 'Lato', 'Helvetica Neue', sans-serif);
+  --font-italiana: var(--font-playfair, 'Playfair Display', serif);
 
   /* ── Motion ── */
   --ease-silk: cubic-bezier(0.16, 1, 0.3, 1);
@@ -42,6 +72,120 @@
   --stack: calc(var(--nav-h) + var(--info-h));
 }
 
+/* ────────────────────────────────────────────────────────────────
+   DARK MODE — evocador, café oscuro caribeño, no frío
+   ──────────────────────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --color-bg: #231A0B;
+  --color-surface: #2E2210;
+  --color-surface-2: #382B14;
+  --color-surface-raised: #42321C;
+
+  --color-text-primary: #F5F0E8;
+  --color-text-secondary: #DAA520;
+  --color-text-muted: #B4A284;
+  --color-text-inverse: #231A0B;
+
+  --color-accent: #D4A832;
+  --color-accent-hover: #C49A2E;
+  --color-accent-secondary: #CD853F;
+  --color-gold: #DAA520;
+  --color-gold-light: rgba(218, 165, 32, 0.12);
+  --color-gold-glow: rgba(218, 165, 32, 0.28);
+
+  --color-border: #4A3020;
+  --color-border-soft: rgba(218, 165, 32, 0.14);
+  --color-border-hair: rgba(218, 165, 32, 0.08);
+  --color-border-bright: rgba(218, 165, 32, 0.28);
+
+  /* Legacy aliases — dark */
+  --ink: #231A0B;
+  --obsidian: #231A0B;
+  --onyx: #2E2210;
+  --charcoal: #382B14;
+  --cocoa: #42321C;
+  --slate: #4E3C24;
+  --shadow-warm: 0 8px 32px rgba(10, 5, 0, 0.55), 0 2px 8px rgba(201, 169, 110, 0.07);
+  --border-hair: rgba(201, 169, 110, 0.08);
+  --border-soft: rgba(201, 169, 110, 0.14);
+  --border-bright: rgba(201, 169, 110, 0.28);
+  --pearl: #F5F0E8;
+  --ivory: #ECD9B8;
+  --cream: #D8C9A0;
+  --taupe: #B4A284;
+  --stone: #7A6A52;
+  --shadow: #3A3223;
+  --champagne: #DAA520;
+  --gold: #CD853F;
+  --gold-light: #E7C98A;
+  --gold-pale: rgba(218, 165, 32, 0.12);
+  --gold-glow: rgba(218, 165, 32, 0.28);
+  --burgundy: #8b2a1f;
+  --copper: #D4A832;
+}
+
+/* ── Dark mode: body ambient lights more visible ── */
+[data-theme="dark"] body::before {
+  background:
+    radial-gradient(ellipse 40% 30% at 15% 50%, rgba(201, 169, 110, 0.10) 0%, transparent 100%),
+    radial-gradient(ellipse 35% 25% at 85% 30%, rgba(201, 169, 110, 0.07) 0%, transparent 100%),
+    radial-gradient(ellipse 50% 40% at 50% 95%, rgba(201, 169, 110, 0.10) 0%, transparent 100%);
+}
+
+/* ── System preference: dark ── */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) {
+    --color-bg: #231A0B;
+    --color-surface: #2E2210;
+    --color-surface-2: #382B14;
+    --color-surface-raised: #42321C;
+
+    --color-text-primary: #F5F0E8;
+    --color-text-secondary: #DAA520;
+    --color-text-muted: #B4A284;
+    --color-text-inverse: #231A0B;
+
+    --color-accent: #D4A832;
+    --color-accent-hover: #C49A2E;
+    --color-accent-secondary: #CD853F;
+    --color-gold: #DAA520;
+    --color-gold-light: rgba(218, 165, 32, 0.12);
+    --color-gold-glow: rgba(218, 165, 32, 0.28);
+
+    --color-border: #4A3020;
+    --color-border-soft: rgba(218, 165, 32, 0.14);
+    --color-border-hair: rgba(218, 165, 32, 0.08);
+    --color-border-bright: rgba(218, 165, 32, 0.28);
+
+    --ink: #231A0B;
+    --obsidian: #231A0B;
+    --onyx: #2E2210;
+    --charcoal: #382B14;
+    --cocoa: #42321C;
+    --slate: #4E3C24;
+    --border-hair: rgba(201, 169, 110, 0.08);
+    --border-soft: rgba(201, 169, 110, 0.14);
+    --border-bright: rgba(201, 169, 110, 0.28);
+    --pearl: #F5F0E8;
+    --ivory: #ECD9B8;
+    --cream: #D8C9A0;
+    --taupe: #B4A284;
+    --stone: #7A6A52;
+    --shadow: #3A3223;
+    --champagne: #DAA520;
+    --gold: #CD853F;
+    --gold-light: #E7C98A;
+    --gold-pale: rgba(218, 165, 32, 0.12);
+    --gold-glow: rgba(218, 165, 32, 0.28);
+    --burgundy: #8b2a1f;
+    --copper: #D4A832;
+    --shadow-warm: 0 8px 32px rgba(10, 5, 0, 0.55), 0 2px 8px rgba(201, 169, 110, 0.07);
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────
+   GLOBAL RESET & BASE STYLES
+   ──────────────────────────────────────────────────────────────── */
 *,
 *::before,
 *::after {
@@ -54,22 +198,24 @@
 
 html {
   scroll-behavior: smooth;
-  background: var(--obsidian);
-  /* Previene scroll horizontal en cualquier pantalla */
+  background: var(--color-bg);
   overflow-x: hidden;
   max-width: 100%;
+  /* Smooth theme transitions */
+  transition: background-color 0.35s ease, color 0.35s ease;
 }
 
 body {
   overflow-x: hidden;
-  background: var(--obsidian);
-  color: var(--pearl);
+  background: var(--color-bg);
+  color: var(--color-text-primary);
   font-family: var(--font-sans);
-  font-weight: 300;
-  font-size: 0.92rem;
+  font-weight: 400;
+  font-size: 1.0625rem; /* ~17px base */
   line-height: 1.75;
   letter-spacing: 0.005em;
   min-height: 100vh;
+  transition: background-color 0.35s ease, color 0.35s ease;
 }
 
 body::before {
@@ -79,9 +225,9 @@ body::before {
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 40% 30% at 15% 50%, rgba(201, 169, 110, 0.035) 0%, transparent 100%),
-    radial-gradient(ellipse 35% 25% at 85% 30%, rgba(180, 92, 50, 0.03) 0%, transparent 100%),
-    radial-gradient(ellipse 50% 40% at 50% 95%, rgba(201, 169, 110, 0.025) 0%, transparent 100%);
+    radial-gradient(ellipse 40% 30% at 15% 50%, var(--color-gold-light) 0%, transparent 100%),
+    radial-gradient(ellipse 35% 25% at 85% 30%, rgba(201, 169, 110, 0.05) 0%, transparent 100%),
+    radial-gradient(ellipse 50% 40% at 50% 95%, var(--color-gold-light) 0%, transparent 100%);
 }
 
 img {
@@ -116,11 +262,12 @@ h6 {
   font-weight: 400;
   letter-spacing: -0.01em;
   line-height: 1.1;
+  color: var(--color-text-primary);
 }
 
 ::selection {
-  background: rgba(201, 169, 110, 0.35);
-  color: var(--pearl);
+  background: var(--color-gold-glow);
+  color: var(--color-text-primary);
 }
 
 /* ── Shared elegant primitives ── */
@@ -129,18 +276,18 @@ h6 {
   align-items: center;
   gap: 0.85rem;
   font-family: var(--font-sans);
-  font-size: 0.68rem;
+  font-size: 0.7rem;
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: var(--champagne);
-  font-weight: 400;
+  color: var(--color-accent);
+  font-weight: 700;
 }
 
 .eyebrow::before {
   content: '';
   width: 38px;
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, var(--champagne) 100%);
+  background: linear-gradient(90deg, transparent 0%, var(--color-accent) 100%);
 }
 
 .eyebrow.center {
@@ -151,45 +298,45 @@ h6 {
   content: '';
   width: 38px;
   height: 1px;
-  background: linear-gradient(90deg, var(--champagne) 0%, transparent 100%);
+  background: linear-gradient(90deg, var(--color-accent) 0%, transparent 100%);
 }
 
 .display-title {
   font-family: var(--font-display);
-  font-weight: 300;
+  font-weight: 400;
   font-size: clamp(2.4rem, 5.2vw, 5rem);
   line-height: 1.02;
   letter-spacing: -0.015em;
-  color: var(--pearl);
+  color: var(--color-text-primary);
 }
 
 .display-title em {
   font-style: italic;
-  font-weight: 400;
-  color: var(--champagne);
+  font-weight: 500;
+  color: var(--color-accent);
 }
 
 .section-title {
   font-family: var(--font-display);
-  font-weight: 300;
+  font-weight: 400;
   font-size: clamp(2rem, 4vw, 3.6rem);
   line-height: 1.08;
   letter-spacing: -0.01em;
-  color: var(--pearl);
+  color: var(--color-text-primary);
 }
 
 .section-title em {
   font-style: italic;
-  font-weight: 400;
-  color: var(--champagne);
+  font-weight: 500;
+  color: var(--color-accent);
 }
 
 .lede {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 400;
-  font-size: 0.95rem;
-  line-height: 1.9;
-  color: var(--taupe);
+  font-size: 1.0625rem; /* 17px */
+  line-height: 1.85;
+  color: var(--color-text-secondary);
   max-width: 52ch;
 }
 
@@ -197,7 +344,7 @@ h6 {
   display: block;
   width: 64px;
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, var(--champagne) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, var(--color-accent) 50%, transparent 100%);
   margin: 1.75rem 0;
 }
 
@@ -206,18 +353,21 @@ h6 {
   margin-right: auto;
 }
 
+/* ────────────────────────────────────────────────────────────────
+   LUX BUTTON — works in both light & dark modes
+   ──────────────────────────────────────────────────────────────── */
 .lux-btn {
   display: inline-flex;
   align-items: center;
   gap: 0.9rem;
   font-family: var(--font-sans);
-  font-size: 0.68rem;
-  font-weight: 400;
-  letter-spacing: 0.26em;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   padding: 1.05rem 2.25rem;
-  color: var(--champagne);
-  border: 1px solid var(--border-soft);
+  color: var(--color-accent);
+  border: 1px solid var(--color-border);
   background: transparent;
   position: relative;
   overflow: hidden;
@@ -229,7 +379,7 @@ h6 {
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--champagne);
+  background: var(--color-accent);
   transform: translateY(101%);
   transition: transform 0.65s var(--ease-silk);
   z-index: 0;
@@ -241,8 +391,8 @@ h6 {
 }
 
 .lux-btn:hover {
-  color: var(--ink);
-  border-color: var(--champagne);
+  color: #FFFFFF;
+  border-color: var(--color-accent);
 }
 
 .lux-btn:hover::before {
@@ -254,7 +404,7 @@ h6 {
   height: 13px;
   stroke: currentColor;
   fill: none;
-  stroke-width: 1.25;
+  stroke-width: 1.5;
   transition: transform 0.5s var(--ease-silk);
 }
 
@@ -323,6 +473,264 @@ h6 {
   text-align: center;
 }
 
+/* ────────────────────────────────────────────────────────────────
+   NAVIGATION — theme-aware overrides
+   ──────────────────────────────────────────────────────────────── */
+/* Light mode nav scrolled state */
+:root:not([data-theme="dark"]) nav.scrolled,
+:root[data-theme="light"] nav.scrolled {
+  background: rgba(255, 248, 240, 0.88) !important;
+  backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  border-bottom-color: rgba(184, 134, 11, 0.15) !important;
+}
+
+/* ────────────────────────────────────────────────────────────────
+   HERO SECTION — theme overrides for light mode
+   ──────────────────────────────────────────────────────────────── */
+
+/* Light mode: hero images get more brightness, panels use warm bg */
+:root:not([data-theme="dark"]) .hero-panel img,
+:root[data-theme="light"] .hero-panel img {
+  filter: brightness(0.48) saturate(0.8) contrast(1.04) !important;
+}
+
+/* Light mode: philosophy section uses warm surface */
+:root:not([data-theme="dark"]) .philosophy,
+:root[data-theme="light"] .philosophy {
+  background: var(--color-surface) !important;
+}
+
+:root:not([data-theme="dark"]) .philosophy::before,
+:root[data-theme="light"] .philosophy::before {
+  background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(184, 134, 11, 0.08) 0%, transparent 70%) !important;
+}
+
+:root:not([data-theme="dark"]) .philosophy-quote,
+:root[data-theme="light"] .philosophy-quote {
+  color: var(--color-text-primary) !important;
+}
+
+/* Light mode: pillars section */
+:root:not([data-theme="dark"]) .pillars,
+:root[data-theme="light"] .pillars {
+  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-surface-2) 100%) !important;
+}
+
+/* Light mode: invitation section — keep dark overlay on top of image, it's fine */
+
+/* ────────────────────────────────────────────────────────────────
+   FORM FIELDS — theme-aware
+   ──────────────────────────────────────────────────────────────── */
+:root:not([data-theme="dark"]) .res-field input,
+:root:not([data-theme="dark"]) .res-field textarea,
+:root[data-theme="light"] .res-field input,
+:root[data-theme="light"] .res-field textarea,
+:root:not([data-theme="dark"]) .form-field input,
+:root:not([data-theme="dark"]) .form-field textarea,
+:root:not([data-theme="dark"]) .form-field select,
+:root[data-theme="light"] .form-field input,
+:root[data-theme="light"] .form-field textarea,
+:root[data-theme="light"] .form-field select {
+  color: var(--color-text-primary) !important;
+  color-scheme: light !important;
+}
+
+:root:not([data-theme="dark"]) .res-form,
+:root[data-theme="light"] .res-form,
+:root:not([data-theme="dark"]) .reservation-form,
+:root[data-theme="light"] .reservation-form {
+  background: rgba(255, 248, 240, 0.9) !important;
+  border-color: var(--color-border) !important;
+}
+
+/* ── THEME TOGGLE BUTTON ── */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  padding: 0.6rem 0;
+  border: none;
+  background: transparent;
+  transition: color 0.45s var(--ease-silk);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.theme-toggle:hover {
+  color: var(--champagne);
+}
+
+.theme-toggle svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  transition: transform 0.45s var(--ease-silk);
+}
+
+.theme-toggle:hover svg {
+  transform: rotate(20deg);
+}
+
+/* ────────────────────────────────────────────────────────────────
+   SECTION BACKGROUNDS — light mode overrides
+   Applied via CSS custom property inheritance
+   ──────────────────────────────────────────────────────────────── */
+
+/* Hero sections in light mode */
+:root:not([data-theme="dark"]) .res-hero,
+:root[data-theme="light"] .res-hero,
+:root:not([data-theme="dark"]) .menu-hero,
+:root[data-theme="light"] .menu-hero,
+:root:not([data-theme="dark"]) .about-hero,
+:root[data-theme="light"] .about-hero,
+:root:not([data-theme="dark"]) .gallery-hero,
+:root[data-theme="light"] .gallery-hero,
+:root:not([data-theme="dark"]) .contact-hero,
+:root[data-theme="light"] .contact-hero {
+  background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(184, 134, 11, 0.07) 0%, transparent 70%),
+    var(--color-surface) !important;
+}
+
+/* Section bodies */
+:root:not([data-theme="dark"]) .menu-body,
+:root[data-theme="light"] .menu-body,
+:root:not([data-theme="dark"]) .res-form-section,
+:root[data-theme="light"] .res-form-section,
+:root:not([data-theme="dark"]) .story,
+:root[data-theme="light"] .story,
+:root:not([data-theme="dark"]) .chronicle,
+:root[data-theme="light"] .chronicle,
+:root:not([data-theme="dark"]) .values,
+:root[data-theme="light"] .values,
+:root:not([data-theme="dark"]) .contact-grid,
+:root[data-theme="light"] .contact-grid,
+:root:not([data-theme="dark"]) .contact-main,
+:root[data-theme="light"] .contact-main,
+:root:not([data-theme="dark"]) .gallery-stage,
+:root[data-theme="light"] .gallery-stage,
+:root:not([data-theme="dark"]) .gallery-footer,
+:root[data-theme="light"] .gallery-footer,
+:root:not([data-theme="dark"]) .contact-map-section,
+:root[data-theme="light"] .contact-map-section {
+  background: var(--color-bg) !important;
+}
+
+/* Menu body specific gradient */
+:root:not([data-theme="dark"]) .menu-body,
+:root[data-theme="light"] .menu-body {
+  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg) 60%, var(--color-surface) 100%) !important;
+}
+
+/* Carousel in light mode */
+:root:not([data-theme="dark"]) .res-carousel,
+:root[data-theme="light"] .res-carousel {
+  background: var(--color-surface-2) !important;
+}
+
+:root:not([data-theme="dark"]) .res-card,
+:root[data-theme="light"] .res-card {
+  background: linear-gradient(180deg, rgba(255, 248, 240, 0.95) 0%, rgba(250, 235, 215, 0.95) 100%) !important;
+  border-color: var(--color-border) !important;
+}
+
+/* Overlay panels in light mode (nav menu) */
+:root:not([data-theme="dark"]) .overlay-panel:nth-child(1),
+:root[data-theme="light"] .overlay-panel:nth-child(1) {
+  background: linear-gradient(180deg, #FFF8F0 0%, #F5EAD5 100%) !important;
+}
+
+:root:not([data-theme="dark"]) .overlay-panel:nth-child(2),
+:root[data-theme="light"] .overlay-panel:nth-child(2) {
+  background: linear-gradient(180deg, #FDF3E4 0%, #F0E5CE 100%) !important;
+}
+
+:root:not([data-theme="dark"]) .overlay-nav-link,
+:root[data-theme="light"] .overlay-nav-link {
+  color: var(--color-text-primary) !important;
+}
+
+/* Gallery cards light mode */
+:root:not([data-theme="dark"]) .gal-card-index,
+:root[data-theme="light"] .gal-card-index {
+  background: rgba(255, 248, 240, 0.85) !important;
+}
+
+/* Map filter — lighter in light mode */
+:root:not([data-theme="dark"]) .map-wrap iframe,
+:root[data-theme="light"] .map-wrap iframe {
+  filter: sepia(0.15) saturate(0.8) brightness(0.95) contrast(0.95) !important;
+}
+
+:root:not([data-theme="dark"]) .map-pin-label,
+:root[data-theme="light"] .map-pin-label {
+  background: rgba(255, 248, 240, 0.95) !important;
+  color: var(--color-accent) !important;
+}
+
+/* Contact grid cells */
+:root:not([data-theme="dark"]) .contact-grid-inner,
+:root[data-theme="light"] .contact-grid-inner {
+  border-color: var(--color-border) !important;
+}
+
+/* Chronicle grid */
+:root:not([data-theme="dark"]) .chronicle-grid,
+:root[data-theme="light"] .chronicle-grid {
+  border-color: var(--color-border) !important;
+}
+
+:root:not([data-theme="dark"]) .chronicle-slot::after,
+:root[data-theme="light"] .chronicle-slot::after {
+  background: var(--color-bg) !important;
+}
+
+/* Nav scrolled light override */
+:root:not([data-theme="dark"]) nav.scrolled .nav-logo,
+:root[data-theme="light"] nav.scrolled .nav-logo {
+  color: var(--color-text-primary) !important;
+}
+
+:root:not([data-theme="dark"]) .menu-toggle .bar,
+:root[data-theme="light"] .menu-toggle .bar {
+  background: var(--color-text-primary) !important;
+}
+
+:root:not([data-theme="dark"]) .menu-toggle.open .bar:nth-child(1),
+:root:not([data-theme="dark"]) .menu-toggle.open .bar:nth-child(3),
+:root[data-theme="light"] .menu-toggle.open .bar:nth-child(1),
+:root[data-theme="light"] .menu-toggle.open .bar:nth-child(3) {
+  background: var(--color-accent) !important;
+}
+
+/* footer light mode */
+:root:not([data-theme="dark"]) footer,
+:root[data-theme="light"] footer {
+  background: linear-gradient(180deg, var(--color-surface-2) 0%, var(--color-surface) 100%) !important;
+  border-top-color: var(--color-border) !important;
+}
+
+/* Pillar hover in light mode */
+:root:not([data-theme="dark"]) .pillar:hover,
+:root[data-theme="light"] .pillar:hover {
+  background: rgba(184, 134, 11, 0.04) !important;
+}
+
+/* Story accent border */
+:root:not([data-theme="dark"]) .story-accent,
+:root[data-theme="light"] .story-accent {
+  border-color: var(--color-accent) !important;
+}
+
+/* ────────────────────────────────────────────────────────────────
+   ACCESSIBILITY & REDUCED MOTION
+   ──────────────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -333,6 +741,9 @@ h6 {
   }
 }
 
+/* ────────────────────────────────────────────────────────────────
+   RESPONSIVE BREAKPOINTS
+   ──────────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .section {
     padding: 5rem 1.5rem;
@@ -343,7 +754,7 @@ h6 {
   }
   .lux-btn {
     padding: 0.95rem 1.85rem;
-    font-size: 0.64rem;
+    font-size: 0.66rem;
   }
 }
 
@@ -367,7 +778,6 @@ h6 {
   }
 }
 
-/* ── Breakpoint 390px: iPhone SE / pequeños Android ── */
 @media (max-width: 390px) {
   :root {
     --nav-h: 60px;
@@ -389,7 +799,7 @@ h6 {
   }
 }
 
-/* Deshabilitar hover de items en pantallas táctiles */
+/* Disable hover effects on touch screens */
 @media (hover: none) {
   .menu-item:hover {
     padding-left: 0;
@@ -404,17 +814,13 @@ h6 {
   }
 }
 
-/* ── SplashScreen: CSS crítico de posicionamiento ────────────────────────
-   Debe vivir aquí (critical CSS path / <head>) para que la pantalla
-   cubra el contenido desde el PRIMER paint, antes de que el bundle JS
-   hidrate el componente y aplique sus propios estilos.
-───────────────────────────────────────────────────────────────────────── */
+/* ── SplashScreen: CSS crítico de posicionamiento ── */
 .spl {
   position: fixed;
   inset: 0;
   z-index: 9999;
   display: grid;
   place-items: center;
-  background: #080603;
+  background: #1C1008;
   overflow: hidden;
 }

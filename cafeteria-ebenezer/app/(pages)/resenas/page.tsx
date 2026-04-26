@@ -14,14 +14,14 @@ const initialReviews: Review[] = [
   {
     name: 'María González',
     city: 'Madrid',
-    text: 'Un café tan cuidado que se convierte en ritual. Vuelves no por el sabor, sino por esa sensación de que alguien ha pensado en ti.',
+    text: 'Un café tan cuidado que se convierte en una experiencia. Vuelves no por el sabor, sino por esa sensación de que alguien ha pensado en ti.',
     stars: 5,
     date: 'Marzo 2026',
   },
   {
     name: 'Carlos Ruiz',
     city: 'Valencia',
-    text: 'La masa de la pizza Tartufo Nero es una declaración. Años investigando pizzerías y puedo decir que Ébenezer está entre las mejores de España.',
+    text: 'La masa de la pizza hawaina es mi favorita. Todo esta muy rico pero debo decir que la atencion fue lo que mas me sorprendio.',
     stars: 5,
     date: 'Febrero 2026',
   },
@@ -67,8 +67,8 @@ export default function ResenasPage() {
   const [text, setText] = useState('');
   const [message, setMessage] = useState('');
   const [messageError, setMessageError] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [reviews, setReviews] = useState<Review[]>(initialReviews);
-  const [carouselPaused, setCarouselPaused] = useState(false);
   const messageTimeoutRef = useRef<number | null>(null);
 
   const duplicatedReviews = useMemo(() => [...reviews, ...reviews], [reviews]);
@@ -77,7 +77,7 @@ export default function ResenasPage() {
     return reviews.reduce((s, r) => s + r.stars, 0) / reviews.length;
   }, [reviews]);
 
-  const submitReview = () => {
+  const submitReview = async () => {
     const n = name.trim();
     const t = text.trim();
     const c = city.trim();
@@ -86,6 +86,49 @@ export default function ResenasPage() {
       setMessage('Por favor, comparte tu nombre y tu experiencia.');
       return;
     }
+
+    setSubmitting(true);
+    setMessageError(false);
+    setMessage('');
+
+    const fecha = new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+    const estrellas = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+
+    // 1. Guardar en base de datos vía backend
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? ''}/api/resenas`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre: n, ciudad: c || 'Visitante', texto: t }),
+      });
+    } catch {
+      // Continuar aunque falle la BD — el negocio sigue recibiendo la reseña
+    }
+
+    // 2. Notificar vía servidor (EmailJS server-side, sin exponer keys)
+    try {
+      await fetch('/api/notificar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from_name: n,
+          ciudad: c || 'Visitante',
+          calificacion: `${rating}/5 ${estrellas}`,
+          comentario: t,
+          fecha,
+        }),
+      });
+    } catch {
+      // Notificación falla silenciosamente
+    }
+
+    // 3. Abrir WhatsApp con la reseña formateada
+    const waMsg = encodeURIComponent(
+      `⭐ Nueva reseña — Cafetería Ébenezer\n\n👤 ${n}${c ? ` (${c})` : ''}\n${estrellas} ${rating}/5\n📅 ${fecha}\n\n"${t}"`,
+    );
+    window.open(`https://wa.me/34623272728?text=${waMsg}`, '_blank');
+
+    // Actualizar lista local y limpiar formulario
     setReviews((prev) => [
       { name: n, city: c || 'Visitante', text: t, stars: rating, date: 'Hoy' },
       ...prev,
@@ -94,10 +137,10 @@ export default function ResenasPage() {
     setCity('');
     setText('');
     setRating(5);
-    setMessageError(false);
+    setSubmitting(false);
     setMessage(`Gracias, ${n}. Tu reseña ha sido recibida.`);
     if (messageTimeoutRef.current) window.clearTimeout(messageTimeoutRef.current);
-    messageTimeoutRef.current = window.setTimeout(() => setMessage(''), 5000);
+    messageTimeoutRef.current = window.setTimeout(() => setMessage(''), 7000);
   };
 
   useEffect(() => {
@@ -134,7 +177,7 @@ export default function ResenasPage() {
         .res-hero p {
           font-family: var(--font-serif);
           font-style: italic;
-          font-size: 0.95rem;
+          font-size: 1.0625rem;
           color: var(--taupe);
           line-height: 1.9;
           max-width: 52ch;
@@ -199,8 +242,7 @@ export default function ResenasPage() {
           padding: 2rem 0;
           animation: slideTrack 64s linear infinite;
         }
-        .res-carousel:hover .res-track,
-        .res-track.paused {
+        .res-carousel:hover .res-track {
           animation-play-state: paused;
         }
         @keyframes slideTrack {
@@ -247,7 +289,7 @@ export default function ResenasPage() {
         .res-card-text {
           font-family: var(--font-serif);
           font-style: italic;
-          font-size: 0.9rem;
+          font-size: 1rem;
           color: var(--ivory);
           line-height: 1.85;
           margin-bottom: 1.75rem;
@@ -303,26 +345,6 @@ export default function ResenasPage() {
           margin-top: 2rem;
           opacity: 0.6;
         }
-        /* En táctil: ocultar hint de cursor y mostrar hint de deslizamiento */
-        .res-pause-touch {
-          display: none;
-        }
-        @media (hover: none) {
-          .res-pause {
-            display: none;
-          }
-          .res-pause-touch {
-            display: block;
-            text-align: center;
-            font-family: var(--font-sans);
-            font-size: 0.6rem;
-            letter-spacing: 0.28em;
-            text-transform: uppercase;
-            color: var(--stone);
-            margin-top: 2rem;
-            opacity: 0.6;
-          }
-        }
 
         /* ── Form ── */
         .res-form-section {
@@ -354,7 +376,7 @@ export default function ResenasPage() {
         .res-form-head p {
           font-family: var(--font-serif);
           font-style: italic;
-          font-size: 0.9rem;
+          font-size: 1.0625rem;
           color: var(--taupe);
           line-height: 1.85;
           max-width: 34ch;
@@ -438,6 +460,11 @@ export default function ResenasPage() {
         .res-submit {
           margin-top: 1rem;
         }
+        .res-submit .lux-btn:disabled {
+          opacity: 0.55;
+          cursor: not-allowed;
+          pointer-events: none;
+        }
 
         .res-msg {
           margin-top: 1.5rem;
@@ -470,86 +497,18 @@ export default function ResenasPage() {
             padding: 1.75rem;
           }
         }
-        @media (max-width: 768px) {
-          .res-card {
-            width: clamp(260px, 82vw, 300px);
-          }
-          .res-stars-picker button {
-            padding: 0.35rem;
-            font-size: 1.75rem;
-          }
-          .res-pause {
-            font-size: 0.54rem;
-          }
-          /* Reducir el fade lateral del carrusel en pantallas pequeñas:
-             10% de 768px = 76px ocultos → reducimos a 6% = 46px */
-          .res-carousel {
-            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
-            mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
-          }
-        }
-        @media (max-width: 600px) {
-          .res-score {
-            flex-direction: column;
-            align-items: center;
-            gap: 1.2rem;
-            padding: 1.5rem 1.5rem;
-          }
-          .res-score-meta {
-            border-left: none;
-            border-top: 1px solid var(--border-hair);
-            padding-left: 0;
-            padding-top: 1rem;
-            text-align: center;
-          }
-          .res-form {
-            padding: 1.5rem 1.25rem;
-          }
-          .res-form-section {
-            padding: clamp(3rem, 6vw, 5rem) clamp(1.25rem, 4vw, 4rem);
-          }
-        }
-        @media (max-width: 480px) {
-          /* En pantallas muy pequeñas el fade de 6% = 23px → reducir más */
-          .res-carousel {
-            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%);
-            mask-image: linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%);
-          }
-          .res-hero h1 {
-            font-size: clamp(2.2rem, 8vw, 3rem);
-          }
-          .res-form {
-            padding: 1.5rem 1rem;
-          }
-        }
-        @media (max-width: 400px) {
-          .res-card {
-            width: 86vw;
-          }
-          .res-hero {
-            padding: clamp(4rem, 8vw, 6rem) clamp(1.25rem, 4vw, 4rem) clamp(2rem, 4vw, 3rem);
-          }
-        }
-        @media (max-width: 390px) {
-          .res-card {
-            width: 90vw;
-          }
-          .res-card-text {
-            font-size: 0.85rem;
-          }
-        }
       `}</style>
 
       <section className="res-hero">
-        <div className="eyebrow center reveal">La voz de los huéspedes</div>
+        <div className="eyebrow center reveal">Lo que dicen quienes nos visitan</div>
         <h1 className="reveal reveal-delay-1">
-          Lo que dicen
+          Palabras que nos
           <br />
-          <em>de nosotros</em>
+          <em>llenan el alma</em>
         </h1>
         <p className="reveal reveal-delay-2">
-          Cada reseña es una conversación silenciosa entre el comensal y nuestro equipo.
-          Las leemos todas. Nos ayudan a ser mejores cada día.
+          Cada reseña es un regalo. Las leemos todas, con atención y gratitud,
+          porque son la mejor forma de saber si estamos haciendo bien lo que queremos hacer.
         </p>
         <div className="res-score reveal reveal-delay-3">
           <div className="res-score-num">
@@ -565,12 +524,8 @@ export default function ResenasPage() {
         </div>
       </section>
 
-      <section
-        className="res-carousel"
-        onTouchStart={() => setCarouselPaused(true)}
-        onTouchEnd={() => setCarouselPaused(false)}
-      >
-        <div className={`res-track${carouselPaused ? ' paused' : ''}`}>
+      <section className="res-carousel">
+        <div className="res-track">
           {duplicatedReviews.map((review, i) => (
             <article className="res-card" key={`${review.name}-${i}`}>
               <div className="res-card-quote">&ldquo;</div>
@@ -589,21 +544,20 @@ export default function ResenasPage() {
           ))}
         </div>
         <div className="res-pause">— Pasa el cursor para pausar —</div>
-        <div className="res-pause-touch">— Desliza para explorar —</div>
       </section>
 
       <section className="res-form-section">
         <div className="res-form-inner">
           <div className="res-form-head">
-            <div className="eyebrow reveal">Deja tu huella</div>
+            <div className="eyebrow reveal">Cuéntanos</div>
             <h2 className="reveal reveal-delay-1">
-              Comparte tu
+              ¿Cómo estuvo
               <br />
-              <em>experiencia</em>
+              <em>tu visita?</em>
             </h2>
             <p className="reveal reveal-delay-2">
-              Tu opinión es el combustible silencioso que nos empuja a mejorar. Gracias por
-              tomarte unos minutos para contarnos tu visita.
+              Tu opinión nos importa de verdad. Tómate un momento y cuéntanos cómo fue.
+              Cada palabra tuya nos ayuda a seguir mejorando para ti y para quienes vienen después.
             </p>
           </div>
 
@@ -673,11 +627,13 @@ export default function ResenasPage() {
             </div>
 
             <div className="res-submit">
-              <button className="lux-btn" type="submit">
-                <span>Publicar reseña</span>
-                <svg viewBox="0 0 24 24">
-                  <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+              <button className="lux-btn" type="submit" disabled={submitting} aria-disabled={submitting}>
+                <span>{submitting ? 'Enviando…' : 'Publicar reseña'}</span>
+                {!submitting && (
+                  <svg viewBox="0 0 24 24">
+                    <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                )}
               </button>
             </div>
 

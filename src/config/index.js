@@ -35,7 +35,7 @@ const config = {
 
   // Seguridad
   jwtSecret: process.env.JWT_SECRET,
-  apiKey: process.env.API_KEY || 'dev-api-key',
+  apiKey: process.env.API_KEY,
 
   // Validación
   maxRequestBodySize: '10mb',
@@ -57,12 +57,14 @@ const config = {
 // Validar configuración requerida (excepto durante build de Next.js)
 const isNextBuildPhase = process.env.NEXT_PHASE === 'phase-production-build';
 if (config.isProduction && !isNextBuildPhase) {
+  if (!process.env.API_KEY) {
+    // eslint-disable-next-line no-console
+    console.error('❌ API_KEY no está configurada. Los endpoints admin quedan sin protección.');
+    process.exit(1);
+  }
   if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
     // eslint-disable-next-line no-console
-    console.warn(
-      '⚠️  JWT_SECRET no está configurado o es corto. ' +
-      'Configúralo antes de habilitar autenticación JWT.',
-    );
+    console.warn('⚠️  JWT_SECRET no configurado o demasiado corto.');
   }
   if (process.env.ALLOWED_ORIGINS === 'http://localhost:3000') {
     // eslint-disable-next-line no-console

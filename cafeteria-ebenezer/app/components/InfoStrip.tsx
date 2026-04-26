@@ -13,7 +13,7 @@ export default function InfoStrip() {
           right: 0;
           height: var(--info-h);
           background: linear-gradient(180deg, #080603 0%, #0c0905 100%);
-          border-bottom: 1px solid rgba(201, 169, 110, 0.1);
+          border-bottom: 1px solid rgba(201, 169, 110, 0.12);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -21,11 +21,11 @@ export default function InfoStrip() {
           backdrop-filter: blur(14px);
           -webkit-backdrop-filter: blur(14px);
           font-family: var(--font-sans);
-          font-size: 0.62rem;
+          font-size: 0.65rem;
           font-weight: 300;
           letter-spacing: 0.22em;
           text-transform: uppercase;
-          color: rgba(246, 238, 221, 0.7);
+          color: rgba(246, 238, 221, 0.92);
           overflow: hidden;
         }
 
@@ -68,7 +68,7 @@ export default function InfoStrip() {
           stroke-width: 1.4;
           stroke-linecap: round;
           stroke-linejoin: round;
-          opacity: 0.85;
+          opacity: 0.92;
         }
 
         .info-item b {
@@ -87,7 +87,7 @@ export default function InfoStrip() {
 
         @media (max-width: 768px) {
           .info-strip {
-            font-size: 0.55rem;
+            font-size: 0.58rem;
             letter-spacing: 0.18em;
           }
           .info-strip::before,

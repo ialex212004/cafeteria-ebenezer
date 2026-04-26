@@ -171,7 +171,7 @@ export default function InicioPage() {
           font-size: 0.64rem;
           letter-spacing: 0.42em;
           text-transform: uppercase;
-          color: var(--stone);
+          color: rgba(245, 240, 232, 0.55);
           margin-bottom: 2rem;
           display: flex;
           align-items: center;
@@ -206,7 +206,7 @@ export default function InicioPage() {
           font-size: clamp(2.8rem, 5.6vw, 5.8rem);
           line-height: 0.98;
           letter-spacing: -0.015em;
-          color: var(--pearl);
+          color: #F5F0E8;
           margin-bottom: 1.75rem;
           opacity: 0;
           animation: heroUp 1.6s 0.7s both var(--ease-silk);
@@ -220,9 +220,9 @@ export default function InicioPage() {
         .hero-sub {
           font-family: var(--font-serif);
           font-style: italic;
-          font-size: 0.95rem;
+          font-size: 1.05rem;
           line-height: 1.85;
-          color: var(--taupe);
+          color: rgba(245, 240, 232, 0.62);
           max-width: 36ch;
           margin-bottom: 2.5rem;
           opacity: 0;
@@ -236,7 +236,7 @@ export default function InicioPage() {
           font-size: 0.64rem;
           letter-spacing: 0.3em;
           text-transform: uppercase;
-          color: var(--pearl);
+          color: #F5F0E8;
           padding: 1.05rem 0;
           position: relative;
           transition: color 0.55s var(--ease-silk), letter-spacing 0.55s var(--ease-silk);
@@ -259,7 +259,7 @@ export default function InicioPage() {
           top: 0;
           width: 12px;
           height: 1px;
-          background: var(--pearl);
+          background: #F5F0E8;
           transition: width 0.55s var(--ease-silk), background 0.4s;
         }
         .hero-cta:hover {
@@ -292,7 +292,7 @@ export default function InicioPage() {
           font-size: 0.58rem;
           letter-spacing: 0.26em;
           text-transform: uppercase;
-          color: var(--stone);
+          color: rgba(245, 240, 232, 0.42);
           opacity: 0;
           animation: heroUp 1.4s 1.2s both var(--ease-silk);
           pointer-events: none;
@@ -429,7 +429,7 @@ export default function InicioPage() {
         }
         .pillar-text {
           font-family: var(--font-serif);
-          font-size: 0.85rem;
+          font-size: 1rem;
           color: var(--taupe);
           line-height: 1.85;
           max-width: 28ch;
@@ -456,7 +456,7 @@ export default function InicioPage() {
           font-weight: 300;
           font-size: clamp(2.4rem, 5vw, 4.4rem);
           line-height: 1.05;
-          color: var(--pearl);
+          color: #F5F0E8;
           margin-bottom: 2rem;
         }
         .invitation-title em {
@@ -467,8 +467,8 @@ export default function InicioPage() {
         .invitation-sub {
           font-family: var(--font-serif);
           font-style: italic;
-          font-size: 1rem;
-          color: var(--ivory);
+          font-size: 1.0625rem;
+          color: rgba(236, 217, 184, 0.82);
           line-height: 1.85;
           margin-bottom: 2.8rem;
           max-width: 48ch;
@@ -655,7 +655,7 @@ export default function InicioPage() {
           onBlur={() => setHoveredPanel(null)}
         >
           <Image
-            src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&fit=crop&w=1800&q=85"
+            src="https://images.unsplash.com/photo-1509042239860-f550ce710b93"
             alt="Espresso en taza de porcelana"
             fill
             priority
@@ -669,16 +669,16 @@ export default function InicioPage() {
             </p>
             <span className="hero-tag">— Café de especialidad</span>
             <h1 className="hero-title">
-              El arte del
+              El sabor del
               <br />
-              <em>despertar</em>
+              <em>buen despertar</em>
             </h1>
             <p className="hero-sub">
-              Granos de origen único, tostados a diario. Cada taza, una composición silenciosa
-              para comenzar el día con reverencia.
+              Café hecho con cariño, desayunos caseros y el calor de una familia cubana
+              que recibe cada mañana como si fuera fiesta.
             </p>
             <Link href="/menu" className="hero-cta">
-              Descubrir la carta de café
+              Ver la carta
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
@@ -702,7 +702,7 @@ export default function InicioPage() {
           onBlur={() => setHoveredPanel(null)}
         >
           <Image
-            src="https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?auto=format&fit=crop&w=1800&q=85"
+            src="https://res.cloudinary.com/dphq9ymvo/image/upload/v1776174688/ChatGPT_Image_16_mar_2026_22_39_26_vrhi49.png"
             alt="Pizza artesanal en horno de leña"
             fill
             priority
@@ -713,18 +713,18 @@ export default function InicioPage() {
             <p className="hero-index">
               Cap. <b>II</b> — La noche
             </p>
-            <span className="hero-tag">— Pizzería artesana</span>
+            <span className="hero-tag">— Pizzas artesanales</span>
             <h2 className="hero-title">
-              La noche
+              La noche que
               <br />
-              <em>servida</em>
+              <em>te espera</em>
             </h2>
             <p className="hero-sub">
-              Masa madre de 48 horas, horno de piedra a 480°C. Ingredientes que cuentan
-              la historia de la tierra que los vio nacer.
+              Masa elaborada con paciencia, ingredientes seleccionados y el cariño
+              de quienes saben que una buena pizza también llena el alma.
             </p>
             <Link href="/menu" className="hero-cta">
-              Explorar nuestras pizzas
+              Ver nuestras pizzas
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
@@ -743,11 +743,11 @@ export default function InicioPage() {
         <div className="philosophy-inner">
           <p className="philosophy-mark reveal">— Nuestra filosofía —</p>
           <h2 className="philosophy-quote reveal reveal-delay-1">
-            &ldquo;No servimos café ni pizza. Servimos el tiempo que decides
-            dedicarte: cada grano, cada masa, cada minuto, <em>elegidos con devoción</em>.&rdquo;
+            &ldquo;En Cuba aprendimos que la comida es amor. En Ébenezer lo repetimos cada día:
+            cada taza, cada plato, cada sonrisa, <em>hechos con el corazón</em>.&rdquo;
           </h2>
-          <div className="philosophy-signature reveal reveal-delay-2">Ébenezer</div>
-          <div className="philosophy-role reveal reveal-delay-2">Chef · Fundador</div>
+          <div className="philosophy-signature reveal reveal-delay-2">Angel Willian y Dayamila</div>
+          <div className="philosophy-role reveal reveal-delay-2">Fundadores · Cafetería Ébenezer</div>
         </div>
       </section>
 
@@ -755,38 +755,38 @@ export default function InicioPage() {
         <div className="pillars-inner">
           <div className="pillars-header">
             <div className="eyebrow center reveal" style={{ marginBottom: '1.5rem' }}>
-              La casa
+              Lo que nos mueve
             </div>
             <h2 className="section-title reveal reveal-delay-1">
-              Tres pilares, <em>un solo oficio</em>
+              Tres pilares, <em>un mismo corazón</em>
             </h2>
           </div>
           <div className="pillars-grid">
             <div className="pillar reveal reveal-delay-1">
               <div className="pillar-num">I</div>
               <h3 className="pillar-title">
-                <em>Materia</em> prima
+                <em>Sabor</em> auténtico
               </h3>
               <p className="pillar-text">
-                Productores seleccionados, trazabilidad absoluta y temporada como única ley.
+                Recetas que vienen de casa, ingredientes que se respetan y manos que saben lo que hacen.
               </p>
             </div>
             <div className="pillar reveal reveal-delay-2">
               <div className="pillar-num">II</div>
               <h3 className="pillar-title">
-                <em>Oficio</em> artesano
+                <em>Calidez</em> cubana
               </h3>
               <p className="pillar-text">
-                Técnicas pacientes, manos expertas y una obsesión silenciosa por el detalle.
+                Aquí no hay clientes, hay personas. Cada quien que entra se va sintiéndose bienvenido de verdad.
               </p>
             </div>
             <div className="pillar reveal reveal-delay-3">
               <div className="pillar-num">III</div>
               <h3 className="pillar-title">
-                <em>Hospitalidad</em>
+                <em>Fe</em> en cada detalle
               </h3>
               <p className="pillar-text">
-                Recibirte como a un amigo, cuidar cada minuto que nos regalas bajo nuestro techo.
+                Trabajamos con gratitud. Porque creemos que lo que hacemos importa, y eso se nota en el plato.
               </p>
             </div>
           </div>
@@ -796,16 +796,16 @@ export default function InicioPage() {
       <section className="invitation">
         <div className="invitation-inner">
           <div className="eyebrow center reveal" style={{ marginBottom: '2rem' }}>
-            Una mesa te espera
+            Te esperamos con los brazos abiertos
           </div>
           <h2 className="invitation-title reveal reveal-delay-1">
-            Concédenos el placer
+            Ven a Ébenezer.
             <br />
-            de <em>recibirte</em>
+            <em>Aquí hay sitio para ti.</em>
           </h2>
           <p className="invitation-sub reveal reveal-delay-2">
-            La experiencia Ébenezer está pensada para saborearse sin prisa. Reserva tu mesa
-            y deja que nos ocupemos de todo lo demás.
+            Reserva tu mesa y déjate cuidar. Un desayuno tranquilo, un almuerzo en familia
+            o una noche de pizzas — siempre hay un momento Ébenezer esperándote.
           </p>
           <Link href="/contacto" className="lux-btn reveal reveal-delay-3">
             <span>Reservar una mesa</span>

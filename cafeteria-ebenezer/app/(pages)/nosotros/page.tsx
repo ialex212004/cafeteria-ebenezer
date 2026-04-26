@@ -38,7 +38,7 @@ export default function NosotrosPage() {
         .about-hero-lede {
           font-family: var(--font-serif);
           font-style: italic;
-          font-size: 0.98rem;
+          font-size: 1.0625rem;
           color: var(--taupe);
           line-height: 1.9;
           max-width: 56ch;
@@ -120,7 +120,7 @@ export default function NosotrosPage() {
         }
         .story-text p {
           font-family: var(--font-serif);
-          font-size: 0.92rem;
+          font-size: 1.0625rem;
           color: var(--taupe);
           line-height: 1.95;
           margin-bottom: 1.35rem;
@@ -246,7 +246,7 @@ export default function NosotrosPage() {
         .chronicle-desc {
           font-family: var(--font-serif);
           font-style: italic;
-          font-size: 0.82rem;
+          font-size: 1rem;
           color: var(--stone);
           line-height: 1.65;
         }
@@ -280,7 +280,7 @@ export default function NosotrosPage() {
         .values-header p {
           font-family: var(--font-serif);
           font-style: italic;
-          font-size: 0.9rem;
+          font-size: 1.0625rem;
           color: var(--taupe);
           line-height: 1.9;
         }
@@ -320,7 +320,7 @@ export default function NosotrosPage() {
         }
         .value-body p {
           font-family: var(--font-serif);
-          font-size: 0.85rem;
+          font-size: 1.0625rem;
           color: var(--stone);
           line-height: 1.85;
           max-width: 60ch;
