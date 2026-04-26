@@ -1,0 +1,311 @@
+- generic [active] [ref=e1]:
+  - complementary "Información del restaurante" [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - img [ref=e5]
+        - generic [ref=e8]: 08:00 — 23:00
+      - generic [ref=e10]:
+        - img [ref=e11]
+        - generic [ref=e14]: Valdepeñas · Ciudad Real
+      - generic [ref=e16]:
+        - img [ref=e17]
+        - generic [ref=e19]: +34 623 272 728
+  - navigation [ref=e20]:
+    - generic [ref=e21]:
+      - generic [ref=e24]: Abierto — 08:00 / 23:00
+      - link "Cafetería Ébenezer" [ref=e25] [cursor=pointer]:
+        - /url: /inicio
+      - generic [ref=e26]:
+        - link "Reservar" [ref=e27] [cursor=pointer]:
+          - /url: /contacto
+          - text: Reservar
+          - img [ref=e28]
+        - button "Abrir menú" [ref=e30] [cursor=pointer]
+  - dialog:
+    - button: ×
+    - generic:
+      - generic: Apariencia
+      - button:
+        - img
+        - generic: Auto
+    - paragraph: Carta de navegación
+    - list:
+      - listitem:
+        - link:
+          - /url: /inicio
+          - text: Inicio
+      - listitem:
+        - link:
+          - /url: /nosotros
+          - text: Nosotros
+      - listitem:
+        - link:
+          - /url: /menu
+          - text: Menú
+      - listitem:
+        - link:
+          - /url: /galeria
+          - text: Galería
+      - listitem:
+        - link:
+          - /url: /resenas
+          - text: Reseñas
+      - listitem:
+        - link:
+          - /url: /contacto
+          - text: Contacto
+    - generic:
+      - generic:
+        - generic: Dirección
+        - text: Calle la Paz, 28-A Valdepeñas · Ciudad Real
+        - generic: Horario
+        - text: 08:00 — 23:00
+        - generic: Teléfono
+        - link:
+          - /url: tel:+34623272728
+          - text: +34 623 272 728
+      - generic: ·Cafetería Ébenezer·
+      - generic:
+        - link:
+          - /url: https://www.instagram.com/ebenezer_valdepenas/
+          - text: Instagram
+        - link:
+          - /url: https://wa.me/34623272728?text=Hola%2C%20me%20gustaría%20reservar%20en%20Cafetería%20Ébenezer
+          - text: WhatsApp
+  - generic [ref=e34]:
+    - generic [ref=e35]: Lo que dicen quienes nos visitan
+    - heading "Palabras que nos llenan el alma" [level=1] [ref=e36]:
+      - text: Palabras que nos
+      - emphasis [ref=e37]: llenan el alma
+    - paragraph [ref=e38]: Cada reseña es un regalo. Las leemos todas, con atención y gratitud, porque son la mejor forma de saber si estamos haciendo bien lo que queremos hacer.
+    - generic [ref=e39]:
+      - generic [ref=e40]:
+        - text: "5.0"
+        - superscript [ref=e41]: / 5
+      - generic [ref=e42]:
+        - generic [ref=e43]: ★★★★★
+        - generic [ref=e44]: Basado en 6+ reseñas
+  - generic [ref=e45]:
+    - generic [ref=e46]:
+      - article [ref=e47]:
+        - generic [ref=e48]: “
+        - paragraph [ref=e49]: Un café tan cuidado que se convierte en una experiencia. Vuelves no por el sabor, sino por esa sensación de que alguien ha pensado en ti.
+        - generic [ref=e50]:
+          - generic [ref=e51]:
+            - heading "María González" [level=4] [ref=e52]
+            - generic [ref=e53]: — Madrid
+          - generic [ref=e54]:
+            - generic [ref=e55]: ★★★★★
+            - generic [ref=e56]: Marzo 2026
+      - article [ref=e57]:
+        - generic [ref=e58]: “
+        - paragraph [ref=e59]: La masa de la pizza hawaina es mi favorita. Todo esta muy rico pero debo decir que la atencion fue lo que mas me sorprendio.
+        - generic [ref=e60]:
+          - generic [ref=e61]:
+            - heading "Carlos Ruiz" [level=4] [ref=e62]
+            - generic [ref=e63]: — Valencia
+          - generic [ref=e64]:
+            - generic [ref=e65]: ★★★★★
+            - generic [ref=e66]: Febrero 2026
+      - article [ref=e67]:
+        - generic [ref=e68]: “
+        - paragraph [ref=e69]: Vengo cada mañana desde hace meses. No sé si el café es mejor que la tarta de queso o al revés. Solo sé que es mi lugar favorito del mundo.
+        - generic [ref=e70]:
+          - generic [ref=e71]:
+            - heading "Ana Martínez" [level=4] [ref=e72]
+            - generic [ref=e73]: — Valdepeñas
+          - generic [ref=e74]:
+            - generic [ref=e75]: ★★★★★
+            - generic [ref=e76]: Febrero 2026
+      - article [ref=e77]:
+        - generic [ref=e78]: “
+        - paragraph [ref=e79]: Conduje dos horas solo para probar la burrata di Andria. Volvería a hacerlo mañana. Un servicio elegante sin pretensiones.
+        - generic [ref=e80]:
+          - generic [ref=e81]:
+            - heading "Luis Herrera" [level=4] [ref=e82]
+            - generic [ref=e83]: — Toledo
+          - generic [ref=e84]:
+            - generic [ref=e85]: ★★★★★
+            - generic [ref=e86]: Enero 2026
+      - article [ref=e87]:
+        - generic [ref=e88]: “
+        - paragraph [ref=e89]: La atmósfera es como un abrazo cálido. Cena de aniversario reservada al instante. El flat white perfecto y la pizza Margherita sublime.
+        - generic [ref=e90]:
+          - generic [ref=e91]:
+            - heading "Sofía Peña" [level=4] [ref=e92]
+            - generic [ref=e93]: — Albacete
+          - generic [ref=e94]:
+            - generic [ref=e95]: ★★★★★
+            - generic [ref=e96]: Enero 2026
+      - article [ref=e97]:
+        - generic [ref=e98]: “
+        - paragraph [ref=e99]: Cada detalle cuidado, desde la cristalería hasta la música. Un ejercicio de hospitalidad que raras veces se ve por estos lares.
+        - generic [ref=e100]:
+          - generic [ref=e101]:
+            - heading "Roberto Díaz" [level=4] [ref=e102]
+            - generic [ref=e103]: — Ciudad Real
+          - generic [ref=e104]:
+            - generic [ref=e105]: ★★★★★
+            - generic [ref=e106]: Diciembre 2025
+      - article [ref=e107]:
+        - generic [ref=e108]: “
+        - paragraph [ref=e109]: Un café tan cuidado que se convierte en una experiencia. Vuelves no por el sabor, sino por esa sensación de que alguien ha pensado en ti.
+        - generic [ref=e110]:
+          - generic [ref=e111]:
+            - heading "María González" [level=4] [ref=e112]
+            - generic [ref=e113]: — Madrid
+          - generic [ref=e114]:
+            - generic [ref=e115]: ★★★★★
+            - generic [ref=e116]: Marzo 2026
+      - article [ref=e117]:
+        - generic [ref=e118]: “
+        - paragraph [ref=e119]: La masa de la pizza hawaina es mi favorita. Todo esta muy rico pero debo decir que la atencion fue lo que mas me sorprendio.
+        - generic [ref=e120]:
+          - generic [ref=e121]:
+            - heading "Carlos Ruiz" [level=4] [ref=e122]
+            - generic [ref=e123]: — Valencia
+          - generic [ref=e124]:
+            - generic [ref=e125]: ★★★★★
+            - generic [ref=e126]: Febrero 2026
+      - article [ref=e127]:
+        - generic [ref=e128]: “
+        - paragraph [ref=e129]: Vengo cada mañana desde hace meses. No sé si el café es mejor que la tarta de queso o al revés. Solo sé que es mi lugar favorito del mundo.
+        - generic [ref=e130]:
+          - generic [ref=e131]:
+            - heading "Ana Martínez" [level=4] [ref=e132]
+            - generic [ref=e133]: — Valdepeñas
+          - generic [ref=e134]:
+            - generic [ref=e135]: ★★★★★
+            - generic [ref=e136]: Febrero 2026
+      - article [ref=e137]:
+        - generic [ref=e138]: “
+        - paragraph [ref=e139]: Conduje dos horas solo para probar la burrata di Andria. Volvería a hacerlo mañana. Un servicio elegante sin pretensiones.
+        - generic [ref=e140]:
+          - generic [ref=e141]:
+            - heading "Luis Herrera" [level=4] [ref=e142]
+            - generic [ref=e143]: — Toledo
+          - generic [ref=e144]:
+            - generic [ref=e145]: ★★★★★
+            - generic [ref=e146]: Enero 2026
+      - article [ref=e147]:
+        - generic [ref=e148]: “
+        - paragraph [ref=e149]: La atmósfera es como un abrazo cálido. Cena de aniversario reservada al instante. El flat white perfecto y la pizza Margherita sublime.
+        - generic [ref=e150]:
+          - generic [ref=e151]:
+            - heading "Sofía Peña" [level=4] [ref=e152]
+            - generic [ref=e153]: — Albacete
+          - generic [ref=e154]:
+            - generic [ref=e155]: ★★★★★
+            - generic [ref=e156]: Enero 2026
+      - article [ref=e157]:
+        - generic [ref=e158]: “
+        - paragraph [ref=e159]: Cada detalle cuidado, desde la cristalería hasta la música. Un ejercicio de hospitalidad que raras veces se ve por estos lares.
+        - generic [ref=e160]:
+          - generic [ref=e161]:
+            - heading "Roberto Díaz" [level=4] [ref=e162]
+            - generic [ref=e163]: — Ciudad Real
+          - generic [ref=e164]:
+            - generic [ref=e165]: ★★★★★
+            - generic [ref=e166]: Diciembre 2025
+    - generic [ref=e167]: — Pasa el cursor para pausar —
+  - generic [ref=e169]:
+    - generic [ref=e170]:
+      - generic [ref=e171]: Cuéntanos
+      - heading "¿Cómo estuvo tu visita?" [level=2] [ref=e172]:
+        - text: ¿Cómo estuvo
+        - emphasis [ref=e173]: tu visita?
+      - paragraph [ref=e174]: Tu opinión nos importa de verdad. Tómate un momento y cuéntanos cómo fue. Cada palabra tuya nos ayuda a seguir mejorando para ti y para quienes vienen después.
+    - generic [ref=e175]:
+      - generic [ref=e176]:
+        - generic [ref=e177]:
+          - generic [ref=e178]: Tu nombre
+          - textbox "Tu nombre" [ref=e179]:
+            - /placeholder: Nombre completo
+        - generic [ref=e180]:
+          - generic [ref=e181]: Ciudad
+          - textbox "Ciudad" [ref=e182]:
+            - /placeholder: Opcional
+      - generic [ref=e183]:
+        - generic [ref=e184]: Tu calificación
+        - group "Tu calificación" [ref=e185]:
+          - button "1 estrella" [ref=e186] [cursor=pointer]: ★
+          - button "2 estrellas" [ref=e187] [cursor=pointer]: ★
+          - button "3 estrellas" [ref=e188] [cursor=pointer]: ★
+          - button "4 estrellas" [ref=e189] [cursor=pointer]: ★
+          - button "5 estrellas" [pressed] [ref=e190] [cursor=pointer]: ★
+      - generic [ref=e191]:
+        - generic [ref=e192]: Tu experiencia
+        - textbox "Tu experiencia" [ref=e193]:
+          - /placeholder: ¿Qué te llevaste de Ébenezer?
+      - button "Publicar reseña" [ref=e195] [cursor=pointer]:
+        - generic [ref=e196]: Publicar reseña
+        - img [ref=e197]
+  - contentinfo [ref=e199]:
+    - generic [ref=e200]:
+      - generic [ref=e201]:
+        - generic [ref=e202]:
+          - generic [ref=e203]: Ébenezer
+          - paragraph [ref=e204]: Sabor cubano auténtico en Valdepeñas. Café de día, pizza de noche y el calor de una familia que recibe a todos como en casa.
+          - generic [ref=e205]:
+            - generic [ref=e206]: ★
+            - generic [ref=e207]: ★
+            - generic [ref=e208]: ★
+            - generic [ref=e209]: ★
+            - generic [ref=e210]: ★
+            - text: Selección Ébenezer
+        - generic [ref=e211]:
+          - heading "Carta" [level=4] [ref=e212]
+          - list [ref=e213]:
+            - listitem [ref=e214]:
+              - link "Cafetería" [ref=e215] [cursor=pointer]:
+                - /url: /menu
+            - listitem [ref=e216]:
+              - link "Pizzería" [ref=e217] [cursor=pointer]:
+                - /url: /menu
+            - listitem [ref=e218]:
+              - link "Galería" [ref=e219] [cursor=pointer]:
+                - /url: /galeria
+            - listitem [ref=e220]:
+              - link "Reseñas" [ref=e221] [cursor=pointer]:
+                - /url: /resenas
+        - generic [ref=e222]:
+          - heading "Casa" [level=4] [ref=e223]
+          - list [ref=e224]:
+            - listitem [ref=e225]:
+              - link "Nuestra historia" [ref=e226] [cursor=pointer]:
+                - /url: /nosotros
+            - listitem [ref=e227]:
+              - link "Reservar" [ref=e228] [cursor=pointer]:
+                - /url: /contacto
+            - listitem [ref=e229]:
+              - link "Instagram" [ref=e230] [cursor=pointer]:
+                - /url: https://www.instagram.com/ebenezer_valdepenas/
+            - listitem [ref=e231]:
+              - link "WhatsApp" [ref=e232] [cursor=pointer]:
+                - /url: https://wa.me/34623272728
+        - generic [ref=e233]:
+          - heading "Visítanos" [level=4] [ref=e234]
+          - paragraph [ref=e235]:
+            - text: Calle la Paz, 28-A
+            - text: 13300 Valdepeñas
+            - text: Ciudad Real, España
+          - paragraph [ref=e236]:
+            - text: 08:00 — 23:00
+            - text: Todos los días
+      - generic [ref=e237]:
+        - paragraph [ref=e238]:
+          - text: © 2026 ·
+          - emphasis [ref=e239]: Cafetería Ébenezer
+          - text: · Todos los derechos reservados
+        - generic [ref=e240]:
+          - generic [ref=e241]: Privacidad
+          - generic [ref=e242]: Cookies
+          - generic [ref=e243]: Legal
+  - generic [ref=e244]:
+    - generic: Escríbenos
+    - link "Contáctanos por WhatsApp (abre en nueva pestaña)" [ref=e245] [cursor=pointer]:
+      - /url: https://wa.me/34623272728?text=Hola%2C%20me%20gustaría%20reservar%20en%20Cafetería%20Ébenezer
+      - img [ref=e246]
+  - button "Open Next.js Dev Tools" [ref=e253] [cursor=pointer]:
+    - img [ref=e254]
+  - alert [ref=e257]

@@ -1,0 +1,253 @@
+- generic [active] [ref=e1]:
+  - complementary "Información del restaurante" [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - img [ref=e5]
+        - generic [ref=e8]: 08:00 — 23:00
+      - generic [ref=e10]:
+        - img [ref=e11]
+        - generic [ref=e14]: Valdepeñas · Ciudad Real
+      - generic [ref=e16]:
+        - img [ref=e17]
+        - generic [ref=e19]: +34 623 272 728
+  - navigation [ref=e20]:
+    - generic [ref=e21]:
+      - generic [ref=e24]: Abierto — 08:00 / 23:00
+      - link "Cafetería Ébenezer" [ref=e25] [cursor=pointer]:
+        - /url: /inicio
+      - generic [ref=e26]:
+        - link "Reservar" [ref=e27] [cursor=pointer]:
+          - /url: /contacto
+          - text: Reservar
+          - img [ref=e28]
+        - button "Abrir menú" [ref=e30] [cursor=pointer]
+  - dialog:
+    - button: ×
+    - generic:
+      - generic: Apariencia
+      - button:
+        - img
+        - generic: Auto
+    - paragraph: Carta de navegación
+    - list:
+      - listitem:
+        - link:
+          - /url: /inicio
+          - text: Inicio
+      - listitem:
+        - link:
+          - /url: /nosotros
+          - text: Nosotros
+      - listitem:
+        - link:
+          - /url: /menu
+          - text: Menú
+      - listitem:
+        - link:
+          - /url: /galeria
+          - text: Galería
+      - listitem:
+        - link:
+          - /url: /resenas
+          - text: Reseñas
+      - listitem:
+        - link:
+          - /url: /contacto
+          - text: Contacto
+    - generic:
+      - generic:
+        - generic: Dirección
+        - text: Calle la Paz, 28-A Valdepeñas · Ciudad Real
+        - generic: Horario
+        - text: 08:00 — 23:00
+        - generic: Teléfono
+        - link:
+          - /url: tel:+34623272728
+          - text: +34 623 272 728
+      - generic: ·Cafetería Ébenezer·
+      - generic:
+        - link:
+          - /url: https://www.instagram.com/ebenezer_valdepenas/
+          - text: Instagram
+        - link:
+          - /url: https://wa.me/34623272728?text=Hola%2C%20me%20gustaría%20reservar%20en%20Cafetería%20Ébenezer
+          - text: WhatsApp
+  - generic [ref=e35]:
+    - generic [ref=e36]: La carta
+    - heading "Sabores de casa, hechos con amor" [level=1] [ref=e37]:
+      - text: Sabores de casa,
+      - emphasis [ref=e38]: hechos con amor
+    - generic [ref=e39]:
+      - generic [ref=e40]: ✦
+      - generic [ref=e41]: ✦
+      - generic [ref=e42]: ✦
+    - paragraph [ref=e43]: De mañana a noche, café de especialidad y desayunos caseros; de tarde en adelante, pizzas artesanales con ingredientes que se notan. Todo hecho con las manos y el corazón de una familia cubana.
+  - tablist "Sección del menú" [ref=e45]:
+    - tab "Cafetería — Día —" [selected] [ref=e46] [cursor=pointer]:
+      - text: Cafetería
+      - generic [ref=e47]: — Día —
+    - tab "Pizzería — Noche —" [ref=e48] [cursor=pointer]:
+      - text: Pizzería
+      - generic [ref=e49]: — Noche —
+  - tabpanel "Cafetería — Día —" [ref=e50]:
+    - generic [ref=e51]:
+      - generic [ref=e52]:
+        - generic [ref=e53]:
+          - generic [ref=e54]: I
+          - heading "Bebidas calientes" [level=2] [ref=e55]:
+            - emphasis [ref=e56]: Bebidas
+            - text: calientes
+        - generic [ref=e57]:
+          - generic [ref=e58]:
+            - generic [ref=e59]:
+              - heading "Espresso Ristretto" [level=4] [ref=e60]
+              - generic [ref=e61]: House selection
+            - paragraph [ref=e62]: Grano de finca única, extracción corta e intensa
+          - generic [ref=e63]: €3,50
+        - generic [ref=e64]:
+          - generic [ref=e65]:
+            - heading "Cappuccino Tradizionale" [level=4] [ref=e67]
+            - paragraph [ref=e68]: Espresso, leche texturizada y cacao de Modica
+          - generic [ref=e69]: €4,50
+        - generic [ref=e70]:
+          - generic [ref=e71]:
+            - heading "Flat White" [level=4] [ref=e73]
+            - paragraph [ref=e74]: Doble espresso, microfoam sedosa
+          - generic [ref=e75]: €4,80
+        - generic [ref=e76]:
+          - generic [ref=e77]:
+            - heading "Mocha Noir" [level=4] [ref=e79]
+            - paragraph [ref=e80]: Espresso, chocolate negro 70% y crema fresca
+          - generic [ref=e81]: €5,20
+        - generic [ref=e82]:
+          - generic [ref=e83]:
+            - heading "Té Imperial Chai" [level=4] [ref=e85]
+            - paragraph [ref=e86]: Té negro Assam, cardamomo, canela y leche tibia
+          - generic [ref=e87]: €4,00
+      - generic [ref=e88]:
+        - generic [ref=e89]:
+          - generic [ref=e90]: II
+          - heading "Colección fría" [level=2] [ref=e91]:
+            - emphasis [ref=e92]: Colección
+            - text: fría
+        - generic [ref=e93]:
+          - generic [ref=e94]:
+            - heading "Cold Brew Reserva" [level=4] [ref=e96]
+            - paragraph [ref=e97]: Infusión lenta en frío, doce horas de espera
+          - generic [ref=e98]: €5,00
+        - generic [ref=e99]:
+          - generic [ref=e100]:
+            - heading "Frappé de la Casa" [level=4] [ref=e102]
+            - paragraph [ref=e103]: Café helado, vainilla de Madagascar y crema batida
+          - generic [ref=e104]: €5,50
+        - generic [ref=e105]:
+          - generic [ref=e106]:
+            - heading "Limonada de Albahaca" [level=4] [ref=e108]
+            - paragraph [ref=e109]: Limón fresco, albahaca del huerto, agua con gas
+          - generic [ref=e110]: €3,80
+        - generic [ref=e111]:
+          - generic [ref=e112]:
+            - heading "Matcha Latte Ceremonial" [level=4] [ref=e114]
+            - paragraph [ref=e115]: Matcha grado ceremonial, leche de avena
+          - generic [ref=e116]: €5,40
+      - generic [ref=e117]:
+        - generic [ref=e118]:
+          - generic [ref=e119]: III
+          - heading "Dulces & Repostería" [level=2] [ref=e120]:
+            - emphasis [ref=e121]: Dulces
+            - text: "& Repostería"
+        - generic [ref=e122]:
+          - generic [ref=e123]:
+            - heading "Croissant de Mantequilla" [level=4] [ref=e125]
+            - paragraph [ref=e126]: Mantequilla francesa AOP, hojaldrado en casa
+          - generic [ref=e127]: €3,20
+        - generic [ref=e128]:
+          - generic [ref=e129]:
+            - generic [ref=e130]:
+              - heading "Tarta de Queso Vasca" [level=4] [ref=e131]
+              - generic [ref=e132]: Especialidad
+            - paragraph [ref=e133]: Queso curado, caramelización suave, base quemada
+          - generic [ref=e134]: €6,20
+        - generic [ref=e135]:
+          - generic [ref=e136]:
+            - heading "Brownie Valrhona" [level=4] [ref=e138]
+            - paragraph [ref=e139]: Chocolate belga, nuez pecana, flor de sal
+          - generic [ref=e140]: €4,40
+        - generic [ref=e141]:
+          - generic [ref=e142]:
+            - heading "Cannelé Bordelés" [level=4] [ref=e144]
+            - paragraph [ref=e145]: Interior cremoso, corteza de caramelo rubio
+          - generic [ref=e146]: €3,60
+      - generic [ref=e147]:
+        - generic [ref=e148]: — · —
+        - paragraph [ref=e149]: “En casa de mi madre en Cuba, la cocina siempre olía a algo rico. Intentamos que Ébenezer huela igual cada día.”
+        - paragraph [ref=e150]: Consulta al equipo por alérgenos · Precios con IVA incluido
+  - contentinfo [ref=e151]:
+    - generic [ref=e152]:
+      - generic [ref=e153]:
+        - generic [ref=e154]:
+          - generic [ref=e155]: Ébenezer
+          - paragraph [ref=e156]: Sabor cubano auténtico en Valdepeñas. Café de día, pizza de noche y el calor de una familia que recibe a todos como en casa.
+          - generic [ref=e157]:
+            - generic [ref=e158]: ★
+            - generic [ref=e159]: ★
+            - generic [ref=e160]: ★
+            - generic [ref=e161]: ★
+            - generic [ref=e162]: ★
+            - text: Selección Ébenezer
+        - generic [ref=e163]:
+          - heading "Carta" [level=4] [ref=e164]
+          - list [ref=e165]:
+            - listitem [ref=e166]:
+              - link "Cafetería" [ref=e167] [cursor=pointer]:
+                - /url: /menu
+            - listitem [ref=e168]:
+              - link "Pizzería" [ref=e169] [cursor=pointer]:
+                - /url: /menu
+            - listitem [ref=e170]:
+              - link "Galería" [ref=e171] [cursor=pointer]:
+                - /url: /galeria
+            - listitem [ref=e172]:
+              - link "Reseñas" [ref=e173] [cursor=pointer]:
+                - /url: /resenas
+        - generic [ref=e174]:
+          - heading "Casa" [level=4] [ref=e175]
+          - list [ref=e176]:
+            - listitem [ref=e177]:
+              - link "Nuestra historia" [ref=e178] [cursor=pointer]:
+                - /url: /nosotros
+            - listitem [ref=e179]:
+              - link "Reservar" [ref=e180] [cursor=pointer]:
+                - /url: /contacto
+            - listitem [ref=e181]:
+              - link "Instagram" [ref=e182] [cursor=pointer]:
+                - /url: https://www.instagram.com/ebenezer_valdepenas/
+            - listitem [ref=e183]:
+              - link "WhatsApp" [ref=e184] [cursor=pointer]:
+                - /url: https://wa.me/34623272728
+        - generic [ref=e185]:
+          - heading "Visítanos" [level=4] [ref=e186]
+          - paragraph [ref=e187]:
+            - text: Calle la Paz, 28-A
+            - text: 13300 Valdepeñas
+            - text: Ciudad Real, España
+          - paragraph [ref=e188]:
+            - text: 08:00 — 23:00
+            - text: Todos los días
+      - generic [ref=e189]:
+        - paragraph [ref=e190]:
+          - text: © 2026 ·
+          - emphasis [ref=e191]: Cafetería Ébenezer
+          - text: · Todos los derechos reservados
+        - generic [ref=e192]:
+          - generic [ref=e193]: Privacidad
+          - generic [ref=e194]: Cookies
+          - generic [ref=e195]: Legal
+  - generic [ref=e196]:
+    - generic: Escríbenos
+    - link "Contáctanos por WhatsApp (abre en nueva pestaña)" [ref=e197] [cursor=pointer]:
+      - /url: https://wa.me/34623272728?text=Hola%2C%20me%20gustaría%20reservar%20en%20Cafetería%20Ébenezer
+      - img [ref=e198]
+  - button "Open Next.js Dev Tools" [ref=e205] [cursor=pointer]:
+    - img [ref=e206]
+  - alert [ref=e209]

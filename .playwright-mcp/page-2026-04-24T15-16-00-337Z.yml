@@ -1,0 +1,212 @@
+- generic [active] [ref=e1]:
+  - complementary "Información del restaurante" [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - img [ref=e5]
+        - generic [ref=e8]: 08:00 — 23:00
+      - generic [ref=e9]:
+        - img [ref=e10]
+        - text: Valdepeñas · Ciudad Real
+      - generic [ref=e13]:
+        - img [ref=e14]
+        - generic [ref=e16]: +34 623 272 728
+  - navigation [ref=e17]:
+    - generic [ref=e18]:
+      - generic [ref=e20]: Abierto — 08:00 / 23:00
+      - link "Cafetería Ébenezer" [ref=e21] [cursor=pointer]:
+        - /url: /inicio
+      - generic [ref=e22]:
+        - link "Reservar" [ref=e23] [cursor=pointer]:
+          - /url: /contacto
+          - text: Reservar
+          - img [ref=e24]
+        - button "Abrir menú"
+  - dialog [ref=e26]:
+    - button [ref=e27] [cursor=pointer]: ×
+    - generic [ref=e28]:
+      - text: Apariencia
+      - button [ref=e29] [cursor=pointer]:
+        - img [ref=e30]
+        - generic [ref=e35]: Auto
+    - paragraph [ref=e36]: Carta de navegación
+    - list [ref=e37]:
+      - listitem [ref=e38]:
+        - link [ref=e39] [cursor=pointer]:
+          - /url: /inicio
+          - text: Inicio
+      - listitem [ref=e40]:
+        - link [ref=e41] [cursor=pointer]:
+          - /url: /nosotros
+          - text: Nosotros
+      - listitem [ref=e42]:
+        - link [ref=e43] [cursor=pointer]:
+          - /url: /menu
+          - text: Menú
+      - listitem [ref=e44]:
+        - link [ref=e45] [cursor=pointer]:
+          - /url: /galeria
+          - text: Galería
+      - listitem [ref=e46]:
+        - link [ref=e47] [cursor=pointer]:
+          - /url: /resenas
+          - text: Reseñas
+      - listitem [ref=e48]:
+        - link [ref=e49] [cursor=pointer]:
+          - /url: /contacto
+          - text: Contacto
+    - generic [ref=e50]:
+      - generic [ref=e51]:
+        - text: DirecciónCalle la Paz, 28-A Valdepeñas · Ciudad Real Horario08:00 — 23:00 Teléfono
+        - link [ref=e52] [cursor=pointer]:
+          - /url: tel:+34623272728
+          - text: +34 623 272 728
+      - generic [ref=e53]: Cafetería Ébenezer
+      - generic [ref=e54]:
+        - link [ref=e55] [cursor=pointer]:
+          - /url: https://www.instagram.com/ebenezer_valdepenas/
+          - text: Instagram
+        - link [ref=e56] [cursor=pointer]:
+          - /url: https://wa.me/34623272728?text=Hola%2C%20me%20gustaría%20reservar%20en%20Cafetería%20Ébenezer
+          - text: WhatsApp
+  - generic [ref=e57]:
+    - generic [ref=e58]: Aquí estamos para ti
+    - heading "Ven cuando quieras. Te guardamos sitio." [level=1] [ref=e59]:
+      - text: Ven cuando quieras.
+      - emphasis [ref=e60]: Te guardamos sitio.
+    - paragraph [ref=e61]: Llama, escribe o reserva aquí mismo. En Ébenezer siempre hay alguien dispuesto a recibirte con una sonrisa y el mejor café de Valdepeñas.
+  - generic [ref=e63]:
+    - generic [ref=e64]:
+      - img [ref=e66]
+      - generic [ref=e69]: Dirección
+      - generic [ref=e70]:
+        - text: Calle la Paz, 28-A
+        - emphasis [ref=e71]: 13300 Valdepeñas
+    - generic [ref=e72]:
+      - img [ref=e74]
+      - generic [ref=e77]: Horarios
+      - generic [ref=e78]:
+        - emphasis [ref=e79]: 08:00 — 23:00
+        - text: Todos los días
+    - generic [ref=e80]:
+      - img [ref=e82]
+      - generic [ref=e84]: Reservas
+      - generic [ref=e85]:
+        - link "+34 623 272 728" [ref=e86] [cursor=pointer]:
+          - /url: tel:+34623272728
+        - emphasis [ref=e87]: reservas@ebenezer.com
+  - generic [ref=e89]:
+    - generic [ref=e90]:
+      - generic [ref=e91]: Formulario de reserva
+      - heading "Reserva tu mesa" [level=2] [ref=e92]:
+        - text: Reserva
+        - emphasis [ref=e93]: tu mesa
+      - paragraph [ref=e94]: Cuéntanos cuándo vienes y para cuántos. Confirmamos tu reserva en menos de dos horas. Si es una ocasión especial — cumpleaños, aniversario, lo que sea — déjanos una nota y lo hacemos especial de verdad.
+      - paragraph [ref=e95]: Para grupos de más de 8 personas, recomendamos llamar directamente.
+    - generic [ref=e96]:
+      - generic [ref=e97]:
+        - generic [ref=e98]:
+          - text: Nombre completo *
+          - textbox "Nombre completo *" [ref=e99]:
+            - /placeholder: Su nombre
+        - generic [ref=e100]:
+          - text: Teléfono *
+          - textbox "Teléfono *" [ref=e101]:
+            - /placeholder: +34 600 000 000
+      - generic [ref=e102]:
+        - text: Correo electrónico
+        - textbox "Correo electrónico" [ref=e103]:
+          - /placeholder: correo@ejemplo.com
+      - generic [ref=e104]:
+        - generic [ref=e105]:
+          - text: Fecha *
+          - textbox "Fecha *" [ref=e106]
+        - generic [ref=e107]:
+          - text: Hora *
+          - textbox "Hora *" [ref=e108]
+        - generic [ref=e109]:
+          - text: Comensales
+          - combobox "Comensales" [ref=e110]:
+            - option "1 persona"
+            - option "2 personas" [selected]
+            - option "3 personas"
+            - option "4 personas"
+            - option "5 personas"
+            - option "6 personas"
+            - option "7 personas"
+            - option "8 personas"
+      - generic [ref=e111]:
+        - text: Ocasión especial o notas
+        - textbox "Ocasión especial o notas" [ref=e112]:
+          - /placeholder: Aniversario, cumpleaños, alergias...
+      - button "Solicitar reserva" [ref=e114] [cursor=pointer]:
+        - generic [ref=e115]: Solicitar reserva
+        - img [ref=e116]
+  - generic [ref=e118]:
+    - generic [ref=e119]:
+      - generic [ref=e120]: Cómo encontrarnos
+      - heading "En el corazón de Valdepeñas" [level=2] [ref=e121]:
+        - text: En el corazón de
+        - emphasis [ref=e122]: Valdepeñas
+    - generic [ref=e123]:
+      - iframe [ref=e124]:
+        
+      - generic [ref=e126]: Ébenezer
+  - contentinfo [ref=e127]:
+    - generic [ref=e128]:
+      - generic [ref=e129]:
+        - generic [ref=e130]:
+          - text: Ébenezer
+          - paragraph [ref=e131]: Sabor cubano auténtico en Valdepeñas. Café de día, pizza de noche y el calor de una familia que recibe a todos como en casa.
+          - generic [ref=e132]: ★★★★★ Selección Ébenezer
+        - generic [ref=e133]:
+          - heading "Carta" [level=4] [ref=e134]
+          - list [ref=e135]:
+            - listitem [ref=e136]:
+              - link "Cafetería" [ref=e137] [cursor=pointer]:
+                - /url: /menu
+            - listitem [ref=e138]:
+              - link "Pizzería" [ref=e139] [cursor=pointer]:
+                - /url: /menu
+            - listitem [ref=e140]:
+              - link "Galería" [ref=e141] [cursor=pointer]:
+                - /url: /galeria
+            - listitem [ref=e142]:
+              - link "Reseñas" [ref=e143] [cursor=pointer]:
+                - /url: /resenas
+        - generic [ref=e144]:
+          - heading "Casa" [level=4] [ref=e145]
+          - list [ref=e146]:
+            - listitem [ref=e147]:
+              - link "Nuestra historia" [ref=e148] [cursor=pointer]:
+                - /url: /nosotros
+            - listitem [ref=e149]:
+              - link "Reservar" [ref=e150] [cursor=pointer]:
+                - /url: /contacto
+            - listitem [ref=e151]:
+              - link "Instagram" [ref=e152] [cursor=pointer]:
+                - /url: https://www.instagram.com/ebenezer_valdepenas/
+            - listitem [ref=e153]:
+              - link "WhatsApp" [ref=e154] [cursor=pointer]:
+                - /url: https://wa.me/34623272728
+        - generic [ref=e155]:
+          - heading "Visítanos" [level=4] [ref=e156]
+          - paragraph [ref=e157]:
+            - text: Calle la Paz, 28-A
+            - text: 13300 Valdepeñas
+            - text: Ciudad Real, España
+          - paragraph [ref=e158]:
+            - text: 08:00 — 23:00
+            - text: Todos los días
+      - generic [ref=e159]:
+        - paragraph [ref=e160]:
+          - text: © 2026 ·
+          - emphasis [ref=e161]: Cafetería Ébenezer
+          - text: · Todos los derechos reservados
+        - generic [ref=e162]: PrivacidadCookiesLegal
+  - generic [ref=e163]:
+    - text: Escríbenos
+    - link "Contáctanos por WhatsApp (abre en nueva pestaña)" [ref=e164] [cursor=pointer]:
+      - /url: https://wa.me/34623272728?text=Hola%2C%20me%20gustaría%20reservar%20en%20Cafetería%20Ébenezer
+      - img [ref=e165]
+  - button "Open Next.js Dev Tools" [ref=e172] [cursor=pointer]:
+    - img [ref=e173]

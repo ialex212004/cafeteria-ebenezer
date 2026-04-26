@@ -1,0 +1,210 @@
+- generic [active] [ref=e1]:
+  - complementary "Información del restaurante" [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - img [ref=e5]
+        - generic [ref=e8]: 08:00 — 23:00
+      - generic [ref=e9]:
+        - img [ref=e10]
+        - text: Valdepeñas · Ciudad Real
+      - generic [ref=e13]:
+        - img [ref=e14]
+        - generic [ref=e16]: +34 623 272 728
+  - navigation [ref=e17]:
+    - generic [ref=e18]:
+      - generic [ref=e20]: Abierto — 08:00 / 23:00
+      - link "Cafetería Ébenezer" [ref=e21] [cursor=pointer]:
+        - /url: /inicio
+      - generic [ref=e22]:
+        - link "Reservar" [ref=e23] [cursor=pointer]:
+          - /url: /contacto
+          - text: Reservar
+          - img [ref=e24]
+        - button "Abrir menú"
+  - dialog [ref=e26]:
+    - button [ref=e27] [cursor=pointer]: ×
+    - generic [ref=e28]:
+      - text: Apariencia
+      - button [ref=e29] [cursor=pointer]:
+        - img [ref=e30]
+        - generic [ref=e35]: Auto
+    - paragraph [ref=e36]: Carta de navegación
+    - list [ref=e37]:
+      - listitem [ref=e38]:
+        - link [ref=e39] [cursor=pointer]:
+          - /url: /inicio
+          - text: Inicio
+      - listitem [ref=e40]:
+        - link [ref=e41] [cursor=pointer]:
+          - /url: /nosotros
+          - text: Nosotros
+      - listitem [ref=e42]:
+        - link [ref=e43] [cursor=pointer]:
+          - /url: /menu
+          - text: Menú
+      - listitem [ref=e44]:
+        - link [ref=e45] [cursor=pointer]:
+          - /url: /galeria
+          - text: Galería
+      - listitem [ref=e46]:
+        - link [ref=e47] [cursor=pointer]:
+          - /url: /resenas
+          - text: Reseñas
+      - listitem [ref=e48]:
+        - link [ref=e49] [cursor=pointer]:
+          - /url: /contacto
+          - text: Contacto
+    - generic [ref=e50]:
+      - generic [ref=e51]:
+        - text: DirecciónCalle la Paz, 28-A Valdepeñas · Ciudad Real Horario08:00 — 23:00 Teléfono
+        - link [ref=e52] [cursor=pointer]:
+          - /url: tel:+34623272728
+          - text: +34 623 272 728
+      - generic [ref=e53]: Cafetería Ébenezer
+      - generic [ref=e54]:
+        - link [ref=e55] [cursor=pointer]:
+          - /url: https://www.instagram.com/ebenezer_valdepenas/
+          - text: Instagram
+        - link [ref=e56] [cursor=pointer]:
+          - /url: https://wa.me/34623272728?text=Hola%2C%20me%20gustaría%20reservar%20en%20Cafetería%20Ébenezer
+          - text: WhatsApp
+  - generic [ref=e58]:
+    - generic [ref=e59]: Nuestra historia
+    - heading "Hasta aquí nos ha traído el Señor" [level=1] [ref=e60]:
+      - text: Hasta aquí nos ha
+      - text: traído
+      - emphasis [ref=e61]: el Señor
+    - paragraph [ref=e62]: Ébenezer no es solo un nombre bonito. Es una declaración de fe. Significa “la roca fuerte” y “hasta aquí nos ha traído el Señor”. Cada taza, cada mesa, cada día abiertos son evidencia de esa promesa cumplida.
+  - generic [ref=e64]:
+    - generic [ref=e66]:
+      - img "Angel Willian y Dayamila, fundadores de Cafetería Ébenezer" [ref=e67]
+      - generic [ref=e68]: — Los fundadores · Ébenezer · MMXXV —
+    - generic [ref=e69]:
+      - generic [ref=e70]: La historia
+      - heading "Un sueño nacido de la fe y las manos" [level=2] [ref=e71]:
+        - text: Un sueño nacido
+        - emphasis [ref=e72]: de la fe y las manos
+      - paragraph [ref=e73]: "Esta cafetería nació del corazón de un matrimonio cubano que creyó que Dios podía usarlos incluso entre hornos y tazas de café. No fue fácil. Hubo madrugadas de duda, momentos en los que el camino no estaba claro. Pero había una roca firme debajo de cada paso: la convicción de que esto no era solo un negocio, sino un llamado."
+      - paragraph [ref=e74]: Cafeteria Ébenezer abrió sus puertas en Valdepeñas no para ser la cafetería más famosa, sino para ser la más fiel. Fiel al producto, fiel a las personas que entran, y sobre todo, fiel a quien nos sostuvo cuando todavía era solo un sueño escrito en un cuaderno.
+      - paragraph [ref=e75]: Dios es el centro de todo lo que hacemos aquí. Eso no es un eslogan; es la razón por la que cada detalle importa, por la que cada persona es recibida como un regalo.
+      - generic [ref=e77]:
+        - generic [ref=e78]: La familia Ébenezer
+        - generic [ref=e79]: Fundadores | Angel Willian Lared Quintero | Dayamila Rodriguez Pacheco · Valdepeñas · MMXXV
+  - generic [ref=e81]:
+    - generic [ref=e82]:
+      - generic [ref=e83]: Cuatro piedras en el camino
+      - heading "Momentos que nos recuerdan quiénes somos" [level=2] [ref=e84]:
+        - text: Momentos que nos
+        - emphasis [ref=e85]: recuerdan quiénes somos
+    - generic [ref=e86]:
+      - generic [ref=e87]:
+        - text: FeEl comienzo
+        - paragraph [ref=e88]: Todo empezó con una oración y una hoja en blanco. La fe vino antes que el capital.
+      - generic [ref=e89]:
+        - text: FamiliaEl motor
+        - paragraph [ref=e90]: Detrás de cada taza hay manos conocidas, risas compartidas y una historia que aún se escribe.
+      - generic [ref=e91]:
+        - text: OficioLa entrega
+        - paragraph [ref=e92]: El buen café y la buena pizza piden tiempo, paciencia y el deseo de hacerlo bien aunque nadie mire.
+      - generic [ref=e93]:
+        - text: GraciaEl sustento
+        - paragraph [ref=e94]: Cada día abiertos es una evidencia de que “hasta aquí nos ha traído el Señor”.
+  - generic [ref=e96]:
+    - generic [ref=e97]:
+      - generic [ref=e98]: Lo que nos define
+      - heading "Lo que hay detrás de cada taza" [level=2] [ref=e99]:
+        - text: Lo que hay
+        - emphasis [ref=e100]: detrás de cada taza
+      - paragraph [ref=e101]: No somos perfectos. Pero tenemos claro para quién trabajamos y a quién queremos parecernos en cada gesto, en cada recibimiento, en cada plato que sale de aquí.
+      - link "Ven a conocernos" [ref=e103] [cursor=pointer]:
+        - /url: /contacto
+        - generic [ref=e104]: Ven a conocernos
+        - img [ref=e105]
+    - generic [ref=e107]:
+      - generic [ref=e108]:
+        - generic [ref=e109]: I
+        - generic [ref=e110]:
+          - heading "Dios en el centro" [level=3] [ref=e111]:
+            - text: Dios en el
+            - emphasis [ref=e112]: centro
+          - paragraph [ref=e113]: "Antes de abrir, hay una oración. Cuando algo sale bien, hay gratitud. Cuando algo falla, hay humildad. Dios no es un detalle decorativo aquí: es la razón de todo."
+      - generic [ref=e114]:
+        - generic [ref=e115]: II
+        - generic [ref=e116]:
+          - heading "Las personas, primero" [level=3] [ref=e117]:
+            - text: Las personas,
+            - emphasis [ref=e118]: primero
+          - paragraph [ref=e119]: Quien entra por esa puerta no es un cliente; es alguien a quien recibir. Puede que venga con prisa, con tristeza, o simplemente con hambre. Nuestra misión es que salga mejor de como entró.
+      - generic [ref=e120]:
+        - generic [ref=e121]: III
+        - generic [ref=e122]:
+          - heading "Honradez en el oficio" [level=3] [ref=e123]:
+            - text: Honradez en el
+            - emphasis [ref=e124]: oficio
+          - paragraph [ref=e125]: "El café lo hacemos bien porque hacerlo mal sería una falta de respeto al productor, al cliente y a nosotros mismos. La excelencia no es orgullo: es mayordomía."
+      - generic [ref=e126]:
+        - generic [ref=e127]: IV
+        - generic [ref=e128]:
+          - heading "Una mesa abierta" [level=3] [ref=e129]:
+            - text: Una mesa
+            - emphasis [ref=e130]: abierta
+          - paragraph [ref=e131]: Aquí caben todos. La mesa de Ébenezer no tiene lista de espera para el alma. Si llegas cansado, hay sitio. Si llegas solo, aquí hay compañía. Así como Dios nos recibió a nosotros.
+  - contentinfo [ref=e132]:
+    - generic [ref=e133]:
+      - generic [ref=e134]:
+        - generic [ref=e135]:
+          - text: Ébenezer
+          - paragraph [ref=e136]: Sabor cubano auténtico en Valdepeñas. Café de día, pizza de noche y el calor de una familia que recibe a todos como en casa.
+          - generic [ref=e137]: ★★★★★ Selección Ébenezer
+        - generic [ref=e138]:
+          - heading "Carta" [level=4] [ref=e139]
+          - list [ref=e140]:
+            - listitem [ref=e141]:
+              - link "Cafetería" [ref=e142] [cursor=pointer]:
+                - /url: /menu
+            - listitem [ref=e143]:
+              - link "Pizzería" [ref=e144] [cursor=pointer]:
+                - /url: /menu
+            - listitem [ref=e145]:
+              - link "Galería" [ref=e146] [cursor=pointer]:
+                - /url: /galeria
+            - listitem [ref=e147]:
+              - link "Reseñas" [ref=e148] [cursor=pointer]:
+                - /url: /resenas
+        - generic [ref=e149]:
+          - heading "Casa" [level=4] [ref=e150]
+          - list [ref=e151]:
+            - listitem [ref=e152]:
+              - link "Nuestra historia" [ref=e153] [cursor=pointer]:
+                - /url: /nosotros
+            - listitem [ref=e154]:
+              - link "Reservar" [ref=e155] [cursor=pointer]:
+                - /url: /contacto
+            - listitem [ref=e156]:
+              - link "Instagram" [ref=e157] [cursor=pointer]:
+                - /url: https://www.instagram.com/ebenezer_valdepenas/
+            - listitem [ref=e158]:
+              - link "WhatsApp" [ref=e159] [cursor=pointer]:
+                - /url: https://wa.me/34623272728
+        - generic [ref=e160]:
+          - heading "Visítanos" [level=4] [ref=e161]
+          - paragraph [ref=e162]:
+            - text: Calle la Paz, 28-A
+            - text: 13300 Valdepeñas
+            - text: Ciudad Real, España
+          - paragraph [ref=e163]:
+            - text: 08:00 — 23:00
+            - text: Todos los días
+      - generic [ref=e164]:
+        - paragraph [ref=e165]:
+          - text: © 2026 ·
+          - emphasis [ref=e166]: Cafetería Ébenezer
+          - text: · Todos los derechos reservados
+        - generic [ref=e167]: PrivacidadCookiesLegal
+  - generic [ref=e168]:
+    - text: Escríbenos
+    - link "Contáctanos por WhatsApp (abre en nueva pestaña)" [ref=e169] [cursor=pointer]:
+      - /url: https://wa.me/34623272728?text=Hola%2C%20me%20gustaría%20reservar%20en%20Cafetería%20Ébenezer
+      - img [ref=e170]
+  - button "Open Next.js Dev Tools" [ref=e177] [cursor=pointer]:
+    - img [ref=e178]
