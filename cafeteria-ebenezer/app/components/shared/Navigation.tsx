@@ -76,15 +76,6 @@ export default function Navigation() {
         :root[data-theme="light"] .nav-logo {
           color: var(--color-text-primary);
         }
-        :root[data-theme="light"] .nav-left {
-          color: var(--color-text-primary);
-        }
-        :root[data-theme="light"] .nav-left b {
-          color: var(--color-accent);
-        }
-        :root[data-theme="light"] .nav-left .dot {
-          background: var(--color-accent);
-        }
         :root[data-theme="light"] .menu-toggle .bar {
           background: var(--color-text-primary);
         }
@@ -97,32 +88,10 @@ export default function Navigation() {
           max-width: 1440px;
           margin: 0 auto;
           display: grid;
-          grid-template-columns: 1fr auto 1fr;
+          grid-template-columns: 1fr auto;
           align-items: center;
           padding: 0 clamp(1.25rem, 3vw, 3rem);
           gap: 2rem;
-        }
-        .nav-left {
-          display: flex;
-          align-items: center;
-          gap: 0.6rem;
-          font-family: var(--font-sans);
-          font-size: 0.58rem;
-          letter-spacing: 0.38em;
-          text-transform: uppercase;
-          color: var(--pearl);
-          font-weight: 400;
-        }
-        .nav-left .dot {
-          width: 5px;
-          height: 5px;
-          border-radius: 50%;
-          background: var(--champagne);
-          animation: pulse 2.4s ease-in-out infinite;
-        }
-        .nav-left b {
-          color: var(--champagne);
-          font-weight: 400;
         }
         .nav-logo {
           font-family: var(--font-italiana);
@@ -491,18 +460,8 @@ export default function Navigation() {
         }
 
         @media (max-width: 900px) {
-          .nav-left, .nav-reserve {
+          .nav-reserve {
             display: none;
-          }
-          .nav-inner {
-            grid-template-columns: 1fr auto;
-          }
-          .nav-right {
-            grid-column: 2;
-          }
-          .nav-logo {
-            grid-column: 1;
-            text-align: left;
           }
         }
         @media (max-width: 768px) {
@@ -596,12 +555,6 @@ export default function Navigation() {
 
       <nav className={scrolled ? 'scrolled' : ''}>
         <div className="nav-inner">
-          <div className="nav-left" aria-hidden="true">
-            <span className="dot" />
-            <span>
-              <b>Abierto</b> — {SITE.hours.opens} / {SITE.hours.closes}
-            </span>
-          </div>
           <Link href="/inicio" className="nav-logo" onClick={closeMenu}>
             Cafetería Ébenezer
           </Link>

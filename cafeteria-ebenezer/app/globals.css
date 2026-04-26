@@ -68,7 +68,7 @@
 
   /* ── Rhythm ── */
   --nav-h: 72px;
-  --info-h: 34px;
+  --info-h: 0px;
   --stack: calc(var(--nav-h) + var(--info-h));
 }
 
@@ -750,7 +750,7 @@ h6 {
   }
   :root {
     --nav-h: 66px;
-    --info-h: 32px;
+    --info-h: 0px;
   }
   .lux-btn {
     padding: 0.95rem 1.85rem;
@@ -761,7 +761,7 @@ h6 {
 @media (max-width: 480px) {
   :root {
     --nav-h: 62px;
-    --info-h: 30px;
+    --info-h: 0px;
   }
   .section {
     padding: 4rem 1.25rem;
@@ -781,7 +781,7 @@ h6 {
 @media (max-width: 390px) {
   :root {
     --nav-h: 60px;
-    --info-h: 28px;
+    --info-h: 0px;
   }
   .section {
     padding: 3.5rem 1rem;

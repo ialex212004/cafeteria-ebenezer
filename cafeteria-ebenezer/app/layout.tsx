@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Lato, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import WhatsAppButton from "./components/WhatsAppButton";
-import InfoStrip from "./components/InfoStrip";
 import ThemeProvider from "./components/ThemeProvider";
 import { SITE } from "@/lib/config/site";
 
@@ -114,9 +113,21 @@ export default function RootLayout({
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-        opens: SITE.hours.opens,
-        closes: SITE.hours.closes,
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        opens: "08:30",
+        closes: "13:30",
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        opens: "19:00",
+        closes: "21:00",
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Saturday"],
+        opens: "19:00",
+        closes: "23:00",
       },
     ],
     servesCuisine: ["Cuban", "Coffee", "Pizza", "Brunch", "Breakfast"],
@@ -139,7 +150,6 @@ export default function RootLayout({
       </head>
       <body>
         <ThemeProvider>
-          <InfoStrip />
           {children}
           <WhatsAppButton />
         </ThemeProvider>

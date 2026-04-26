@@ -5,12 +5,12 @@ export const SITE = {
     tel: 'tel:+34623272728',
   },
   hours: {
-    opens: '08:00',
-    closes: '23:00',
-    display: '08:00 — 23:00',
+    opens: '08:30',
+    closes: '21:00',
+    display: '08:30–13:30 · 19:00–21:00 · Sáb 19:00–23:00',
   },
   address: {
-    street: 'Calle la Paz, 28-A',
+    street: 'Calle Escuela, 35',
     postalCode: '13300',
     city: 'Valdepeñas',
     region: 'Ciudad Real',
