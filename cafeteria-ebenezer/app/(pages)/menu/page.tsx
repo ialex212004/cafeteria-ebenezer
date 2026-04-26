@@ -6,80 +6,111 @@ type MenuTab = 'Cafe' | 'Pizza';
 
 type MenuItem = {
   name: string;
-  desc: string;
-  price: string;
-  note?: string;
+  desc?: string;
+  price?: string;
+  highlight?: boolean;
+  allergens?: string[];
 };
 
 type MenuCategory = {
   title: string;
-  roman: string;
   items: MenuItem[];
 };
 
+const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI'];
+
 const cafeMenu: MenuCategory[] = [
   {
-    title: 'Bebidas calientes',
-    roman: 'I',
+    title: 'Desayunos',
     items: [
-      { name: 'Espresso Ristretto', desc: 'Grano de finca única, extracción corta e intensa', price: '3,50', note: 'House selection' },
-      { name: 'Cappuccino Tradizionale', desc: 'Espresso, leche texturizada y cacao de Modica', price: '4,50' },
-      { name: 'Flat White', desc: 'Doble espresso, microfoam sedosa', price: '4,80' },
-      { name: 'Mocha Noir', desc: 'Espresso, chocolate negro 70% y crema fresca', price: '5,20' },
-      { name: 'Té Imperial Chai', desc: 'Té negro Assam, cardamomo, canela y leche tibia', price: '4,00' },
+      { name: 'Tosta de tomate + café o té', price: '3,25', allergens: ['Gluten'] },
+      { name: 'Media tosta de tomate + café o té', price: '2,75', allergens: ['Gluten'] },
+      { name: 'Tosta de mermelada y mantequilla + café o té', price: '3,75', allergens: ['Gluten', 'Leche'] },
+      { name: 'Media tosta de mermelada y mantequilla + café o té', price: '3,00', allergens: ['Gluten', 'Leche'] },
+      { name: 'Tosta de aguacate y atún', price: '6,00', desc: 'Queso crema, tomate cherry, cebollino, sésamo', allergens: ['Gluten', 'Pescado', 'Leche', 'Sésamo'] },
+      { name: 'Tosta de jamón serrano', price: '6,00', allergens: ['Gluten'] },
+      { name: 'Tosta de jamón cocido o pavo', price: '5,50', allergens: ['Gluten'] },
+      { name: 'Tosta de jamón cocido/pavo y queso', price: '6,50', allergens: ['Gluten', 'Leche'] },
+      { name: 'Tosta de salmón y aguacate', price: '10,00', desc: 'Queso crema, salsa de naranja, sésamo', allergens: ['Gluten', 'Pescado', 'Leche', 'Sésamo'] },
+      { name: 'Tosta de aguacate y tomate cherry', price: '5,50', allergens: ['Gluten', 'Leche', 'Sésamo'] },
+      { name: 'Tosta Ebenezer', price: '12,00', desc: 'Aguacate, bacon, huevos, queso manchego…', highlight: true, allergens: ['Gluten', 'Huevos', 'Leche', 'Sésamo'] },
+      { name: 'Tosta de cerdo asado', price: '11,00', allergens: ['Gluten', 'Huevos', 'Leche', 'Sésamo'] },
+      { name: 'Healthy Toast', price: '8,00', desc: 'Brioche, mantequilla, sirope, frutas', allergens: ['Gluten', 'Leche'] },
+      { name: 'Desayuno Edén', price: '13,00', desc: 'Tosta + yogur + granola + bebida', highlight: true, allergens: ['Gluten', 'Leche', 'Frutos secos', 'Sésamo'] },
     ],
   },
   {
-    title: 'Colección fría',
-    roman: 'II',
+    title: 'Sándwiches',
     items: [
-      { name: 'Cold Brew Reserva', desc: 'Infusión lenta en frío, doce horas de espera', price: '5,00' },
-      { name: 'Frappé de la Casa', desc: 'Café helado, vainilla de Madagascar y crema batida', price: '5,50' },
-      { name: 'Limonada de Albahaca', desc: 'Limón fresco, albahaca del huerto, agua con gas', price: '3,80' },
-      { name: 'Matcha Latte Ceremonial', desc: 'Matcha grado ceremonial, leche de avena', price: '5,40' },
+      { name: 'Sándwich de pollo', price: '8,50', allergens: ['Gluten', 'Leche', 'Sésamo'] },
+      { name: 'Sándwich jamón cocido y mozzarella', allergens: ['Gluten', 'Leche', 'Sésamo'] },
+      { name: 'Sándwich pavo, provolone y mozzarella', allergens: ['Gluten', 'Leche', 'Sésamo'] },
+      { name: 'Sándwich de pastrami', price: '10,50', allergens: ['Gluten', 'Leche', 'Mostaza', 'Sésamo'] },
     ],
   },
   {
-    title: 'Dulces & Repostería',
-    roman: 'III',
+    title: 'Huevos Benedict & Otros',
     items: [
-      { name: 'Croissant de Mantequilla', desc: 'Mantequilla francesa AOP, hojaldrado en casa', price: '3,20' },
-      { name: 'Tarta de Queso Vasca', desc: 'Queso curado, caramelización suave, base quemada', price: '6,20', note: 'Especialidad' },
-      { name: 'Brownie Valrhona', desc: 'Chocolate belga, nuez pecana, flor de sal', price: '4,40' },
-      { name: 'Cannelé Bordelés', desc: 'Interior cremoso, corteza de caramelo rubio', price: '3,60' },
+      { name: 'Huevos Benedict con bacon', price: '9,00', allergens: ['Gluten', 'Huevos', 'Leche', 'Sésamo'] },
+      { name: 'Huevos Benedict clásicos', price: '8,50', allergens: ['Gluten', 'Huevos', 'Leche'] },
+      { name: 'Huevos Benedict con aguacate', price: '9,00', allergens: ['Gluten', 'Huevos', 'Leche', 'Sésamo'] },
+      { name: 'Bocadillo cubano', price: '10,00', allergens: ['Gluten'] },
+    ],
+  },
+  {
+    title: 'Bollería & Tartas',
+    items: [
+      { name: 'Croissant', price: '2,50', allergens: ['Gluten', 'Leche'] },
+      { name: 'Napolitana de chocolate', price: '2,50', allergens: ['Gluten', 'Leche', 'Soja'] },
+      { name: 'Pastel de hojaldre con frutas', price: '2,00', allergens: ['Gluten'] },
+      { name: 'Croissant jamón y queso', price: '5,00', allergens: ['Gluten', 'Leche'] },
+      { name: 'Croissant con mermelada', price: '4,50', allergens: ['Gluten', 'Leche'] },
+      { name: 'Petit choux (petisú)', price: '2,50', allergens: ['Gluten', 'Huevos', 'Leche'] },
+      { name: 'Tres leches', price: '4,00', allergens: ['Leche', 'Huevos'] },
+      { name: 'Beso de ángel', price: '4,50', allergens: ['Leche', 'Huevos'] },
+      { name: 'Chocoflan', price: '4,50', allergens: ['Leche', 'Huevos'] },
+    ],
+  },
+  {
+    title: 'Cafés',
+    items: [
+      { name: 'Espresso', price: '1,50' },
+      { name: 'Cortado', price: '1,50', allergens: ['Leche'] },
+      { name: 'Café con leche', price: '1,60 / 1,80', allergens: ['Leche'] },
+      { name: 'Americano', price: '1,75' },
+      { name: 'Ice latte', price: '2,75', allergens: ['Leche'] },
+      { name: 'Bombón', price: '2,50', allergens: ['Leche'] },
+      { name: 'Capuchino', price: '2,50', allergens: ['Leche'] },
+      { name: 'Frappé', price: '3,00', allergens: ['Leche'] },
+      { name: 'ColaCao', price: '2,25', allergens: ['Leche'] },
+    ],
+  },
+  {
+    title: 'Bebidas',
+    items: [
+      { name: 'Refrescos', price: '2,70' },
+      { name: 'Agua', price: '1,60' },
+      { name: 'Agua con gas', price: '1,80' },
+      { name: 'Zumo natural', price: '2,75' },
+      { name: 'Batidos', price: '5,00', allergens: ['Leche'] },
+      { name: 'Limonada de coco', price: '5,50' },
+      { name: 'Piña colada', price: '5,50', allergens: ['Leche'] },
+      { name: 'Tés e infusiones', price: '1,75' },
+      { name: 'Tés especiales', price: '2,25' },
     ],
   },
 ];
 
 const pizzaMenu: MenuCategory[] = [
   {
-    title: 'Pizzas Signature',
-    roman: 'I',
+    title: 'Pizzas',
     items: [
-      { name: 'Margherita D.O.P.', desc: 'Tomate San Marzano, mozzarella di bufala, albahaca genovesa', price: '12,00', note: 'La original' },
-      { name: 'Pepperoni Piccante', desc: 'Pepperoni italiano, miel de romero, mozzarella fior di latte', price: '14,00' },
-      { name: 'Tartufo Nero', desc: 'Crema de trufa negra, mozzarella, huevo de corral y parmesano 24m', price: '18,00', note: 'Selección' },
-      { name: 'Quattro Formaggi', desc: 'Mozzarella, gorgonzola DOP, parmigiano reggiano y fontina', price: '15,00' },
-    ],
-  },
-  {
-    title: 'Creaciones de autor',
-    roman: 'II',
-    items: [
-      { name: 'Ébenezer Suprema', desc: 'Solomillo, chorizo ibérico, pimientos asados y aceitunas Kalamata', price: '17,00' },
-      { name: 'Mediterránea', desc: 'Cherry confitado, rúcula salvaje, jamón ibérico 36m y parmesano', price: '16,00' },
-      { name: 'Bosco Selvatico', desc: 'Crema de setas, boletus, prosciutto di Parma y aceite de trufa', price: '17,50' },
-      { name: 'Burrata di Andria', desc: 'Base blanca, burrata entera, tomate pasificado y albahaca', price: '16,50' },
-    ],
-  },
-  {
-    title: 'Para compartir',
-    roman: 'III',
-    items: [
-      { name: 'Tabla de Antipasti', desc: 'Selección de embutidos ibéricos, quesos curados y encurtidos', price: '18,00' },
-      { name: 'Focaccia al Rosmarino', desc: 'Aceite de oliva virgen extra, romero fresco y flor de sal', price: '6,00' },
-      { name: 'Ensalada de Temporada', desc: 'Brotes tiernos, burrata, vinagreta de trufa', price: '9,50' },
-      { name: 'Alitas al Horno', desc: 'Marinado de la casa, ahumado ligero, alioli negro', price: '8,00' },
+      { name: 'Pizza queso', price: '10,00', allergens: ['Gluten', 'Leche'] },
+      { name: 'Hawaiana', price: '11,50', allergens: ['Gluten', 'Leche'] },
+      { name: 'Pollo / Cerdo / Vegetales / Pepperoni', price: '12,50', allergens: ['Gluten', 'Leche'] },
+      { name: 'Manggarina', price: '13,00', allergens: ['Gluten', 'Leche', 'Frutos secos'] },
+      { name: 'Cuatro estaciones', price: '14,00', allergens: ['Gluten', 'Leche'] },
+      { name: 'Carbonara', price: '14,00', allergens: ['Gluten', 'Leche', 'Huevos', 'Frutos secos'] },
     ],
   },
 ];
@@ -87,8 +118,6 @@ const pizzaMenu: MenuCategory[] = [
 export default function MenuPage() {
   const [activeTab, setActiveTab] = useState<MenuTab>('Cafe');
 
-  // Re-observe .reveal elements inside the menu body after each tab switch.
-  // A rAF is needed so the effect runs after React commits the new DOM.
   useEffect(() => {
     let observer: IntersectionObserver;
 
@@ -103,7 +132,6 @@ export default function MenuPage() {
           }),
         { threshold: 0.08 }
       );
-      // Only target elements that haven't been revealed yet
       document
         .querySelectorAll('.menu-body .reveal:not(.visible)')
         .forEach((el) => observer.observe(el));
@@ -151,7 +179,7 @@ export default function MenuPage() {
         .menu-hero p {
           font-family: var(--font-serif);
           font-style: italic;
-          font-size: 0.95rem;
+          font-size: 1.0625rem;
           color: var(--taupe);
           line-height: 1.85;
           max-width: 54ch;
@@ -310,7 +338,7 @@ export default function MenuPage() {
         .menu-item-desc {
           font-family: var(--font-serif);
           font-style: italic;
-          font-size: 0.85rem;
+          font-size: 1rem;
           color: var(--stone);
           line-height: 1.7;
           max-width: 52ch;
@@ -332,6 +360,32 @@ export default function MenuPage() {
           margin-right: 0.15em;
           opacity: 0.8;
         }
+        .menu-item-allergens {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.35rem;
+          margin-top: 0.5rem;
+        }
+        .allergen-badge {
+          font-family: var(--font-sans);
+          font-size: 0.5rem;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          color: var(--stone);
+          padding: 0.15rem 0.5rem;
+          border: 1px solid rgba(139, 98, 80, 0.25);
+          font-weight: 400;
+        }
+        .menu-item-price--consult {
+          color: var(--stone);
+          font-size: 0.9rem;
+          letter-spacing: 0.1em;
+          font-family: var(--font-sans);
+          text-transform: uppercase;
+        }
+        .menu-item-price--consult::before {
+          content: '';
+        }
 
         /* ── Footer of menu ── */
         .menu-footer {
@@ -351,11 +405,11 @@ export default function MenuPage() {
         .menu-footer-quote {
           font-family: var(--font-display);
           font-style: italic;
-          font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+          font-size: clamp(1.1rem, 1.8vw, 1.5rem);
           color: var(--taupe);
           max-width: 50ch;
           margin: 0 auto 2rem;
-          line-height: 1.6;
+          line-height: 1.65;
         }
         .menu-footer-note {
           font-family: var(--font-sans);
@@ -423,7 +477,6 @@ export default function MenuPage() {
             margin-bottom: 3.5rem;
           }
         }
-        /* ── 390px: tabs apretados en iPhone SE ── */
         @media (max-width: 390px) {
           .menu-tabs-wrap {
             padding: clamp(1.75rem, 5vw, 2.5rem) 1rem 0.75rem;
@@ -461,9 +514,9 @@ export default function MenuPage() {
         <div className="menu-hero-inner">
           <div className="eyebrow center reveal">La carta</div>
           <h1 className="reveal reveal-delay-1">
-            Una selección
+            Sabores de casa,
             <br />
-            <em>cuidadosamente orquestada</em>
+            <em>hechos con amor</em>
           </h1>
           <div className="ornament reveal reveal-delay-2">
             <span>✦</span>
@@ -471,8 +524,9 @@ export default function MenuPage() {
             <span>✦</span>
           </div>
           <p className="reveal reveal-delay-3">
-            Dos mundos en una misma mesa. Cada preparación nace del respeto por el producto,
-            la paciencia del oficio y la alegría de compartir.
+            De mañana a noche, café de especialidad y desayunos caseros;
+            de tarde en adelante, pizzas artesanales con ingredientes que se notan.
+            Todo hecho con las manos y el corazón de una familia cubana.
           </p>
         </div>
       </section>
@@ -514,7 +568,7 @@ export default function MenuPage() {
           {categories.map((cat, i) => (
             <div className={`menu-category reveal reveal-delay-${(i % 3) + 1}`} key={`${activeTab}-${cat.title}`}>
               <div className="menu-category-head">
-                <span className="menu-category-num">{cat.roman}</span>
+                <span className="menu-category-num">{ROMAN[i]}</span>
                 <h2 className="menu-category-title">
                   <em>{cat.title.split(' ')[0]}</em>
                   {cat.title.split(' ').slice(1).join(' ') ? ' ' + cat.title.split(' ').slice(1).join(' ') : ''}
@@ -525,11 +579,22 @@ export default function MenuPage() {
                   <div>
                     <div className="menu-item-name">
                       <h4>{item.name}</h4>
-                      {item.note && <span className="menu-item-note">{item.note}</span>}
+                      {item.highlight && <span className="menu-item-note">Especialidad</span>}
                     </div>
-                    <p className="menu-item-desc">{item.desc}</p>
+                    {item.desc && <p className="menu-item-desc">{item.desc}</p>}
+                    {item.allergens && item.allergens.length > 0 && (
+                      <div className="menu-item-allergens">
+                        {item.allergens.map((a) => (
+                          <span className="allergen-badge" key={a}>{a}</span>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                  <div className="menu-item-price">{item.price}</div>
+                  {item.price ? (
+                    <div className="menu-item-price">{item.price}</div>
+                  ) : (
+                    <div className="menu-item-price menu-item-price--consult">Consultar</div>
+                  )}
                 </div>
               ))}
             </div>
@@ -538,11 +603,13 @@ export default function MenuPage() {
           <div className="menu-footer">
             <div className="menu-footer-mark">— · —</div>
             <p className="menu-footer-quote">
-              &ldquo;La carta cambia con las estaciones. Los productores marcan el ritmo
-              y nosotros lo seguimos, con gusto.&rdquo;
+              &ldquo;En casa de mi madre en Cuba, la cocina siempre olía a algo rico.
+              Intentamos que Ébenezer huela igual cada día.&rdquo;
             </p>
             <p className="menu-footer-note">
-              Consulta al equipo por <b>alérgenos</b> &nbsp;·&nbsp; Precios con <b>IVA incluido</b>
+              Todos los productos pueden contener <b>trazas</b> por contaminación cruzada
+              &nbsp;·&nbsp; Consulte al personal ante cualquier <b>alergia</b>
+              &nbsp;·&nbsp; Precios con <b>IVA incluido</b>
             </p>
           </div>
         </div>
